@@ -1,0 +1,94 @@
+  <UserControl x:Class="bbnApp.deskTop.PlatformManagement.AreaCode.AreaCodeEditPage"
+         xmlns="https://github.com/avaloniaui"
+         xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         xmlns:suki="https://github.com/kikipoulet/SukiUI"
+         xmlns:converters="clr-namespace:bbnApp.deskTop.Converters"
+         xmlns:theme="clr-namespace:SukiUI.Theme;assembly=SukiUI"
+         xmlns:my="clr-namespace:bbnApp.deskTop.Controls"
+         xmlns:area="clr-namespace:bbnApp.deskTop.PlatformManagement.AreaCode"
+         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+         xmlns:icon="clr-namespace:bbnApp.deskTop.Controls"
+         d:DesignHeight="480"
+         d:DesignWidth="650"
+         x:DataType="area:AreaCodeEditPageViewModel"
+         mc:Ignorable="d">
+    <suki:GroupBox Width="600">
+
+      <UserControl.Resources>
+        <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
+      </UserControl.Resources>
+      
+      <suki:GroupBox.Header>
+        <Grid ColumnDefinitions="*,auto">
+          <StackPanel Orientation="Horizontal" Grid.Column="0" VerticalAlignment="Center" Margin="0,20,0,0">
+            <avalonia:MaterialIcon Kind="EditBoxOutline"></avalonia:MaterialIcon>
+            <TextBlock>行政区划维护</TextBlock>
+          </StackPanel>
+          <StackPanel Orientation="Horizontal" Grid.Column="1" VerticalAlignment="Center"  Margin="0,20,0,0">
+              <Button Command="{Binding CloseCommand}">
+                <avalonia:MaterialIcon Kind="ExitToApp" ToolTip.Tip="点击关闭" Cursor="Hand"></avalonia:MaterialIcon>
+              </Button>
+          </StackPanel>
+        </Grid>
+      </suki:GroupBox.Header>
+
+      <StackPanel Orientation="Vertical">
+
+        <StackPanel Orientation="Horizontal">
+          <TextBlock VerticalAlignment="Center" Classes="Caption">所属地区：</TextBlock>
+          <my:AreaNodeSelector IsAllEnabled="True" InitValue="{Binding InitValue}" AccessLeve="0" Width="600" Orientation="Horizontal"></my:AreaNodeSelector>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal">
+          <TextBlock VerticalAlignment="Center" Classes="Caption">地区名称：</TextBlock>
+          <TextBox Watermark="请输入地区名称" Text="{Binding AreaItem.AreaName}" MaxLength="20" Width="300" theme:TextBoxExtensions.AddDeleteButton="True"></TextBox>
+          <TextBlock VerticalAlignment="Center" Text="{Binding AreaItem.AreaId}"></TextBlock>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal">
+          <TextBlock VerticalAlignment="Center" Classes="Caption">行政级别：</TextBlock>
+          <ComboBox  Width="300" SelectedItem="{Binding SelectedXzjb}" ItemsSource="{Binding XzjbItem}">
+            <ComboBox.ItemTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding Name}"/>
+              </DataTemplate>
+            </ComboBox.ItemTemplate>
+          </ComboBox>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal">
+          <TextBlock VerticalAlignment="Center" Classes="Caption">位置坐标：</TextBlock>
+          <TextBox Watermark="经度,维度" MaxLength="21"  Width="300" Text="{Binding AreaItem.AreaPoint}"></TextBox>
+        </StackPanel>
+
+
+
+        <StackPanel Orientation="Horizontal">
+          <TextBlock VerticalAlignment="Center" Classes="Caption">备注说明：</TextBlock>
+          <TextBox Watermark="备注信息" MaxLength="100" Width="400" Text="{Binding AreaItem.ReMarks}" Height="80" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
+        </StackPanel>
+
+
+        <StackPanel Orientation="Horizontal">
+          <TextBlock VerticalAlignment="Center" Classes="Caption">数据锁定：</TextBlock>
+          <ToggleSwitch IsChecked="{Binding AreaItem.IsLock}" />
+          <TextBlock VerticalAlignment="Center" Classes="Caption" Text="{Binding AreaItem.LockTime}"></TextBlock>
+          <TextBlock VerticalAlignment="Center" Classes="Caption" Text="{Binding AreaItem.LockReason}"></TextBlock>
+        </StackPanel>
+
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5,20">
+          <Button Classes="Flat" HorizontalAlignment="Stretch" Width="500" Command="{Binding AreaSubmitCommand}" theme:ButtonExtensions.ShowProgress="{Binding IsBusy}">
+            <my:Space Orientation="Horizontal">
+              <avalonia:MaterialIcon IsVisible="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}" Kind="Post" Width="20" Height="20"></avalonia:MaterialIcon>
+              <TextBlock>数据提交</TextBlock>
+            </my:Space>
+          </Button>
+        </StackPanel>
+
+      </StackPanel>
+
+    </suki:GroupBox>
+</UserControl>

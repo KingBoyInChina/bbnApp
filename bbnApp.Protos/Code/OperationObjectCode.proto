@@ -1,0 +1,133 @@
+﻿
+syntax = "proto3";
+
+option csharp_namespace = "BbnApp.Protos";
+
+package OperationObjectCodeGrpc;
+
+
+/********定义标准操作对象服务********/
+service OperationObjectCodeGrpc {
+  //节点树读取
+  rpc OperationObjectTree (OperationObjectTreeRequest) returns (OperationObjectTreeResponse);
+  //清单读取
+  rpc OperationObjectCodeList (OperationObjectCodeListRequest) returns (OperationObjectCodeListResponse);
+  //对象代码信息读取
+  rpc GetOperationInfo (GetOperationInfoRequest) returns (GetOperationInfoResponse);
+  //对象代码维护
+  rpc SaveOperationInfo  (SaveOperationInfoRequest) returns (SaveOperationInfoResponse);
+  //对象代码状态变更
+  rpc OperationState (OperationStateRequest) returns (OperationStateResponse);
+  //对象代码操作代码维护
+  rpc ItemSave (ItemSaveRequest) returns (ItemSaveResponse);
+}
+//节点树读取-请求对象
+message OperationObjectTreeRequest{
+
+}
+//节点树读取-响应对象
+message OperationObjectTreeResponse{
+    bool Code = 1;
+    string Message = 2;
+    repeated OperationObjectNode Item = 3;
+}
+//清单读取-请求对象
+message OperationObjectCodeListRequest{
+
+}
+//清单读取-响应对象
+message OperationObjectCodeListResponse{
+    bool Code = 1;
+    string Message = 2;
+    repeated OperationObjectCode Item = 3;
+}
+//详细信息读取-请求对象
+message GetOperationInfoRequest{
+    string ObjCode=1;
+}
+//详细信息读取-响应对象
+message GetOperationInfoResponse{
+    bool Code = 1;
+    string Message = 2;
+    OperationObjectCode Obj=3;
+    repeated ObjectOperationType Item=4;
+}
+//标准对象维护-请求对象
+message SaveOperationInfoRequest{
+    OperationObjectCode data=1;
+}
+//标准对象维护-响应对象
+message SaveOperationInfoResponse{
+    bool Code = 1;
+    string Message = 2;
+    OperationObjectCode Obj=3;
+}
+//标准对象状态变更-请求对象
+message OperationStateRequest{
+    string Type=1;
+    string ObjCode=2;
+}
+//标准对象状态变更-响应对象
+message OperationStateResponse{
+    bool Code = 1;
+    string Message = 2;
+    OperationObjectCode Obj=3;
+}
+//标准对象操作代码设置-请求对象
+message ItemSaveRequest{
+    ObjectOperationType Item=1;
+}
+//标准对象操作代码设置-响应对象
+message ItemSaveResponse{
+    bool Code = 1;
+    string Message = 2;
+}
+
+// 对象代码Tree
+message OperationObjectNode {
+    string Id = 1;
+    string PId = 2;
+    string Name = 3;
+    string Tag = 4;
+    bool IsLeaf = 5;
+    bool IsLock = 6;
+    repeated OperationObjectNode SubItems = 7;
+}
+// 操作对象代码类型
+message OperationObjectCode {
+  string Yhid = 1; // 用户ID
+  string ObjCode = 2; // 操作对象代码
+  string ObjName = 3; // 操作对象名称
+  string ObjDescription = 4; // 操作对象说明
+  int32 IsLock = 5; // 锁定
+  string LockTime = 6; // 锁定时间
+  string LockReason = 7; // 锁定原因
+  string ReMarks = 8; // 备注
+  int32 IdxNum=9;//序号
+}
+//对象代码操作代码
+message ObjectOperationType {
+  string Yhid = 1; // 用户组ID
+  string PermissionId = 2; // 权限代码ID
+  string PermissionCode = 3; // 权限代码
+  string PermissionName = 4; // 权限代码名称
+  string PermissionDescription = 5; // 权限代码说明
+  int32 IsLock = 6; // 锁定
+  string ObjCode = 7; // 对象代码
+  int32 IsDelete = 8; // 删除状态
+  bool IsChecked = 9; // 选中状态
+  int32 IdxNum = 10; // 序号
+}
+// 权限代码类型
+message PermissionsCode {
+  string Yhid = 1; // 用户组ID
+  string PermissionId = 2; // 权限代码ID
+  string PermissionCode = 3; // 权限代码
+  string PermissionName = 4; // 权限代码名称
+  string PermissionDescription = 5; // 权限代码说明
+  int32 IsLock = 6; // 锁定
+  string LockTime = 7; // 锁定时间
+  string LockReason = 8; // 锁定原因
+  string ReMarks = 9; // 备注
+  int32 IdxNum = 10; // 序号
+}

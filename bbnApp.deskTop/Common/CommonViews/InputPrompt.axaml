@@ -1,0 +1,47 @@
+  <UserControl x:Class="bbnApp.deskTop.Common.CommonViews.InputPrompt"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:suki="https://github.com/kikipoulet/SukiUI"
+        xmlns:theme="clr-namespace:SukiUI.Theme;assembly=SukiUI"
+        xmlns:comm="clr-namespace:bbnApp.deskTop.Common.CommonViews"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        d:DesignHeight="480"
+        d:DesignWidth="650"
+        Width="600"
+        x:DataType="comm:InputPromptViewModel"
+        mc:Ignorable="d">
+    <Grid>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+      </Grid.RowDefinitions>
+
+      <Grid Grid.Row="0" Margin="10,20,0,0">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="40"/>
+          </Grid.ColumnDefinitions>
+        <StackPanel Orientation="Horizontal" Grid.Column="0" VerticalAlignment="Center">
+          <avalonia:MaterialIcon Kind="EditBoxOutline" Margin="0,0,5,0"></avalonia:MaterialIcon>
+          <TextBlock>请填写说明信息</TextBlock>
+        </StackPanel>
+
+        <Button Classes="Basic" HorizontalAlignment="Center" Grid.Column="1" Command="{Binding CloseCommand}">
+          <avalonia:MaterialIcon Kind="CloseCircle" Margin="0,0,5,0" ToolTip.Tip="点击关闭" ></avalonia:MaterialIcon>
+        </Button>
+        
+      </Grid>
+      
+      <TextBox Watermark="说明内容" Text="{Binding Info}"  suki:TextBoxExtensions.AddDeleteButton="True"  Grid.Row="1" Margin="0,15,0,15"></TextBox>
+
+      <Button Grid.Row="2" Classes="Flat Account" Command="{Binding CloseCommand}">
+        <StackPanel Orientation="Horizontal">
+          <avalonia:MaterialIcon Kind="Check" Margin="0,0,5,0"></avalonia:MaterialIcon>
+          <TextBlock>确定</TextBlock>
+        </StackPanel>
+      </Button>
+    </Grid>
+</UserControl>

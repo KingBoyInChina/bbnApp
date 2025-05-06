@@ -1,0 +1,65 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="bbnApp.deskTop.App"
+             xmlns:local="using:bbnApp.deskTop"
+             xmlns:sukiUi="clr-namespace:SukiUI;assembly=SukiUI"
+             xmlns:localconvert="clr-namespace:bbnApp.deskTop.Converters"
+						xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:avaloniaEdit="https://github.com/avaloniaui/avaloniaedit"
+             RequestedThemeVariant="Default">
+	<TrayIcon.Icons>
+		<TrayIcons>
+			<TrayIcon Icon="/Assets/logo.png"
+                      ToolTipText="帮帮农">
+				<TrayIcon.Menu>
+					<NativeMenu>
+						<NativeMenuItem Header="Native Menu Demo">
+							<NativeMenu>
+								<NativeMenuItem Header="Option 1"   />
+								<NativeMenuItem Header="Option 2"   />
+								<NativeMenuItemSeparator/>
+								<NativeMenuItem Header="Option 3"  />
+							</NativeMenu>
+						</NativeMenuItem>
+					</NativeMenu>
+				</TrayIcon.Menu>
+			</TrayIcon>
+		</TrayIcons>
+	</TrayIcon.Icons>
+
+	<!--
+    Refer to the link below to customize your font.
+    https://kikipoulet.github.io/SukiUI/documentation/faq/custom-font.html#how-to-use-custom-font
+    -->
+	<Application.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceInclude Source="Styles/CompletionWindowStyles.axaml" />
+        <ResourceInclude Source="Resources/IconFont.axaml"/>
+      </ResourceDictionary.MergedDictionaries>
+      <localconvert:IntToBoolConverter x:Key="IntToBoolConverter" />
+      <localconvert:InverseBoolConverter x:Key="InverseBoolConverter" />
+    </ResourceDictionary>
+	</Application.Resources>
+  <Application.Styles>
+		<FluentTheme></FluentTheme>
+
+		<StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml" />
+		<StyleInclude Source="avares://AvaloniaEdit/Themes/Fluent/AvaloniaEdit.xaml" />
+		<sukiUi:SukiTheme Locale="zh-CN" ThemeColor="Blue"  />
+		<StyleInclude Source="avares://bbnApp.deskTop/Styles/ShowMeTheXamlStyles.axaml" />
+		<StyleInclude Source="avares://bbnApp.deskTop/Styles/WrapPanelStyles.axaml" />
+		<StyleInclude Source="avares://bbnApp.deskTop/Styles/TextStyles.axaml" />
+		<StyleInclude Source="avares://bbnApp.deskTop/Styles/GlassCardStyles.axaml" />
+		<StyleInclude Source="avares://bbnApp.deskTop/Styles/MaterialIconStyles.axaml" />
+		<StyleInclude Source="avares://bbnApp.deskTop/Styles/CustomControlStyles.axaml" />
+
+		<avalonia:MaterialIconStyles />
+	</Application.Styles>
+
+
+
+
+
+</Application>
+

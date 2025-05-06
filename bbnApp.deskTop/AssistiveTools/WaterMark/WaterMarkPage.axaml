@@ -1,0 +1,135 @@
+  <UserControl x:Class="bbnApp.deskTop.AssistiveTools.WaterMark.WaterMarkPage"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:suki="https://github.com/kikipoulet/SukiUI"
+             xmlns:my="clr-namespace:bbnApp.deskTop.AssistiveTools.WaterMark"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:icon="clr-namespace:bbnApp.deskTop.Controls"
+             d:DesignHeight="850"
+             d:DesignWidth="800"
+             x:DataType="my:WaterMarkPageViewModel"
+             mc:Ignorable="d">
+
+    <SplitView IsPaneOpen="True" DisplayMode="Inline" OpenPaneLength="300">
+      <SplitView.Pane>
+        <suki:GlassCard IsInteractive="True">
+          <StackPanel  Width="300" Orientation="Vertical" >
+            <StackPanel Width="280" Orientation="Vertical" Margin="5,0,0,0">
+              <Grid Margin="0,10,0,0">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="auto"></ColumnDefinition>
+                  <ColumnDefinition Width="auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <icon:IconFont Grid.Column="0" Kind="bbn-info" Foreground="{DynamicResource SukiText}" FontSize="18" Margin="10,0"/>
+
+                <TextBlock Grid.Column="1"
+                           Text="请选择需要加水印的图片"
+                             VerticalAlignment="Center"
+                             Margin="0,0,0,5" />
+              </Grid>
+
+              <Border Width="280" Height="1" Background="{DynamicResource SukiText}" Classes="Line" Margin="0,10"/>
+
+              <Button
+                Tag="select"
+                Margin="0,0,0,0"
+                ToolTip.Tip="点击选择图片"
+                Cursor="Hand"
+                Click="Button_Click"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Stretch">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                  <icon:IconFont Kind="bbn-file-plus" Foreground="{DynamicResource SukiText}" FontSize="18" Margin="10,0"/>
+                  <TextBlock FontSize="14" Grid.Column="1" Text="选择" />
+                </StackPanel>
+              </Button>
+
+
+            </StackPanel>
+          
+            <Border Width="280" Height="1" Background="{DynamicResource SukiText}" Classes="Line" Margin="0,10"/>
+
+            <StackPanel Orientation="Horizontal" Margin="10,5,0,5">
+              <TextBlock FontSize="14" Text="水印文本：" VerticalAlignment="Center"/>
+              <TextBox Width="200" Text="{Binding WaterText}" ></TextBox>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="10,5,0,5">
+              <TextBlock  FontSize="14" Text="字体大小：" VerticalAlignment="Center"></TextBlock>
+              <NumericUpDown Value="{Binding WaterSize}"  Width="200" Increment="1" Maximum="100" Minimum="5"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="10,5,0,5">
+              <TextBlock  FontSize="14" Text="旋转角度：" VerticalAlignment="Center"></TextBlock>
+              <NumericUpDown Value="{Binding WaterAngle}"  Width="200" Increment="1" Maximum="360" Minimum="-360"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="10,15,0,5">
+              <TextBlock  FontSize="14" Text="滑动滑块改变字体颜色" FontWeight="Bold"  Foreground="{Binding WaterBrush}" VerticalAlignment="Center"></TextBlock>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="10,5,0,5">
+              <TextBlock  FontSize="14" Text="透明度：" VerticalAlignment="Center"></TextBlock>
+              <Slider x:Name="slider" Maximum="100" Minimum="1" Width="160" Value="{Binding WaterOpacity}"/>
+              <TextBlock  FontSize="14" Text="{Binding #slider.Value}" Margin="15,0,0,0" VerticalAlignment="Center"></TextBlock>
+              <TextBlock  FontSize="14" Text="%" VerticalAlignment="Center"></TextBlock>
+            </StackPanel>
+
+            <StackPanel  Orientation="Vertical" Margin="10,5,0,5">
+              <!-- 红色滑块 -->
+              <TextBlock Text="红色" Foreground="Red"/>
+              <Slider Minimum="0" Maximum="255" Width="260" Value="{Binding R}"/>
+
+              <!-- 绿色滑块 -->
+              <TextBlock Text="绿色" Foreground="Green"/>
+              <Slider Minimum="0" Maximum="255" Width="260" Value="{Binding G}"/>
+
+              <!-- 蓝色滑块 -->
+              <TextBlock Text="蓝色" Foreground="Blue"/>
+              <Slider Minimum="0" Maximum="255" Width="260" Value="{Binding B}"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="10,5,0,5">
+              <Button
+                     Tag="download"
+                     Width="260"
+                     Margin="15,5,0,0"
+                    Click="Button_Click"
+                     Classes="danger"
+                     ToolTip.Tip="点击下载图片"
+                     Cursor="Hand"
+                     VerticalAlignment="Center"
+                     HorizontalAlignment="Stretch">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                  <icon:IconFont Kind="bbn-download" Foreground="{DynamicResource SukiText}" FontSize="18" Margin="10,0"/>
+
+                  <TextBlock FontSize="14"
+                             Grid.Column="1"
+                             Text="下载图片" />
+                </StackPanel>
+              </Button>
+            </StackPanel>
+
+          </StackPanel>
+        </suki:GlassCard>
+      
+      </SplitView.Pane>
+      <suki:GlassCard IsInteractive="True" Margin="5,0,5,0">
+        <Grid>
+          <Border
+             Grid.Row="1"
+                BorderThickness="1"
+                CornerRadius="1"
+                VerticalAlignment="Stretch"
+                HorizontalAlignment="Stretch"
+            >
+            <Image Margin="5"
+                   VerticalAlignment="Stretch"
+                   HorizontalAlignment="Stretch"
+                   Source="{Binding SelectImage}"/>
+          </Border>
+        </Grid>
+        </suki:GlassCard>
+    </SplitView>
+  </UserControl>

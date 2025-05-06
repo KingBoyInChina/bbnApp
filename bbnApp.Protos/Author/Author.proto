@@ -1,0 +1,148 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "BbnApp.Protos";
+
+package author;
+
+//定义Author服务
+service Author {
+	//获取机构清单
+  rpc GetCompanyItems (CompanyRequest) returns (CompanyResponse);
+	//登录
+  rpc Login (LoginRequest) returns (LoginResponse);
+	//密码变更
+  rpc UpdatePassWord(PassWordRequest) returns (PassWordResponse);
+}
+
+///机构初始化请求
+message CompanyRequest {
+  //版本号
+  string Version = 1;
+  //默认机构id
+  string CompanyId = 2;
+}
+///登录响应
+message CompanyResponse {
+  //返回码
+  bool Code = 1;
+  //返回信息
+  string Message = 2;
+  //用户信息
+  repeated CompanyItem CompanyItems = 3;
+}
+///机构对象
+message CompanyItem {
+  //用户组ID
+  string Yhid =1;
+  //机构ID
+  string Id=2;
+  //机构名称
+  string Name=3;
+  //标识
+  string Tag=4;
+}
+
+
+///登录请求
+message LoginRequest {
+  //用户组id
+  string yhid = 1;
+  //机构id
+  string companyId = 2;
+  //用户名
+  string userName = 3;
+  //密码
+  string passWord = 4;
+  //两步验证
+  string twoFactorCode = 5;
+  //请求来源
+  string LoginFrom=6;
+  //请求ip
+  string IPAddress=7;
+  //ip地区
+  string AreaInfo=8;
+}
+///登录响应
+message LoginResponse {
+  //返回码
+  bool code = 1;
+  //返回信息
+  string message = 2;
+  //用户信息
+  UserInfo userInfo = 5;
+  //顶部菜单
+  repeated TopMenuItem  TopMenus=6;
+}
+///用户信息
+message UserInfo {
+  //用户组ID
+  string yhid =1;
+  //机构ID
+  string companyId=2;
+  //机构名称
+  string companyName=3;
+  //员工ID
+  string employeeId=4;
+  ///员工名称
+  string employeeName=5;
+  // 员工工号
+  string employeeNum=6;
+  // 部门ID
+  string departMentId=7;
+  // 部门名称
+  string departMentName=8;
+  // 职务级别
+  uint32 positionLeve=9;
+  // 职务名称
+  string position=10;
+  // 联系电话
+  string phoneNum=11;
+  // 邮箱
+  string emailNum=12;
+  // 入职时间
+  string dateOfEmployment=13;
+  // 所在区划代码
+  string areaCode=14;
+  // 所在区划名称
+  string areaName=15;
+  //账号锁定
+  bool isLock=16;
+  //操作员ID
+  string OperatorId=17;
+  //密码有效期
+  string passWordExpTime=18;
+  //有效时间
+  string token=19;
+  //有效期
+  string expires=20;
+}
+//顶部菜单
+message TopMenuItem {
+  //ID
+  string Id = 1;
+  //名称
+  string Name = 2;
+  //描述
+  string Description = 3;
+  //Tag
+  string Tag = 4;
+  //Remarks
+  string Remarks = 5;
+}
+
+//密码修改请求数据
+message PassWordRequest{
+  //旧密码
+  string oldPassWord = 1;
+  //新密码
+  string newPassWord = 2;
+}
+//密码修改返回数据
+message PassWordResponse{
+  //状态
+  bool code = 1;
+  //消息
+  string message = 2;
+  //密码过期时间
+  string passWordExpTime=3;
+}

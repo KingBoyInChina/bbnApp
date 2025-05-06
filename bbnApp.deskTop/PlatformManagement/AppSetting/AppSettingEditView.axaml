@@ -1,0 +1,115 @@
+
+  <UserControl x:Class="bbnApp.deskTop.PlatformManagement.AppSetting.AppSettingEditView"
+         xmlns="https://github.com/avaloniaui"
+         xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         xmlns:suki="https://github.com/kikipoulet/SukiUI"
+         xmlns:converters="clr-namespace:bbnApp.deskTop.Converters"
+         xmlns:theme="clr-namespace:SukiUI.Theme;assembly=SukiUI"
+         xmlns:my="clr-namespace:bbnApp.deskTop.Controls"
+         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+         d:DesignHeight="800"
+         d:DesignWidth="450"
+         xmlns:setting="clr-namespace:bbnApp.deskTop.PlatformManagement.AppSetting"
+         x:DataType="setting:AppSettingEditViewModel"
+         mc:Ignorable="d">
+
+    <suki:GroupBox Width="400">
+
+      <UserControl.Resources>
+        <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
+      </UserControl.Resources>
+
+      <suki:GroupBox.Header>
+        <Grid ColumnDefinitions="*,auto">
+          <StackPanel Orientation="Horizontal" Grid.Column="0" VerticalAlignment="Center" Margin="0,20,0,0">
+            <avalonia:MaterialIcon Kind="ToolClock"></avalonia:MaterialIcon>
+            <TextBlock>系统参数设置</TextBlock>
+          </StackPanel>
+          <StackPanel Orientation="Horizontal" Grid.Column="1" VerticalAlignment="Center"  Margin="0,20,0,0">
+            <Button Command="{Binding CloseCommand}">
+              <avalonia:MaterialIcon Kind="ExitToApp" ToolTip.Tip="点击关闭" Cursor="Hand"></avalonia:MaterialIcon>
+            </Button>
+          </StackPanel>
+        </Grid>
+      </suki:GroupBox.Header>
+
+      <StackPanel Orientation="Vertical">
+
+        <StackPanel Orientation="Horizontal">
+          <TextBlock VerticalAlignment="Center" Classes="Caption">参数代码：</TextBlock>
+          <TextBox Watermark="请输入参数代码" Text="{Binding AppSettingItem.SettingCode}" MaxLength="20" Width="300" theme:TextBoxExtensions.AddDeleteButton="True"></TextBox>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal">
+          <TextBlock VerticalAlignment="Center" Classes="Caption">参数名称：</TextBlock>
+          <TextBox Watermark="请输入参数名称" Text="{Binding AppSettingItem.SettingName}" MaxLength="20" Width="300" theme:TextBoxExtensions.AddDeleteButton="True"></TextBox>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal">
+          <TextBlock VerticalAlignment="Center" Classes="Caption">参数类型：</TextBlock>
+          <ComboBox  Width="300" SelectedItem="{Binding SelectedValueType}" ItemsSource="{Binding ValueTypeItems}">
+            <ComboBox.ItemTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding Name}"/>
+              </DataTemplate>
+            </ComboBox.ItemTemplate>
+          </ComboBox>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal">
+          <TextBlock VerticalAlignment="Center" Classes="Caption">取值范围：</TextBlock>
+          <TextBox Watermark="请输入取值范围" MaxLength="200"  Width="300" Text="{Binding AppSettingItem.ValueRange}"></TextBox>
+        </StackPanel>
+
+
+        <StackPanel Orientation="Horizontal">
+          <TextBlock VerticalAlignment="Center" Classes="Caption">默认取值：</TextBlock>
+          <TextBox Watermark="请输入默认值" MaxLength="20"  Width="300" Text="{Binding AppSettingItem.DefaultValue}"></TextBox>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal">
+          <TextBlock VerticalAlignment="Center" Classes="Caption">当前取值：</TextBlock>
+          <TextBox Watermark="请输入当前值" MaxLength="20"  Width="300" Text="{Binding AppSettingItem.NowValue}"></TextBox>
+        </StackPanel>
+
+
+        <StackPanel Orientation="Horizontal">
+          <TextBlock VerticalAlignment="Center" Classes="Caption">参数说明：</TextBlock>
+          <TextBox Watermark="参数说明" MaxLength="100" Width="300" Text="{Binding AppSettingItem.SettingDesc}" Height="80" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
+        </StackPanel>
+        
+        <StackPanel Orientation="Horizontal">
+          <TextBlock VerticalAlignment="Center" Classes="Caption">备注说明：</TextBlock>
+          <TextBox Watermark="备注说明" MaxLength="100" Width="300" Text="{Binding AppSettingItem.ReMarks}" Height="80" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal">
+          <TextBlock VerticalAlignment="Center" Classes="Caption">固定参数：</TextBlock>
+          <ToggleSwitch IsChecked="{Binding AppSettingItem.IsFiexed,  Converter={StaticResource IntToBoolConverter}}"/>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal">
+          <TextBlock VerticalAlignment="Center" Classes="Caption">数据锁定：</TextBlock>
+          <ToggleSwitch IsChecked="{Binding AppSettingItem.IsLock,  Converter={StaticResource IntToBoolConverter}}" IsEnabled="False"/>
+          <TextBlock IsVisible="{Binding AppSettingItem.IsLock,  Converter={StaticResource IntToBoolConverter}}" VerticalAlignment="Center" Classes="Caption" Text="{Binding AppSettingItem.LockTime}"></TextBlock>
+          <TextBlock IsVisible="{Binding AppSettingItem.IsLock,  Converter={StaticResource IntToBoolConverter}}" VerticalAlignment="Center" Classes="Caption" Text="{Binding AppSettingItem.LockReason}"></TextBlock>
+        </StackPanel>
+
+
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20">
+          <Button Classes="Flat" HorizontalAlignment="Stretch" Width="300" Command="{Binding AppSettingSubmitCommand}" theme:ButtonExtensions.ShowProgress="{Binding IsBusy}">
+            <my:Space Orientation="Horizontal">
+              <avalonia:MaterialIcon IsVisible="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}" Kind="Post" Width="20" Height="20"></avalonia:MaterialIcon>
+              <TextBlock>数据提交</TextBlock>
+            </my:Space>
+          </Button>
+        </StackPanel>
+
+      </StackPanel>
+
+    </suki:GroupBox>
+
+  </UserControl>

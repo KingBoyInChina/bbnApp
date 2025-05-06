@@ -1,0 +1,57 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Design.PreviewWith>
+    <Border Padding="20">
+      <!-- Add Controls for Previewer Here -->
+    </Border>
+  </Design.PreviewWith>
+  <!--这个是公共样式文件，不涉及颜色主题-->
+  <!-- Add Styles Here -->
+
+  <Style Selector="Button">
+    <Setter Property="Cursor" Value="Hand"></Setter>
+  </Style>
+
+  <Style Selector="Button.Space">
+    <Setter Property="Margin" Value="2,0"></Setter>
+  </Style>
+
+  <Style Selector="TextBlock.Space">
+    <Setter Property="Margin" Value="5,0,0,0"></Setter>
+  </Style>
+
+	<Style Selector="ToggleButton">
+		<Setter Property="Cursor" Value="Hand"></Setter>
+	</Style>
+
+	<Style Selector="RadioButton">
+		<Setter Property="Cursor" Value="Hand"></Setter>
+	</Style>
+	
+	<Style Selector="MenuItem">
+		<Setter Property="Cursor" Value="Hand"></Setter>
+	</Style>
+
+  <Style Selector="Border.Split">
+    <Setter Property="Margin" Value="5,3"></Setter>
+    <Setter Property="BorderThickness" Value="1"></Setter>
+    <Setter Property="Opacity" Value="0.2"></Setter>
+  </Style>
+
+  <Style Selector="Border.Line">
+    <Setter Property="Opacity" Value="0.2"></Setter>
+  </Style>
+  <Style Selector="DataGridColumnHeader">
+    <Setter Property="HorizontalAlignment" Value="Stretch" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+  </Style>
+
+  <Style Selector="DataGridColumnHeader>StackPanel">
+    <Setter Property="Orientation" Value="Horizontal"></Setter>
+    <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+  </Style>
+
+  <Style Selector="TextBlock.NOTNULL">
+    <Setter Property="Foreground" Value="Red"></Setter>
+  </Style>
+</Styles>

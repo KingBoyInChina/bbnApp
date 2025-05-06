@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Exceptionless" Version="6.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.4" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.8.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+	  <ProjectReference Include="..\bbnApp.Common\bbnApp.Common.csproj" />
+	  <ProjectReference Include="..\bbnApp.Core\bbnApp.Core.csproj" />
+	  <ProjectReference Include="..\bbnApp.Domain\bbnApp.Domain.csproj" />
+	  <ProjectReference Include="..\bbnApp.Share\bbnApp.Share.csproj" />
+    <ProjectReference Include="..\bbnApp.DTOs\bbnApp.DTOs.csproj" />
+  </ItemGroup>
+
+</Project>

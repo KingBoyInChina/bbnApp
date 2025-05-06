@@ -1,0 +1,154 @@
+<UserControl x:Class="bbnApp.deskTop.Views.SettingView"
+                 xmlns="https://github.com/avaloniaui"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:suki="https://github.com/kikipoulet/SukiUI"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+								 xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+								 xmlns:my="clr-namespace:bbnApp.deskTop.ViewModels"
+								 x:DataType="my:SettingViewModel"
+                 d:DesignHeight="500"
+                 d:DesignWidth="460"
+                 Width="420"
+                 mc:Ignorable="d">
+  <suki:GlassCard IsOpaque="True" IsInteractive="True">
+    <suki:GroupBox Padding="10,10">
+      <suki:GroupBox.Header>
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+          </Grid.ColumnDefinitions>
+          <TextBlock Grid.Column="0">系统参数配置</TextBlock>
+
+          <Button Grid.Column="1" VerticalAlignment="Center" BorderThickness="0" Command="{Binding DialogCloseCommand}" ToolTip.Tip="点击关闭" Cursor="Hand" HorizontalAlignment="Right" ZIndex="999" Margin="0,0,10,0">
+            <avalonia:MaterialIcon Kind="CloseBold"/>
+          </Button>
+        </Grid>
+      </suki:GroupBox.Header>
+      <suki:BusyArea Name="BusyParameIn"
+               BusyText="配置参数保存中..."
+               IsBusy="{Binding IsSubmiting}">
+        <StackPanel>
+          <TabControl>
+            <TabItem Header="应用参数">
+              <StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="0,10,0,25">
+                  <avalonia:MaterialIcon Kind="Timer" VerticalAlignment="Center"></avalonia:MaterialIcon>
+                  <TextBlock FontWeight="DemiBold"  VerticalAlignment="Center" Foreground="{DynamicResource SukiLowText}" Text="定时主题切换" />
+                  <ToggleSwitch IsChecked="{Binding AutoTheme}"  VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="0,10,0,25">
+                  <avalonia:MaterialIcon Kind="Number0Circle"></avalonia:MaterialIcon>
+                  <TextBlock FontWeight="DemiBold"  Foreground="{DynamicResource SukiLowText}" Text="亮色主题切换时间" />
+                </StackPanel>
+
+                <NumericUpDown suki:NumericUpDownExtensions.Unit="时" Value="{Binding LightHour}" />
+
+                <StackPanel Orientation="Horizontal" Margin="0,10,0,25">
+                  <avalonia:MaterialIcon Kind="Number1Circle"></avalonia:MaterialIcon>
+                  <TextBlock FontWeight="DemiBold"  Foreground="{DynamicResource SukiLowText}" Text="暗色主题切换时间" />
+                </StackPanel>
+
+                <NumericUpDown suki:NumericUpDownExtensions.Unit="时" Value="{Binding DarkHour}" />
+
+              </StackPanel>
+            </TabItem>
+            <TabItem Header="MQTT监控平台">
+              <StackPanel>
+                
+                <StackPanel Orientation="Horizontal">
+                  <avalonia:MaterialIcon Kind="WebAsset"></avalonia:MaterialIcon>
+                  <TextBlock FontWeight="DemiBold"  Foreground="{DynamicResource SukiLowText}" Text="地址" />
+                </StackPanel>
+
+                <TextBox Watermark="请输入MQTT监控平台地址"
+                     Margin="0,10,0,25"
+                     Focusable="True"
+                     Text="{Binding MqttUrl,Mode=TwoWay}"
+                     suki:TextBoxExtensions.AddDeleteButton="True"></TextBox>
+
+                <StackPanel Orientation="Horizontal">
+                  <avalonia:MaterialIcon Kind="User"></avalonia:MaterialIcon>
+                  <TextBlock FontWeight="DemiBold"  Foreground="{DynamicResource SukiLowText}" Text="用户名" />
+                </StackPanel>
+
+                <TextBox Watermark="请输入MQTT监控平台地址"
+                     Margin="0,10,0,25"
+                     Focusable="True"
+                     Text="{Binding MqttUserName,Mode=TwoWay}"
+                     suki:TextBoxExtensions.AddDeleteButton="True"></TextBox>
+
+                <StackPanel Orientation="Horizontal">
+                  <avalonia:MaterialIcon Kind="Password"></avalonia:MaterialIcon>
+                  <TextBlock FontWeight="DemiBold"  Foreground="{DynamicResource SukiLowText}" Text="密码" />
+                </StackPanel>
+
+                <TextBox Watermark="请输入MQTT监控平台地址"
+                     Margin="0,10,0,25"
+                     Focusable="True"
+                     Text="{Binding MqttPassword,Mode=TwoWay}"
+                     PasswordChar="*"
+                     suki:TextBoxExtensions.AddDeleteButton="True"></TextBox>
+
+              </StackPanel>
+            </TabItem>
+            <TabItem Header="异常监控平台">
+              <StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                  <avalonia:MaterialIcon Kind="WebAsset"></avalonia:MaterialIcon>
+                  <TextBlock FontWeight="DemiBold"  Foreground="{DynamicResource SukiLowText}" Text="地址" />
+                </StackPanel>
+
+                <TextBox Watermark="请输入异常监控平台地址"
+                     Margin="0,10,0,25"
+                     Focusable="True"
+                     Text="{Binding ExcptionlessUrl,Mode=TwoWay}"
+                     suki:TextBoxExtensions.AddDeleteButton="True"></TextBox>
+
+                <StackPanel Orientation="Horizontal">
+                  <avalonia:MaterialIcon Kind="User"></avalonia:MaterialIcon>
+                  <TextBlock FontWeight="DemiBold"  Foreground="{DynamicResource SukiLowText}" Text="用户名" />
+                </StackPanel>
+
+                <TextBox Watermark="请输入异常监控平台用户名"
+                     Margin="0,10,0,25"
+                     Focusable="True"
+                     Text="{Binding ExcptionlessUserName,Mode=TwoWay}"
+                     suki:TextBoxExtensions.AddDeleteButton="True"></TextBox>
+
+                <StackPanel Orientation="Horizontal">
+                  <avalonia:MaterialIcon Kind="Password"></avalonia:MaterialIcon>
+                  <TextBlock FontWeight="DemiBold"  Foreground="{DynamicResource SukiLowText}" Text="密码" />
+                </StackPanel>
+
+                <TextBox Watermark="请输入异常监控平台密码"
+                     Margin="0,10,0,25"
+                     Focusable="True"
+                     Text="{Binding ExcptionlessPassword,Mode=TwoWay}"
+                     PasswordChar="*"
+                     suki:TextBoxExtensions.AddDeleteButton="True"></TextBox>
+
+              </StackPanel>
+            </TabItem>
+          </TabControl>
+
+          <Button
+                Margin="0,25,0,10"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Bottom"
+                  suki:ButtonExtensions.ShowProgress="{Binding IsSubmiting}"
+                  Classes="Flat"
+                  Command="{Binding SettingSaveCommand}"
+                  FontWeight="DemiBold">
+            配置参数保存
+          </Button>
+
+        </StackPanel>
+      </suki:BusyArea>
+    </suki:GroupBox >
+  </suki:GlassCard>
+</UserControl>
