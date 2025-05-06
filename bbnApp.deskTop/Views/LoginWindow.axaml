@@ -1,0 +1,109 @@
+<UserControl x:Class="bbnApp.deskTop.Views.LoginWindow"
+                 xmlns="https://github.com/avaloniaui"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:suki="https://github.com/kikipoulet/SukiUI"
+									xmlns:theme="clr-namespace:SukiUI.Theme;assembly=SukiUI"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+								 xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+								 xmlns:login="clr-namespace:bbnApp.deskTop.ViewModels"
+								 x:DataType="login:LoginWindowViewModel"
+                 d:DesignHeight="500"
+                 d:DesignWidth="450"
+									Width="450"
+                 mc:Ignorable="d">
+              <Grid Margin="15">
+									<Grid.RowDefinitions>
+										<RowDefinition Height="30"/>
+										<RowDefinition Height="Auto"/>
+									</Grid.RowDefinitions>
+					
+									<Button Grid.Row="0" BorderThickness="0" Command="{Binding CloseDialogCommand}" ToolTip.Tip="点击关闭" Cursor="Hand" HorizontalAlignment="Right" ZIndex="999" Margin="0,0,10,0">
+										<avalonia:MaterialIcon Kind="CloseCircle" Width="32" Height="32" />
+									</Button>
+					
+									<StackPanel Grid.Row="1" Margin="0,-20,0,0">
+									<suki:GlassCard Width="350" Height="420" Margin="0,0,0,25" IsInteractive="True">
+										<suki:BusyArea Name="BusySignIn"
+														 BusyText="身份验证中..."
+														 IsBusy="{Binding IsLoggingIn}">
+											<StackPanel>
+												<Image HorizontalAlignment="Center" Margin="5" Height="38" Width="38" Source="avares://bbnApp.deskTop/Assets/logo.png"/>
+												<TextBlock Margin="0,10,0,27"
+															 HorizontalAlignment="Center"
+															 FontSize="18"
+															 FontWeight="DemiBold"
+															 Text="欢迎使用，请登录" />
+												<StackPanel Margin="6,5,0,3" Orientation="Horizontal" VerticalAlignment="Center">
+													<avalonia:MaterialIcon Kind="Company"></avalonia:MaterialIcon>
+													<TextBlock
+																 FontWeight="DemiBold" Foreground="{DynamicResource SukiLowText}"
+																 Text="用户机构" />
+												</StackPanel>
+								
+												<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+														<ComboBox Width="230" ItemsSource="{Binding CompanyItems}" SelectedItem="{Binding SelectedCompanyItem}" AutoScrollToSelectedItem="True" IsTextSearchEnabled="True">
+														<ComboBox.ItemTemplate>
+															<DataTemplate>
+															<TextBlock Text="{Binding Name}" />
+															</DataTemplate>
+														</ComboBox.ItemTemplate>
+													</ComboBox>
+
+													<Button Classes="Basic" 
+                                  Command="{Binding CompanyReloadCommand}"
+																	theme:ButtonExtensions.ShowProgress="{Binding IsCompanyReload}">
+														<StackPanel Orientation="Horizontal">
+															<avalonia:MaterialIcon Kind="Reload"></avalonia:MaterialIcon>
+															<TextBlock>重载</TextBlock>
+														</StackPanel>
+                    
+													</Button>
+												</StackPanel>
+								
+                
+												<StackPanel Margin="6,10,0,3" Orientation="Horizontal" VerticalAlignment="Center">
+													<avalonia:MaterialIcon Kind="Account"></avalonia:MaterialIcon>
+													<TextBlock
+															 FontWeight="DemiBold" Foreground="{DynamicResource SukiLowText}"
+															 Text="用户账号" />
+												</StackPanel>
+												<StackPanel Orientation="Horizontal">
+													<TextBox Width="300" suki:TextBoxExtensions.Prefix="" Watermark="工号/手机号/邮箱" Text="{Binding Username,Mode=TwoWay}"/>
+												</StackPanel>
+												<StackPanel Margin="6,18,0,3" Orientation="Horizontal" VerticalAlignment="Center">
+													<avalonia:MaterialIcon Kind="Password"></avalonia:MaterialIcon>
+                          <TextBlock
+                            InputMethod.IsInputMethodEnabled="False"
+															 FontWeight="DemiBold" Foreground="{DynamicResource SukiLowText}"
+															 Text="用户密码" />
+												</StackPanel>
+												<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+													<TextBox Width="300" x:Name="PasswordTextBox" Watermark="请输入密码"
+														 Margin="0,0,0,25"
+														Focusable="True"
+															MaxLength="8"
+																 GotFocus="TextBox_GotFocus"
+																 LostFocus="TextBox_LostFocus"
+														 KeyDown="TextBox_KeyDown"
+														 Text="{Binding Password,Mode=TwoWay}"
+														 suki:TextBoxExtensions.AddDeleteButton="True"
+														 PasswordChar="*" ></TextBox>
+													</StackPanel>
+											</StackPanel>
+										</suki:BusyArea>
+									</suki:GlassCard>
+									<Button Name="ButtonSignIn"
+											Width="160"
+											Margin="0,-45,0,7"
+											HorizontalAlignment="Center"
+											VerticalAlignment="Bottom"
+											suki:ButtonExtensions.ShowProgress="{Binding IsLoggingIn}"
+											Classes="Flat Rounded"
+											Command="{Binding LoginCommand}"
+											FontWeight="DemiBold">
+										登录
+									</Button>
+									</StackPanel>				
+									</Grid>
+</UserControl>

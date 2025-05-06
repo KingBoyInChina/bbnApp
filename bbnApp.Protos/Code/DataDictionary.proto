@@ -1,0 +1,168 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "BbnApp.Protos";
+
+package DataDictionaryGrpc;
+
+
+/********定义字典服务********/
+service DataDictionaryGrpc {
+	//字典树读取
+  rpc DicTree (DataDictionaryTreeRequest) returns (DataDictionaryTreeResponse);
+	//字典信息读取
+  rpc DicInfo (DataDictionaryInfoRequest) returns (DataDictionaryInfoResponse);
+	//字典类别提交
+  rpc DicPost (DataDictionarySaveRequest) returns (DataDictionarySaveResponse);
+  //字典类别状态变更
+  rpc DicStateSave (DataDictionaryStateRequest) returns (DataDictionaryStateResponse);
+  //字典项目查询
+  rpc ItemsSearch (DataDictionaryItemSearchRequest) returns (DataDictionaryItemSearchResponse);
+  //字典项目提交
+  rpc ItemPost (DataDictionaryItemSaveRequest) returns (DataDictionaryItemSaveResponse);
+  //字典项目状态变更
+  rpc ItemStateSave (DataDictionaryItemStateRequest) returns (DataDictionaryItemStateResponse);
+  //字典下载
+  rpc DicDownload (DataDictionaryDownloadRequest) returns (DataDictionaryDownloadResponse);
+}
+
+//字典类别对象
+message DataDictionaryCode{
+	 string Yhid=1;
+	 string DicCode=2;
+	 string DicPCode=3;
+	 int32 IsLeaf=4;
+	 string DicName=5;
+	 string DicSpell=6;
+	 int32 DicIndex=7;
+	 string AppId=8;
+	 string AppName=9;
+	 int32 IsLock=10;
+	 string LockTime=11;
+	 string LockReason=12;
+	 string ReMarks=13; 
+	 int32 Isdelete=14;
+	 int32 IdxNum=15;
+}
+//字典明细
+message DataDictionaryItem{
+	 string Yhid=1;
+	 string ItemId=2;
+	 string DicCode=3;
+	 string ItemName=4;
+	 string ItemSpell=5;
+	 int32 ItemIndex=6;
+	 int32 IsLock=7;
+	 string LockTime=8;
+	 string LockReason=9;
+	 string ReMarks=10;
+	 int32 Isdelete=11;
+	 int32 IdxNum=12;
+}
+ 
+// 树节点项 
+message DicTreeItem {
+    string Id = 1;
+    string PId = 2;
+    string Name = 3;
+    string Tag = 4;
+    bool IsLeaf = 5;
+    bool IsLock = 6;
+    repeated DicTreeItem SubItems = 7;
+}
+ 
+// 字典下载请求对象
+message DataDictionaryDownloadRequest {
+    
+}
+// 字典下载响应 
+message DataDictionaryDownloadResponse {
+    bool Code = 1;
+    string Message = 2;
+    repeated DicTreeItem Item = 3;
+}
+
+// 字典树请求对象
+message DataDictionaryTreeRequest {
+    string FilterKey = 1;
+}
+// 字典树响应 
+message DataDictionaryTreeResponse {
+    bool Code = 1;
+    string Message = 2;
+    repeated DicTreeItem Item = 3;
+}
+// 字典详情请求对象 
+message DataDictionaryInfoRequest {
+    string DicCode = 1;
+}
+ 
+// 字典详情响应 
+message DataDictionaryInfoResponse {
+    bool Code = 1;
+    string Message = 2;
+    DataDictionaryCode DicObj = 3;
+    repeated DataDictionaryItem Items = 4;
+}
+ 
+// 字典对象提交请求 
+message DataDictionarySaveRequest {
+    DataDictionaryCode Item = 1;
+}
+ 
+// 字典对象提交响应 
+message DataDictionarySaveResponse {
+    bool Code = 1;
+    string Message = 2;
+    DataDictionaryCode Item = 3;
+}
+ 
+// 字典对象状态变更请求 
+message DataDictionaryStateRequest {
+    string Type=1;
+    DicTreeItem Item = 2;
+}
+ 
+// 字典对象状态变更响应 
+message DataDictionaryStateResponse {
+    bool Code = 1;
+    string Message = 2;
+    DataDictionaryCode Item = 3;
+}
+ 
+// 字典明细查询请求 
+message DataDictionaryItemSearchRequest {
+    string DicCode = 1;
+    string ItemName = 2;
+}
+ 
+// 字典明细查询响应 
+message DataDictionaryItemSearchResponse {
+    bool Code = 1;
+    string Message = 2;
+    repeated DataDictionaryItem Items = 3;
+}
+ 
+// 字典明细提交请求 
+message DataDictionaryItemSaveRequest {
+    DataDictionaryItem Item = 1;
+}
+ 
+// 字典明细提交响应 
+message DataDictionaryItemSaveResponse {
+    bool Code = 1;
+    string Message = 2;
+    DataDictionaryItem Item = 3;
+}
+ 
+// 字典明细状态变更请求 
+message DataDictionaryItemStateRequest {
+    string Type=1;
+    string ItemId = 2;
+}
+ 
+// 字典明细状态变更响应 
+message DataDictionaryItemStateResponse {
+    bool Code = 1;
+    string Message = 2;
+    DataDictionaryItem Item = 3;
+}

@@ -1,0 +1,215 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "BbnApp.Protos";
+
+package AreaGrpc;
+
+/********定义Area服务********/
+service AreaGrpc {
+	//行政区划字典List读取
+  rpc AreaListLoad (AreaListNodeRequest) returns (AreaListNodeResponse);
+	//行政区划字典Tree读取
+  rpc AreaTreeLoad (AreaTreeNodeRequest) returns (AreaTreeNodeResponse);
+	//查询数据库获取行政区划代码
+  rpc GetAreaGrid (AreaGridRequest) returns (AreaGridResponse);
+  //地区信息提交
+  rpc AreaPost (AreaPostRequest) returns (AreaPostResponse);
+  //地区信息删除
+  rpc AreaDelete (AreaDeleteRequest) returns (AreaDeleteResponse);
+  //地区信息停用
+  rpc AreaLock (AreaLockRequest) returns (AreaLockResponse);
+}
+
+///地区代码List字典请求
+message AreaListNodeRequest {
+  //地区代码
+  string AreaCode = 1;
+  //行政级别
+  int32 AreaLeve = 2;
+}
+///地区代码字典请求响应
+message AreaListNodeResponse {
+  //返回码
+  bool Code = 1;
+  //返回信息
+  string Message = 2;
+  //用户信息
+  repeated AreaListNode Items = 3;
+}
+///地区字典对象
+message AreaListNode {
+   
+  //区划代码
+  string AreaId =1;
+  //上级区划代码
+  string AreaPId =2;
+  //区划名称
+  string AreaName=3;
+  //区划全称
+  string AreaFullName=4;
+  //行政级别
+  string AreaLeve=5;
+  //行政级别名称
+  string AreaLeveName=6;
+  //经纬度
+  string AreaPoint=7;
+  //锁定状态
+  bool IsLock=8;
+}
+
+///地区代码Tree字典请求
+message AreaTreeNodeRequest {
+  //地区代码
+  string AreaCode = 1;
+  //行政级别
+  int32 AreaLeve = 2;
+}
+///地区代码字典请求响应
+message AreaTreeNodeResponse {
+  //返回码
+  bool Code = 1;
+  //返回信息
+  string Message = 2;
+  //用户信息
+  repeated AreaTreeNode Items = 3;
+}
+///地区字典对象
+message AreaTreeNode {
+   
+  //区划代码
+  string AreaId =1;
+  //区划名称
+  string AreaName=2;
+  //区划全称
+  string AreaFullName=3;
+  //行政级别
+  string AreaLeve=4;
+  //行政级别名称
+  string AreaLeveName=5;
+  //经纬度
+  string AreaPoint=6;
+  //锁定状态
+  bool IsLock=7;
+  //子节点
+  bool IsLeaf=8;
+  //子集
+  repeated AreaTreeNode Children = 9;
+}
+
+///地区查询请求
+message AreaGridRequest {
+  //地区代码
+  string AreaCode = 1;
+  //地区名称
+  string AreaName = 2;
+  //行政级别
+  int32 AreaLeve = 3;
+  //页面
+  int32 PageIndex = 4;
+  //每页条数
+  int32 PageSize = 5;
+}
+///地区代码字典请求响应
+message AreaGridResponse {
+  //返回码
+  bool Code = 1;
+  //返回信息
+  string Message = 2;
+  //总条数
+  int32 Total = 3;
+  //用户信息
+  repeated AreaItem AreaItems = 4;
+}
+//地区对象
+message AreaItem {
+  //序号
+  int32 IdxNum = 1;
+  //区划代码
+  string AreaId =2;
+  //上级区划代码
+  string AreaPId =3;
+  //区划名称
+  string AreaName=4;
+  //区划全称
+  string AreaFullName=5;
+  //行政级别
+  string AreaLeve=6;
+  //行政级别名称
+  string AreaLeveName=7;
+  //经纬度
+  string AreaPoint=8;
+  //锁定状态
+  bool IsLock=9;
+  //锁定时间
+  string LockTime=10;
+  //锁定原因
+  string LockReason=11;
+  //备注
+  string ReMarks=12;
+}
+
+///地区提交请求
+message AreaPostRequest {
+  //地区代码
+  AreaPostData AreaData = 1;
+}
+///地区提交请求响应
+message AreaPostResponse {
+  //返回码
+  bool Code = 1;
+  //返回信息
+  string Message = 2;
+  //用户信息
+  repeated AreaPostData AreaData = 3;
+}
+//地区信息维护对象
+message AreaPostData {
+  //区划代码
+  string AreaId =1;
+  //上级区划代码
+  string AreaPId =2;
+  //区划名称
+  string AreaName=3;
+  //区划全称
+  string AreaFullName=4;
+  //行政级别
+  string AreaLeve=5;
+  //行政级别名称
+  string AreaLeveName=6;
+  //经纬度
+  string AreaPoint=7;
+  //锁定状态
+  bool IsLock=8;
+  //锁定时间
+  string LockTime=9;
+  //锁定原因
+  string LockReason=10;
+  //备注
+  string ReMarks=11;
+}
+///地区删除提交请求
+message AreaDeleteRequest {
+  //地区代码
+  string AreaId = 1;
+}
+///地区删除提交请求响应
+message AreaDeleteResponse {
+  //返回码
+  bool Code = 1;
+  //返回信息
+  string Message = 2;
+}
+///地区停用提交请求
+message AreaLockRequest {
+  //地区代码
+  string AreaId = 1;
+  //停用原因
+  string LockReason=2;
+}
+///地区停用提交请求响应
+message AreaLockResponse {
+  //返回码
+  bool Code = 1;
+  //返回信息
+  string Message = 2;
+}

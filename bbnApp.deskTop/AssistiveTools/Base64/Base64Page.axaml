@@ -1,0 +1,81 @@
+<UserControl x:Class="bbnApp.deskTop.AssistiveTools.Base64.Base64Page"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:suki="https://github.com/kikipoulet/SukiUI"
+             xmlns:my="clr-namespace:bbnApp.deskTop.AssistiveTools.Base64"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:icon="clr-namespace:bbnApp.deskTop.Controls"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             x:DataType="my:Base64PageViewModel"
+             mc:Ignorable="d">
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="50"></RowDefinition>
+      <RowDefinition Height="2"></RowDefinition>
+      <RowDefinition Height="*"></RowDefinition>
+    </Grid.RowDefinitions>
+
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*"></ColumnDefinition>
+      <ColumnDefinition Width="*"></ColumnDefinition>
+    </Grid.ColumnDefinitions>
+
+    <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">
+      <icon:IconFont Kind="bbn-info" Foreground="{DynamicResource SukiText}" FontSize="18" Margin="10,0"/>
+      <TextBlock Text="Base64加解密" FontWeight="Bold"></TextBlock>
+    </StackPanel>
+
+    <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right">
+
+      <Button Classes="Flat Space" Command="{Binding DataEncryptCommand}">
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+          <icon:IconFont Kind="bbn-jiami" Foreground="{DynamicResource SukiText}"/>
+          <TextBlock Classes="Space">加密</TextBlock>
+        </StackPanel>
+      </Button>
+
+      <Button Classes="Flat Space" Command="{Binding DataDecryptCommand}">
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+          <icon:IconFont Kind="bbn-jiemi" Foreground="{DynamicResource SukiText}"/>
+          <TextBlock>解密</TextBlock>
+        </StackPanel>
+      </Button>
+
+      <Button Classes="Outlined Space" Command="{Binding DataClearCommand}">
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+          <icon:IconFont Kind="bbn-clear" Foreground="{DynamicResource SukiText}"/>
+          <TextBlock>清空</TextBlock>
+        </StackPanel>
+      </Button>
+    </StackPanel>
+
+    <Border Background="{DynamicResource SukiText}"
+            Classes="Line"
+            Grid.Row="1"
+            Grid.ColumnSpan="2"
+          BorderThickness="1">
+    </Border>
+
+    <TextBox
+          Grid.Row="2" Grid.Column="0"
+          VerticalAlignment="Stretch"
+          VerticalContentAlignment="Stretch"
+          AcceptsReturn="True"
+          Text="{Binding Plaintext}"
+          Watermark="请输入需要加密或解密的内容"
+          TextWrapping="Wrap" />
+
+    <TextBox
+          Grid.Row="2" Grid.Column="1"
+            VerticalAlignment="Stretch"
+            VerticalContentAlignment="Stretch"
+            AcceptsReturn="True"
+            Text="{Binding Ciphertext}"
+            Watermark="加密或解密结果"
+            TextWrapping="Wrap" />
+
+  </Grid>
+</UserControl>
+

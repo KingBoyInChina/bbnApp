@@ -1,0 +1,612 @@
+<suki:SukiWindow x:Class="bbnApp.deskTop.Views.MainWindow"
+                 xmlns="https://github.com/avaloniaui"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+                 xmlns:converters="clr-namespace:bbnApp.deskTop.Converters"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:icon="clr-namespace:bbnApp.deskTop.Controls"
+                 xmlns:suki="https://github.com/kikipoulet/SukiUI"
+								xmlns:objectModel="clr-namespace:System.Collections.ObjectModel;assembly=System.ObjectModel"
+                 d:DesignHeight="600"
+                 d:DesignWidth="800"
+								x:Name="MainWindowPage"
+                 xmlns:vm="clr-namespace:bbnApp.deskTop.ViewModels"
+                 x:DataType="vm:MainWindowViewModel"
+				 xmlns:main="clr-namespace:bbnApp.deskTop.Views"
+				 Title="{Binding Title}"
+	             WindowState="{Binding WindowState}"
+                 BackgroundAnimationEnabled="{Binding AnimationsEnabled}"
+                 BackgroundShaderFile="{Binding CustomShaderFile}"
+                 BackgroundStyle="{Binding BackgroundStyle}"
+                 BackgroundTransitionsEnabled="{Binding TransitionsEnabled}"
+                 CanMinimize="{Binding !WindowLocked}"
+									CanMaximize="{Binding !WindowLocked}"
+                 CanMove="{Binding !WindowLocked}"
+                 CanResize="{Binding !WindowLocked}"
+                 Icon="/Assets/favicon.ico"
+                 ShowTitlebarBackground="{Binding ShowTitleBar}"
+                 ShowBottomBorder="{Binding ShowBottomBar}"
+                 IsTitleBarVisible="{Binding TitleBarVisible, Mode=TwoWay}"
+                 IsMenuVisible="True"
+                 mc:Ignorable="d">
+	<suki:SukiWindow.TitleBarContextMenu>
+		<ContextMenu>
+			<MenuItem Header="Custom TitleBar Context Menu Item"></MenuItem>
+		</ContextMenu>
+	</suki:SukiWindow.TitleBarContextMenu>
+	
+	<suki:SukiWindow.Hosts>
+		<suki:SukiToastHost Manager="{Binding ToastManager}"/>
+		<suki:SukiDialogHost Manager="{Binding DialogManager}"/>
+	</suki:SukiWindow.Hosts>
+
+	<suki:SukiWindow.LogoContent>
+		
+  <icon:IconFont Kind="bbn-line-system" 
+                 VerticalAlignment="Center"
+                 Foreground="{DynamicResource SukiPrimaryColor}">
+      <icon:IconFont.Transitions>
+			<Transitions>
+				<BrushTransition Property="Foreground" Duration="{DynamicResource ShortAnimationDuration}" />
+			</Transitions>
+		</icon:IconFont.Transitions>
+  </icon:IconFont>
+    
+	</suki:SukiWindow.LogoContent>
+		
+	<suki:SukiWindow.RightWindowTitleBarControls>
+		<Button Classes="Basic Rounded WindowControlsButton" ToolTip.Tip="快捷设置">
+			<avalonia:MaterialIcon Kind="Tools" Foreground="{DynamicResource SukiText}" />
+			<Button.Flyout>
+				<Flyout ShowMode="TransientWithDismissOnPointerMoveAway">
+					<Panel>
+
+						<Border CornerRadius="20" Margin="20" BoxShadow="{DynamicResource SukiPopupShadow}"></Border>
+
+						<Border Margin="20" CornerRadius="15"
+                                ClipToBounds="True" MinWidth="300"
+                                Background="{DynamicResource SukiCardBackground}"
+                                BorderBrush="{DynamicResource SukiLightBorderBrush}"
+                                BorderThickness="1">
+							<Border Background="{DynamicResource PopupGradientBrush}"
+									Padding="15">
+
+								<StackPanel Margin="0,0,0,0" Spacing="10">
+									<MenuItem Command="{Binding ToggleBaseThemeCommand}" Header="{Binding BaseTheme}">
+										<MenuItem.Icon>
+											<avalonia:MaterialIcon Kind="{Binding IsLightTheme, Converter={x:Static converters:BoolToIconConverters.ThemeState}}" />
+										</MenuItem.Icon>
+									</MenuItem>
+                  
+                  <MenuItem Command="{Binding DicReloadCommand}"
+                                          Header="重载系统参数"
+                                          ToolTip.Tip="点击重新下载系统参数">
+                    <MenuItem.Icon>
+                      <avalonia:MaterialIcon
+												Kind="Download" />
+                    </MenuItem.Icon>
+                  </MenuItem>
+                  
+                  <MenuItem Command="{Binding ToggleWindowLockCommand}"
+											  Header="{Binding WindowLockedInfo}"
+											  ToolTip.Tip="设置窗体锁定状态">
+										<MenuItem.Icon>
+											<avalonia:MaterialIcon
+												Kind="{Binding WindowLocked, Converter={x:Static converters:BoolToIconConverters.WindowLock}}" />
+										</MenuItem.Icon>
+									</MenuItem>
+									<MenuItem Command="{Binding ToggleTitleBarCommand}"
+											  Header="{Binding ToggleTitleBarInfo}"
+											  ToolTip.Tip="切换标题栏显示状态">
+										<MenuItem.Icon>
+											<avalonia:MaterialIcon
+												Kind="{Binding TitleBarVisible, Converter={x:Static converters:BoolToIconConverters.Visibility}}" />
+										</MenuItem.Icon>
+									</MenuItem>
+									<MenuItem Command="{Binding ToggleTitleBackgroundCommand}"
+											  Header="{Binding ToggleTitleBackgroundInfo}"
+											  ToolTip.Tip="工具栏背景状态切换">
+										<MenuItem.Icon>
+											<avalonia:MaterialIcon Kind="{Binding ShowTitleBar, Converter={x:Static converters:BoolToIconConverters.View}}"  />
+										</MenuItem.Icon>
+									</MenuItem>
+									<MenuItem Command="{Binding ToggleRightToLeftCommand}"
+											  Header="{Binding ToggleRightToLeftInfo}"
+											  ToolTip.Tip="菜单面板左右切换">
+										<MenuItem.Icon>
+											<avalonia:MaterialIcon
+												Kind="SwapHorizontal" />
+										</MenuItem.Icon>
+									</MenuItem>
+									<MenuItem Header="全屏"
+											  PointerPressed="MakeFullScreenPressed"
+											  ToolTip.Tip="应用全屏显示" >
+										<MenuItem.Icon>
+											<avalonia:MaterialIcon Kind="Fullscreen" />
+										</MenuItem.Icon>
+									</MenuItem>
+									<MenuItem Header="-"/>
+									<MenuItem Header="注销登录"
+											  PointerPressed="MakeReLoginPressed"
+											  Foreground="OrangeRed"
+											  ToolTip.Tip="注销身份重新登录" >
+										<MenuItem.Icon>
+											<avalonia:MaterialIcon Kind="Logout" />
+										</MenuItem.Icon>
+									</MenuItem>
+									<MenuItem Header="退出使用"
+											  PointerPressed="MakeExitePressed"
+											  Foreground="Red"
+											  ToolTip.Tip="注销并退出" >
+										<MenuItem.Icon>
+											<avalonia:MaterialIcon Kind="ExitToApp" />
+										</MenuItem.Icon>
+									</MenuItem>
+								</StackPanel>
+
+							</Border>
+						</Border>
+					</Panel>
+				</Flyout>
+			</Button.Flyout>
+		</Button>
+		<Button Classes="Basic Rounded WindowControlsButton" ToolTip.Tip="主题设置">
+			<avalonia:MaterialIcon Kind="Theme" Foreground="{DynamicResource SukiText}" />
+			<Button.Flyout>
+				<Flyout ShowMode="TransientWithDismissOnPointerMoveAway">
+					<Panel>
+
+						<Border CornerRadius="20" Margin="20" BoxShadow="{DynamicResource SukiPopupShadow}"></Border>
+						<Border Margin="20" CornerRadius="15"
+                                ClipToBounds="True" MinWidth="350"
+                                Background="{DynamicResource SukiCardBackground}"
+                                BorderBrush="{DynamicResource SukiLightBorderBrush}"
+                                BorderThickness="1">
+							<Border Background="{DynamicResource PopupGradientBrush}"
+									Padding="15">
+
+								<StackPanel Margin="0,0,0,0" Spacing="20">
+
+									<Grid ColumnDefinitions="*,20,*">
+
+										<suki:GlassCard Padding="0">
+											<DockPanel>
+												<RadioButton
+													 HorizontalAlignment="Stretch"
+													 VerticalAlignment="Stretch"
+													 Cursor="Hand"
+													 Padding="0"
+													 Classes="GigaChips"
+													 GroupName="RadioBaseTheme"
+													 IsChecked="{Binding IsLightTheme}"
+													 >
+													<Border Margin="-50"
+															Background="#fafafa"
+															CornerRadius="{DynamicResource MediumCornerRadius}">
+														<Grid>
+															<TextBlock Margin="58,42,42,42"
+																	   HorizontalAlignment="Center"
+																	   VerticalAlignment="Bottom"
+																	   FontWeight="DemiBold"
+																	   Foreground="#555555"
+																	   Text="亮色主题" />
+														</Grid>
+													</Border>
+												</RadioButton>
+											</DockPanel>
+										</suki:GlassCard>
+										<suki:GlassCard Grid.Column="2" Padding="0">
+											<DockPanel>
+												<RadioButton
+													 HorizontalAlignment="Stretch"
+													 VerticalAlignment="Stretch"
+													 Cursor="Hand"
+													Classes="GigaChips"
+													GroupName="RadioBaseTheme"
+													 IsChecked="{Binding !IsLightTheme}"
+                                                 >
+													<Border Margin="-50"
+															Background="#222222"
+															CornerRadius="{DynamicResource MediumCornerRadius}">
+														<Grid>
+															<TextBlock Margin="58,42,42,42"
+																	   HorizontalAlignment="Center"
+																	   VerticalAlignment="Bottom"
+																	   FontWeight="DemiBold"
+																	   Foreground="#fafafa"
+																	   Text="暗色主题" />
+														</Grid>
+													</Border>
+												</RadioButton>
+											</DockPanel>
+										</suki:GlassCard>
+									</Grid>
+
+									<suki:GlassCard CornerRadius="15" Padding="15">
+										<StackPanel Orientation="Vertical">
+											<DockPanel>
+												<suki:GroupBox Header="设置主题色">
+													<ItemsControl HorizontalAlignment="Center" ItemsSource="{Binding Themes}">
+														<ItemsControl.ItemsPanel>
+															<ItemsPanelTemplate>
+																<StackPanel HorizontalAlignment="Center"
+																			Orientation="Horizontal"
+																			Spacing="10" />
+															</ItemsPanelTemplate>
+														</ItemsControl.ItemsPanel>
+														<ItemsControl.ItemTemplate>
+															<DataTemplate>
+																<RadioButton Width="50"
+																			 Height="50"
+																			 Cursor="Hand"
+																			 Classes="GigaChips"
+																			Checked="RadioButton_Checked"
+																			 CommandParameter="{Binding}"
+																			 CornerRadius="50"
+																			 GroupName="RadioColorTheme">
+																	<Border Margin="-30"
+																			Background="{Binding PrimaryBrush}"
+																			CornerRadius="50" />
+																</RadioButton>
+															</DataTemplate>
+														</ItemsControl.ItemTemplate>
+													</ItemsControl>
+												</suki:GroupBox>
+											</DockPanel>
+											<Border BorderThickness="1"  Background="{DynamicResource SukiCardBackground}" HorizontalAlignment="Stretch" BorderBrush="{DynamicResource SukiLightBorderBrush}"></Border>
+											<Button Margin="0,5,0,0" Classes="Basic"  Command="{Binding CreateCustomThemeCommand}">
+												<StackPanel Orientation="Horizontal">
+													<avalonia:MaterialIcon Kind="ModeEdit" />
+													<TextBlock>自定义主题色</TextBlock>
+												</StackPanel>
+											</Button>
+										</StackPanel>
+									</suki:GlassCard>
+
+									<suki:GlassCard CornerRadius="15" Padding="15">
+										<DockPanel>
+											<ComboBox DockPanel.Dock="Right"
+													  ItemsSource="{Binding BackgroundStyles}"
+													  SelectedItem="{Binding BackgroundStyle}" />
+											<StackPanel HorizontalAlignment="Left">
+												<TextBlock FontSize="16"
+														   FontWeight="DemiBold"
+														   Text="背景风格" />
+												<TextBlock Margin="0,12,70,0"
+														   Foreground="{DynamicResource SukiLowText}"
+														   Text="从提供的背景风格中选择."
+														   TextWrapping="Wrap" />
+											</StackPanel>
+										</DockPanel>
+									</suki:GlassCard>
+
+									<Grid ColumnDefinitions="*,20,*">
+
+										<suki:GlassCard  CornerRadius="15" Padding="15">
+											<DockPanel>
+												<ToggleSwitch VerticalAlignment="Center" DockPanel.Dock="Right" IsChecked="{Binding BackgroundAnimations}" />
+												<TextBlock DockPanel.Dock="Bottom" Text="开启/关闭动画背景" Margin="0,8,0,0"
+														   Foreground="{DynamicResource SukiLowText}"
+														   VerticalAlignment="Center" />
+												<TextBlock Text="动画背景" FontSize="15"
+														   FontWeight="DemiBold"
+														   VerticalAlignment="Center" />
+
+											</DockPanel>
+										</suki:GlassCard>
+										<suki:GlassCard Grid.Column="2"  CornerRadius="15" Padding="15">
+											<DockPanel>
+												<ToggleSwitch VerticalAlignment="Center" DockPanel.Dock="Right" IsChecked="{Binding BackgroundTransitions}" />
+												<TextBlock DockPanel.Dock="Bottom" Text="开启/关闭过渡效果" Margin="0,8,0,0"
+														   Foreground="{DynamicResource SukiLowText}"
+														   VerticalAlignment="Center" />
+												<TextBlock Text="过渡效果" FontSize="15"
+														   FontWeight="DemiBold"
+														   VerticalAlignment="Center" />
+
+											</DockPanel>
+										</suki:GlassCard>
+									</Grid>
+
+									<suki:GlassCard CornerRadius="15" Padding="15">
+										<DockPanel>
+											<ToggleSwitch VerticalAlignment="Center" DockPanel.Dock="Right" IsChecked="{Binding IsShadCn}"  Command="{Binding ShadCnModeCommand}"/>
+											<TextBlock DockPanel.Dock="Bottom" Text="开启/关闭Shadcn模式" Margin="0,8,0,0"
+													   Foreground="{DynamicResource SukiLowText}"
+													   VerticalAlignment="Center" />
+											<TextBlock Text="Shadcn模式" FontSize="15"
+													   FontWeight="DemiBold"
+													   VerticalAlignment="Center" />
+
+										</DockPanel>
+									</suki:GlassCard>
+								</StackPanel>
+
+							</Border>
+						</Border>
+
+					</Panel>
+				</Flyout>
+			</Button.Flyout>
+		</Button>
+		<Button Classes="Basic Rounded WindowControlsButton" ToolTip.Tip="应用中心">
+			<avalonia:MaterialIcon Kind="User" Foreground="{DynamicResource SukiText}" />
+			<Button.Flyout>
+				<Flyout ShowMode="TransientWithDismissOnPointerMoveAway">
+					<Panel>
+						<Border CornerRadius="20" Margin="20" BoxShadow="{DynamicResource SukiPopupShadow}"></Border>
+
+						<Border Margin="20" CornerRadius="15"
+                                ClipToBounds="True" MinWidth="200"
+                                Background="{DynamicResource SukiCardBackground}"
+                                BorderBrush="{DynamicResource SukiLightBorderBrush}"
+                                BorderThickness="1">
+							<Border Background="{DynamicResource PopupGradientBrush}"
+									Padding="15">
+
+								<StackPanel Margin="0,0,0,0" Spacing="10">
+                  <MenuItem
+												PointerPressed="UsrePointerPressed"
+											  Header="{Binding LoginUser.EmployeeName}"
+											  ToolTip.Tip="点击查看用户信息">
+										<MenuItem.Icon>
+											<avalonia:MaterialIcon Kind="UserCircle" />
+										</MenuItem.Icon>
+                  
+                  <FlyoutBase.AttachedFlyout>
+											<Flyout Placement="Left" ShowMode="TransientWithDismissOnPointerMoveAway">
+                        
+                        <Panel>
+													<Border CornerRadius="20" Margin="20" BoxShadow="{DynamicResource SukiPopupShadow}"></Border>
+														<Border Margin="20"
+																 CornerRadius="15"
+                                ClipToBounds="True" MinWidth="200"
+                                Background="{DynamicResource SukiCardBackground}"
+                                BorderBrush="{DynamicResource SukiLightBorderBrush}"
+                                BorderThickness="1">
+															<Border Background="{DynamicResource PopupGradientBrush}" Padding="15">
+																	<StackPanel Orientation="Vertical">
+														
+                            <StackPanel Orientation="Horizontal">
+                              <TextBlock Grid.Column="0">姓名:</TextBlock>
+															<TextBlock Grid.Column="1" Text="{Binding LoginUser.EmployeeName}"></TextBlock>
+                            </StackPanel>
+                            
+                            <StackPanel Orientation="Horizontal">
+                              <TextBlock Grid.Column="0">工号:</TextBlock>
+															<TextBlock Grid.Column="1" Text="{Binding LoginUser.EmployeeNum}"></TextBlock>
+                            </StackPanel>
+                            
+                            <StackPanel Orientation="Horizontal">
+                              <TextBlock Grid.Column="0">部门:</TextBlock>
+															<TextBlock Grid.Column="1" Text="{Binding LoginUser.DepartMentName}"></TextBlock>
+                            </StackPanel>
+                            
+                            <StackPanel Orientation="Horizontal">
+                              <TextBlock Grid.Column="0">职务:</TextBlock>
+															<TextBlock Grid.Column="1" Text="{Binding LoginUser.Position}"></TextBlock>
+                            </StackPanel>
+                            
+                            <StackPanel Orientation="Horizontal">
+                              <TextBlock Grid.Column="0">电话:</TextBlock>
+															<TextBlock Grid.Column="1" Text="{Binding LoginUser.PhoneNum}"></TextBlock>
+                            </StackPanel>
+                            
+                            <StackPanel Orientation="Horizontal">
+                              <TextBlock Grid.Column="0">邮箱:</TextBlock>
+															<TextBlock Grid.Column="1" Text="{Binding LoginUser.EmailNum}"></TextBlock>
+                            </StackPanel>
+                            
+                            <StackPanel Orientation="Horizontal">
+                              <TextBlock Grid.Column="0">入职时间:</TextBlock>
+															<TextBlock Grid.Column="1" Text="{Binding LoginUser.DateOfEmployment}"></TextBlock>
+                            </StackPanel>
+                            
+                            <StackPanel Orientation="Horizontal">
+                              <TextBlock Grid.Column="0">机构名称:</TextBlock>
+															<TextBlock Grid.Column="1" Text="{Binding LoginUser.CompanyName}"></TextBlock>
+                            </StackPanel>
+                  
+                          </StackPanel>
+															</Border>
+														</Border>
+                          </Panel>
+                    
+											</Flyout>
+									</FlyoutBase.AttachedFlyout>
+                  
+									</MenuItem>
+
+                  <MenuItem
+												IsVisible="{Binding IsLogined}"
+											  Header="密码修改"
+												Command="{Binding PassWordWindowCommand}"
+											  ToolTip.Tip="操作员密码修改">
+                    <MenuItem.Icon>
+                      <avalonia:MaterialIcon Kind="PasswordReset" />
+                    </MenuItem.Icon>
+                  </MenuItem>
+
+                  <MenuItem
+											  Header="更新检测"
+											  ToolTip.Tip="检测应用更新">
+										<MenuItem.Icon>
+											<avalonia:MaterialIcon Kind="Update" />
+										</MenuItem.Icon>
+									</MenuItem>
+                  
+									<MenuItem
+											  Header="参数配置"
+                        Command="{Binding ParameSettingCommand}"
+											  ToolTip.Tip="应用参数配置">
+										<MenuItem.Icon>
+											<avalonia:MaterialIcon Kind="Database" />
+										</MenuItem.Icon>
+									</MenuItem>
+                
+                  <Separator/>
+                   
+									<MenuItem Header="注销登录"
+											  PointerPressed="MakeReLoginPressed"
+											  Foreground="OrangeRed"
+											  ToolTip.Tip="注销身份重新登录" >
+										<MenuItem.Icon>
+											<avalonia:MaterialIcon Kind="Logout" />
+										</MenuItem.Icon>
+									</MenuItem>
+                  
+									<MenuItem Header="退出使用"
+											  PointerPressed="MakeExitePressed"
+											  Foreground="Red"
+											  ToolTip.Tip="注销并退出" >
+										<MenuItem.Icon>
+											<avalonia:MaterialIcon Kind="ExitToApp" />
+										</MenuItem.Icon>
+									</MenuItem>
+                
+								</StackPanel>
+
+							</Border>
+						</Border>
+					</Panel>
+				</Flyout>
+			</Button.Flyout>
+		</Button>
+
+	</suki:SukiWindow.RightWindowTitleBarControls>
+
+	<suki:SukiWindow.MenuItems>
+    <MenuItem IsVisible="{StaticResource TopMenuToEnableConverter}" Command="{Binding AppTagSelectedCommand}" CommandParameter="{Binding ., RelativeSource={RelativeSource Self}}" Tag="UserCenter">
+      <MenuItem.Header>
+        <StackPanel Orientation="Horizontal">
+          <icon:IconFont Kind="bbn-user" Foreground="{DynamicResource SukiText}"/>
+          <Border BorderBrush="{DynamicResource SukiText}" Classes="Split"></Border>
+					<TextBlock Text="用户中心"></TextBlock>
+        </StackPanel>
+      </MenuItem.Header>
+    </MenuItem>
+    <MenuItem IsVisible="{StaticResource TopMenuToEnableConverter}" Command="{Binding AppTagSelectedCommand}" CommandParameter="{Binding ., RelativeSource={RelativeSource Self}}" Tag="OperationsCenter">
+      <MenuItem.Header>
+        <StackPanel Orientation="Horizontal">
+          <icon:IconFont Kind="bbn-list" Foreground="{DynamicResource SukiText}"/>
+          <Border BorderBrush="{DynamicResource SukiText}" Classes="Split"></Border>
+          <TextBlock Text="运维中心"></TextBlock>
+        </StackPanel>
+      </MenuItem.Header>
+    </MenuItem>
+    <MenuItem IsVisible="{StaticResource TopMenuToEnableConverter}" Command="{Binding AppTagSelectedCommand}" CommandParameter="{Binding ., RelativeSource={RelativeSource Self}}" Tag="BackupCenter">
+      <MenuItem.Header>
+        <StackPanel Orientation="Horizontal">
+          <icon:IconFont Kind="bbn-tree" Foreground="{DynamicResource SukiText}"/>
+          <Border BorderBrush="{DynamicResource SukiText}" Classes="Split"></Border>
+          <TextBlock Text="设备中心"></TextBlock>
+        </StackPanel>
+      </MenuItem.Header>
+    </MenuItem>
+    <MenuItem IsVisible="{StaticResource TopMenuToEnableConverter}" Command="{Binding AppTagSelectedCommand}" CommandParameter="{Binding ., RelativeSource={RelativeSource Self}}" Tag="DataCenter">
+      <MenuItem.Header>
+        <StackPanel Orientation="Horizontal">
+          <icon:IconFont Kind="bbn-database" Foreground="{DynamicResource SukiText}"/>
+          <Border BorderBrush="{DynamicResource SukiText}" Classes="Split"></Border>
+          <TextBlock Text="数据中心"></TextBlock>
+        </StackPanel>
+      </MenuItem.Header>
+    </MenuItem>
+    <MenuItem IsVisible="{StaticResource TopMenuToEnableConverter}" Command="{Binding AppTagSelectedCommand}" CommandParameter="{Binding ., RelativeSource={RelativeSource Self}}" Tag="FileManagement">
+      <MenuItem.Header>
+        <StackPanel Orientation="Horizontal">
+          <icon:IconFont Kind="bbn-folder" Foreground="{DynamicResource SukiText}"/>
+          <Border BorderBrush="{DynamicResource SukiText}" Classes="Split"></Border>
+          <TextBlock Text="文件管理"></TextBlock>
+        </StackPanel>
+      </MenuItem.Header>
+    </MenuItem>
+    <MenuItem IsVisible="{StaticResource TopMenuToEnableConverter}" Command="{Binding AppTagSelectedCommand}" CommandParameter="{Binding ., RelativeSource={RelativeSource Self}}" Tag="PlatformManagement">
+      <MenuItem.Header>
+        <StackPanel Orientation="Horizontal">
+          <icon:IconFont Kind="bbn-server" Foreground="{DynamicResource SukiText}"/>
+          <Border BorderBrush="{DynamicResource SukiText}" Classes="Split"></Border>
+          <TextBlock Text="平台管理"></TextBlock>
+        </StackPanel>
+      </MenuItem.Header>
+    </MenuItem>
+    <MenuItem Header="辅助工具" IsVisible="{StaticResource TopMenuToEnableConverter}" CommandParameter="{Binding ., RelativeSource={RelativeSource Self}}">
+      <MenuItem.Header>
+        <StackPanel Orientation="Horizontal">
+          <avalonia:MaterialIcon Kind="ServiceToolbox"></avalonia:MaterialIcon>
+          <Border BorderBrush="{DynamicResource SukiText}" Classes="Split"></Border>
+          <TextBlock Text="辅助工具"></TextBlock>
+        </StackPanel>
+      </MenuItem.Header>
+      
+				<MenuItem Header="加解密工具" IsVisible="{StaticResource TopMenuToEnableConverter}" Command="{Binding AppTagSelectedCommand}" CommandParameter="{Binding ., RelativeSource={RelativeSource Self}}" Tag="AssistiveToolsKeys">
+						<MenuItem.Icon>
+							<icon:IconFont MKind="Key"></icon:IconFont>
+						</MenuItem.Icon>
+        </MenuItem>
+      
+				<MenuItem Header="文件处理工具" IsVisible="{StaticResource TopMenuToEnableConverter}" Command="{Binding AppTagSelectedCommand}" CommandParameter="{Binding ., RelativeSource={RelativeSource Self}}" Tag="AssistiveToolsFiles">
+						<MenuItem.Icon>
+							<icon:IconFont MKind="Files"></icon:IconFont>
+						</MenuItem.Icon>
+        </MenuItem>
+    
+    </MenuItem>
+	</suki:SukiWindow.MenuItems>
+
+	<suki:SukiSideMenu IsSearchEnabled="True" ItemsSource="{Binding SelectedPages}" SelectedItem="{Binding ActivePage}">
+		<suki:SukiSideMenu.Styles>
+			<Style Selector="Image.AppIcon">
+				<Setter Property="Transitions">
+					<Transitions>
+						<DoubleTransition Property="Opacity" Duration="0.1" />
+					</Transitions>
+				</Setter>
+				<Style Selector="^:pointerover">
+					<Setter Property="Opacity" Value="0.5" />
+				</Style>
+			</Style>
+		</suki:SukiSideMenu.Styles>
+		
+		<suki:SukiSideMenu.ItemTemplate>
+			<DataTemplate>
+				<suki:SukiSideMenuItem Classes="Compact" Header="{Binding DisplayName}">
+					<suki:SukiSideMenuItem.Icon>
+            <icon:IconFont Kind="{Binding IconFont}" MKind="{Binding Icon}" Foreground="{DynamicResource SukiText}"/>
+          </suki:SukiSideMenuItem.Icon>
+				</suki:SukiSideMenuItem>
+			</DataTemplate>
+		</suki:SukiSideMenu.ItemTemplate>
+		
+		<suki:SukiSideMenu.HeaderContent>
+			<Image Width="60"
+                   Height="60"
+                   Margin="0,-40,1,1"
+                   Classes="AppIcon"
+                   IsVisible="{Binding $parent[suki:SukiWindow].((vm:MainWindowViewModel)DataContext).TitleBarVisible}"
+                   PointerPressed="InputElement_OnPointerPressed"
+                   Source="/Assets/logo.png"
+                   
+                   ToolTip.Tip="点击切换菜单栏状态" />
+		</suki:SukiSideMenu.HeaderContent>
+
+		<suki:SukiSideMenu.FooterContent>
+			<StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+				<Button Classes="Basic"
+						Tag="ExitFullScreen"
+						IsVisible="{Binding IsFullScreen}"
+                        Click="Button_Click"
+                        ToolTip.Tip="点击离开全屏模式.">
+					<StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+					<avalonia:MaterialIcon Kind="FullscreenExit" />
+					<TextBlock VerticalAlignment="Center">离开全屏模式</TextBlock>
+					</StackPanel>
+				</Button>
+    </StackPanel>
+		</suki:SukiSideMenu.FooterContent>
+	</suki:SukiSideMenu>
+
+</suki:SukiWindow>
+
+

@@ -1,0 +1,205 @@
+  <UserControl x:Class="bbnApp.deskTop.PlatformManagement.AppSetting.AppSettingView"
+           xmlns="https://github.com/avaloniaui"
+           xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+           xmlns:suki="https://github.com/kikipoulet/SukiUI"
+           xmlns:converters="clr-namespace:bbnApp.deskTop.Converters"
+           xmlns:theme="clr-namespace:SukiUI.Theme;assembly=SukiUI"
+           xmlns:my="clr-namespace:bbnApp.deskTop.Controls"
+           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+           d:DesignHeight="400"
+           d:DesignWidth="1050"
+           xmlns:setting="clr-namespace:bbnApp.deskTop.PlatformManagement.AppSetting"
+           x:DataType="setting:AppSettingViewModel"
+           mc:Ignorable="d">
+    <suki:GlassCard Classes="HeaderCard" Margin="10">
+      <suki:GroupBox>
+        <suki:GroupBox.Header>
+          <StackPanel Orientation="Horizontal">
+            <avalonia:MaterialIcon Kind="Location"></avalonia:MaterialIcon>
+            <TextBlock>系统配置清单</TextBlock>
+          </StackPanel>
+        </suki:GroupBox.Header>
+        
+        <SplitView IsPaneOpen="{Binding IsEdit}"
+                   x:Name="AppSettingSplite"
+                   DisplayMode="Overlay"
+                   PanePlacement="Right"
+                   OpenPaneLength="450">
+            <SplitView.Pane>
+              <ContentControl
+                  Background="{DynamicResource SukiCardBackground}"
+                  BorderBrush="{DynamicResource SukiLightBorderBrush}"
+                  BorderThickness="1"
+                  Content="{Binding AppSettingContent}"></ContentControl>
+            </SplitView.Pane>
+          
+          <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="auto"></RowDefinition>
+              <RowDefinition Height="2"></RowDefinition>
+              <RowDefinition Height="*"></RowDefinition>
+              <RowDefinition Height="auto"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Grid ColumnDefinitions="*, 200" Grid.Row="0">
+
+              <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                
+                <TextBlock VerticalAlignment="Center" Classes="Caption">参数名称：</TextBlock>
+                <TextBox Watermark="请输入参数名称关键字" Text="{Binding FilterSettingName}" Width="240" suki:TextBoxExtensions.AddDeleteButton="True"/>
+
+                <TextBlock VerticalAlignment="Center" Classes="Caption">参数代码：</TextBlock>
+                <TextBox Watermark="请输入参数代码关键字" Text="{Binding FilterSettingCode}" Width="240" suki:TextBoxExtensions.AddDeleteButton="True"/>
+
+
+              </StackPanel>
+
+              <my:Space  Grid.Column="1" Orientation="Horizontal" Spacing="10">
+                <Button VerticalAlignment="Center" theme:ButtonExtensions.ShowProgress="{Binding IsBusy}"  Command="{Binding AppSettingLoadCommand}" Classes="Outlined" >
+                  <StackPanel Orientation="Horizontal">
+                    <avalonia:MaterialIcon Kind="Search"   IsVisible="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}"/>
+                    <TextBlock>查询</TextBlock>
+                  </StackPanel>
+                </Button>
+
+                <Button VerticalAlignment="Center"  Command="{Binding SettingAddActionCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" Tag="add" Classes="Flat" >
+                  <StackPanel Orientation="Horizontal">
+                    <avalonia:MaterialIcon Kind="Add" />
+                    <TextBlock>新建</TextBlock>
+                  </StackPanel>
+                </Button>
+              </my:Space>
+            </Grid>
+
+
+            <Border Background="{DynamicResource SukiText}"
+              Classes="Line"
+              Grid.Row="1"
+              Height="1"
+              BorderThickness="0">
+            </Border>
+            <suki:BusyArea Grid.Row="2" Name="BusyAreaIn"
+									   BusyText="数据加载中..."
+									   IsBusy="{Binding IsBusy}">
+              <DataGrid
+                ItemsSource="{Binding AppSettingData}"
+                AutoGenerateColumns="False"
+                IsReadOnly="True"
+                CanUserReorderColumns="True"
+                CanUserResizeColumns="True"
+                CanUserSortColumns="True"
+                GridLinesVisibility="All"
+                >
+                <DataGrid.Columns>
+                  <DataGridTextColumn Binding="{Binding IdxNum}"  Width="100">
+                    <DataGridTextColumn.Header>
+                      <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock>序号</TextBlock>
+                      </StackPanel>
+                    </DataGridTextColumn.Header>
+                  </DataGridTextColumn>
+                  <DataGridTextColumn Binding="{Binding SettingCode}"  Width="180">
+                    <DataGridTextColumn.Header>
+                      <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock>配置参数代码</TextBlock>
+                      </StackPanel>
+                    </DataGridTextColumn.Header>
+                  </DataGridTextColumn>
+                  <DataGridTextColumn Binding="{Binding SettingName}" Width="200">
+                    <DataGridTextColumn.Header>
+                      <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock>配置参数名称</TextBlock>
+                      </StackPanel>
+                    </DataGridTextColumn.Header>
+                  </DataGridTextColumn>
+                  <DataGridTextColumn Binding="{Binding SettingDesc}"  Width="*">
+                    <DataGridTextColumn.Header>
+                      <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock>参数说明</TextBlock>
+                      </StackPanel>
+                    </DataGridTextColumn.Header>
+                  </DataGridTextColumn>
+                  <DataGridTextColumn Binding="{Binding DefaultValue}"  Width="100">
+                    <DataGridTextColumn.Header>
+                      <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock>默认值</TextBlock>
+                      </StackPanel>
+                    </DataGridTextColumn.Header>
+                  </DataGridTextColumn>
+                  <DataGridTextColumn Binding="{Binding NowValue}"  Width="100">
+                    <DataGridTextColumn.Header>
+                      <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock>当前值</TextBlock>
+                      </StackPanel>
+                    </DataGridTextColumn.Header>
+                  </DataGridTextColumn>
+                  
+                  <DataGridTemplateColumn Header="固定项"  Width="100">
+                    <DataTemplate>
+                      <ToggleSwitch Tag="IsFixed" IsChecked="{Binding IsFiexed,  Converter={StaticResource IntToBoolConverter}}" Click="ToggleSwitch_Click"></ToggleSwitch>
+                    </DataTemplate>
+                  </DataGridTemplateColumn>
+                  
+                  <DataGridTemplateColumn Header="锁定"  Width="100">
+                    <DataTemplate>
+                        <ToggleSwitch Tag="IsLock" IsChecked="{Binding IsLock,  Converter={StaticResource IntToBoolConverter}}" Click="ToggleSwitch_Click"></ToggleSwitch>
+                    </DataTemplate>
+                  </DataGridTemplateColumn>
+
+                  <!-- 自定义操作列 -->
+                  <DataGridTemplateColumn Header="操作" Width="80">
+
+                    <DataGridTemplateColumn.CellTemplate>
+                      <DataTemplate>
+                        <my:Space Orientation="Horizontal">
+                            <!-- 修改按钮 -->
+                            <Button 
+                                    Classes="Basic"
+                                    ToolTip.Tip="点击修改"
+                                    DataContext="{Binding $parent[UserControl].DataContext}"
+                                    x:DataType="setting:AppSettingViewModel"
+                                    Command="{Binding SettingEditCommand}"
+                                    CommandParameter="{Binding $parent.DataContext}"
+                                    Tag="edit">
+                              <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <avalonia:MaterialIcon Kind="EditCircle" />
+                              </StackPanel>
+                            </Button>
+                            <!-- 删除按钮 -->
+                            <Button 
+                                    Classes="Basic Accent"
+                                    DataContext="{Binding $parent[UserControl].DataContext}"
+                                    x:DataType="setting:AppSettingViewModel"
+                                    Command="{Binding SettingDeleteCommand}"
+                                    CommandParameter="{Binding $parent.DataContext}"
+                                    ToolTip.Tip="点击删除"
+                                    Tag="delete">
+                              <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <avalonia:MaterialIcon Kind="DeleteCircle" />
+                              </StackPanel>
+                            </Button>
+                          </my:Space>
+                      </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                  </DataGridTemplateColumn>
+
+                </DataGrid.Columns>
+              </DataGrid>
+
+            </suki:BusyArea>
+
+            <my:Pagination
+              Grid.Row="3"
+              x:Name="AppSettingPagination"
+              ItemsSource="{Binding PagerData}"
+              ItemsPerPage="20"
+              TotalItems="{Binding TotalItems}"
+              IsBackendPaging="True"/>
+          </Grid>
+        </SplitView>
+        
+        </suki:GroupBox>
+      </suki:GlassCard>
+</UserControl>

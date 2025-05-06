@@ -1,0 +1,249 @@
+  <UserControl x:Class="bbnApp.deskTop.PlatformManagement.AreaCode.AreaCodePage"
+           xmlns="https://github.com/avaloniaui"
+           xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+           xmlns:suki="https://github.com/kikipoulet/SukiUI"
+           xmlns:converters="clr-namespace:bbnApp.deskTop.Converters"
+           xmlns:theme="clr-namespace:SukiUI.Theme;assembly=SukiUI"
+           xmlns:my="clr-namespace:bbnApp.deskTop.Controls"
+           xmlns:area="clr-namespace:bbnApp.deskTop.PlatformManagement.AreaCode"
+           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+           xmlns:icon="clr-namespace:bbnApp.deskTop.Controls"
+           d:DesignHeight="400"
+           d:DesignWidth="1050"
+           x:DataType="area:AreaCodePageViewModel"
+           mc:Ignorable="d">
+    <suki:GlassCard Classes="HeaderCard" Margin="10">
+      <suki:GroupBox>
+
+        <UserControl.Resources>
+          <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
+        </UserControl.Resources>
+
+        <suki:GroupBox.Header>
+          <StackPanel Orientation="Horizontal">
+            <avalonia:MaterialIcon Kind="Location"></avalonia:MaterialIcon>
+            <TextBlock>行政区划清单</TextBlock>
+          </StackPanel>
+        </suki:GroupBox.Header>
+        
+        <SplitView IsPaneOpen="{Binding IsEdit}"
+                   x:Name="AreaSplite"
+           DisplayMode="Overlay"
+           PanePlacement="Right"
+           OpenPaneLength="650">
+          
+            <SplitView.Pane>
+              <ContentControl
+                  Background="{DynamicResource SukiCardBackground}"
+                  BorderBrush="{DynamicResource SukiLightBorderBrush}"
+                  BorderThickness="1"
+                  Content="{Binding AreaContent}"></ContentControl>
+            </SplitView.Pane>
+          
+          <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="auto"></RowDefinition>
+              <RowDefinition Height="2"></RowDefinition>
+              <RowDefinition Height="*"></RowDefinition>
+              <RowDefinition Height="auto"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Grid ColumnDefinitions="*, 200" Grid.Row="0">
+
+              <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock VerticalAlignment="Center" Classes="Caption">行政地区：</TextBlock>
+
+                <my:AreaNodeSelector ShowResetButton="True" IsAllEnabled="True" AccessLeve="4" SelectionChanged="AreaNodeSelector_SelectionChanged" InitValue="{Binding InitValue}" Width="800" Orientation="Horizontal"></my:AreaNodeSelector>
+
+                <TextBlock VerticalAlignment="Center" Classes="Caption">地区名称：</TextBlock>
+                <TextBox Watermark="请输入地区关键字" Text="{Binding FilterAreaName}" Width="180" suki:TextBoxExtensions.AddDeleteButton="True"/>
+
+                <TextBlock VerticalAlignment="Center" Classes="Caption">行政级别：</TextBlock>
+                <ComboBox  Width="150" ItemsSource="{Binding XzjbItem}" SelectedItem="{Binding AreaLeveSelectedItem}">
+                  <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                      <TextBlock Text="{Binding Name}"/>
+                    </DataTemplate>
+                  </ComboBox.ItemTemplate>
+                </ComboBox>
+
+              </StackPanel>
+
+              <my:Space  Grid.Column="1" Orientation="Horizontal" Spacing="10">
+                <Button VerticalAlignment="Center" theme:ButtonExtensions.ShowProgress="{Binding IsBusy}"  Command="{Binding DataLoadCommand}" Classes="Outlined" >
+                  <StackPanel Orientation="Horizontal">
+                    <avalonia:MaterialIcon Kind="Search"   IsVisible="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}"/>
+                    <TextBlock>查询</TextBlock>
+                  </StackPanel>
+                </Button>
+
+                <Button VerticalAlignment="Center"  Command="{Binding AreaAddActionCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" Tag="add" Classes="Flat" >
+                  <StackPanel Orientation="Horizontal">
+                    <avalonia:MaterialIcon Kind="Add" />
+                    <TextBlock>新建</TextBlock>
+                  </StackPanel>
+                </Button>
+              </my:Space>
+            </Grid>
+
+
+            <Border Background="{DynamicResource SukiText}"
+              Classes="Line"
+              Grid.Row="1"
+              Height="1"
+              BorderThickness="0">
+            </Border>
+            <suki:BusyArea Grid.Row="2" Name="BusyAreaIn"
+									   BusyText="数据加载中..."
+									   IsBusy="{Binding IsBusy}">
+              <DataGrid
+                ItemsSource="{Binding AreaData}"
+                AutoGenerateColumns="False"
+                CanUserReorderColumns="True"
+                CanUserResizeColumns="True"
+                CanUserSortColumns="True"
+                GridLinesVisibility="All"
+                >
+                <DataGrid.Columns>
+                  <DataGridTextColumn Binding="{Binding IdxNum}"  Width="100">
+                    <DataGridTextColumn.Header>
+                      <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock>序号</TextBlock>
+                      </StackPanel>
+                    </DataGridTextColumn.Header>
+                  </DataGridTextColumn>
+                  <DataGridTextColumn Binding="{Binding AreaId}"  Width="140">
+                    <DataGridTextColumn.Header>
+                      <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock>区划代码</TextBlock>
+                      </StackPanel>
+                    </DataGridTextColumn.Header>
+                  </DataGridTextColumn>
+                  <DataGridTextColumn Binding="{Binding AreaName}" Width="200">
+                    <DataGridTextColumn.Header>
+                      <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock>区划名称</TextBlock>
+                      </StackPanel>
+                    </DataGridTextColumn.Header>
+                  </DataGridTextColumn>
+                  <DataGridTextColumn Binding="{Binding AreaFullName}"  Width="*">
+                    <DataGridTextColumn.Header>
+                      <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock>区划全称</TextBlock>
+                      </StackPanel>
+                    </DataGridTextColumn.Header>
+                  </DataGridTextColumn>
+                  <DataGridTextColumn Header="行政级别" Binding="{Binding AreaLeveName}"  Width="100">
+                    <DataGridTextColumn.Header>
+                      <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock>行政级别</TextBlock>
+                      </StackPanel>
+                    </DataGridTextColumn.Header>
+                  </DataGridTextColumn>
+                  
+                  <!--<DataGridTextColumn Header="锁定" Binding="{Binding IsLock,Converter={x:Static converters:BoolToTextConverters.Lock}}" Width="80">
+                    <DataGridTextColumn.Header>
+                      <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock>锁定</TextBlock>
+                      </StackPanel>
+                    </DataGridTextColumn.Header>
+                  </DataGridTextColumn>-->
+
+                  <DataGridTemplateColumn Header="锁定"  Width="80">
+                    <DataTemplate>
+                      <CheckBox IsChecked="{Binding IsLock}" 
+                                HorizontalAlignment="Center" 
+                                Cursor="Hand" 
+                                IsEnabled="False"
+                                ></CheckBox>
+                    </DataTemplate>
+                  </DataGridTemplateColumn>
+
+                  <!-- 自定义操作列 -->
+                  <DataGridTemplateColumn Header="操作" Width="200">
+
+                    <DataGridTemplateColumn.CellTemplate>
+                      <DataTemplate>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                          <!-- 锁定按钮 -->
+                          <StackPanel IsVisible="{Binding IsLock}">
+                            <Button Margin="5,0"
+                                    Classes="Basic"
+                                    ToolTip.Tip="点击解锁"
+                                    DataContext="{Binding $parent[UserControl].DataContext}"
+                                    x:DataType="area:AreaCodePageViewModel"
+                                    Command="{Binding AreaLockActionCommand}"
+                                    CommandParameter="{Binding $parent.DataContext}"
+                                    Tag="edit">
+                              <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <avalonia:MaterialIcon Kind="Unlocked" />
+                              </StackPanel>
+                            </Button>
+                          </StackPanel>
+
+                          <StackPanel IsVisible="{Binding IsLock, Converter={StaticResource InverseBoolConverter}}">
+                            <Button Margin="5,0"
+                                    Classes="Basic"
+                                    ToolTip.Tip="点击锁定"
+                                    DataContext="{Binding $parent[UserControl].DataContext}"
+                                    x:DataType="area:AreaCodePageViewModel"
+                                    Command="{Binding AreaLockActionCommand}"
+                                    CommandParameter="{Binding $parent.DataContext}"
+                                    Tag="edit">
+                              <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <avalonia:MaterialIcon Kind="Lock" />
+                              </StackPanel>
+                            </Button>
+                          </StackPanel>
+
+                          <!-- 修改按钮 -->
+                          <Button Margin="5,0" 
+                                  Classes="Basic" 
+                                  ToolTip.Tip="点击修改" 
+                                  DataContext="{Binding $parent[UserControl].DataContext}"
+                                  x:DataType="area:AreaCodePageViewModel"
+                                  Command="{Binding AreaEditActionCommand}"
+                                  CommandParameter="{Binding $parent.DataContext}"
+                                  Tag="edit">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                              <avalonia:MaterialIcon Kind="EditCircle" />
+                            </StackPanel>
+                          </Button>
+                          <!-- 删除按钮 -->
+                          <Button Margin="5,0" 
+                                  Classes="Basic Accent" 
+                                  DataContext="{Binding $parent[UserControl].DataContext}"
+                                  x:DataType="area:AreaCodePageViewModel"
+                                  Command="{Binding AreaDeleteActionCommand}"
+                                  CommandParameter="{Binding $parent.DataContext}"
+                                  ToolTip.Tip="点击删除"  
+                                  Tag="delete">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                              <avalonia:MaterialIcon Kind="DeleteCircle" />
+                            </StackPanel>
+                          </Button>
+                        </StackPanel>
+                      </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                  </DataGridTemplateColumn>
+
+                </DataGrid.Columns>
+              </DataGrid>
+
+            </suki:BusyArea>
+
+            <my:Pagination
+              Grid.Row="3"
+              x:Name="AreaPagination"
+              ItemsSource="{Binding AreaItemSource}"
+              ItemsPerPage="20"
+              TotalItems="{Binding TotalItems}"
+              IsBackendPaging="True"/>
+          </Grid>
+        </SplitView>
+        
+        </suki:GroupBox>
+      </suki:GlassCard>
+</UserControl>

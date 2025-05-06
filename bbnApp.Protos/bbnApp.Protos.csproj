@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="User\" />
+    <Folder Include="Author\" />
+    <Protobuf Include="Author\**" GrpcServices="Server,Client" />
+    <Protobuf Include="User\**" GrpcServices="Server,Client" />
+    <Protobuf Include="Code\Area.proto" GrpcServices="Server,Client" />
+    <Protobuf Include="Code\AppSetting.proto" GrpcServices="Server,Client" />
+    <Protobuf Include="Code\DataDictionary.proto" GrpcServices="Server,Client" />
+    <Protobuf Include="Code\OperationObjectCode.proto" GrpcServices="Server,Client" />
+    
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Grpc.AspNetCore" Version="2.71.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.72.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+</Project>

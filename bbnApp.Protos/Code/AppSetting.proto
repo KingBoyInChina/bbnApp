@@ -1,0 +1,93 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "BbnApp.Protos";
+
+package AppSettingGrpc;
+
+/********定义AppSetting服务********/
+service AppSettingGrpc {
+	//查询
+  rpc AppSettingGridLoad (AppSettingSearchRequest) returns (AppSettingSearchResponse);
+  //提交
+  rpc AppSettingPostSave (AppSettingPostRequest) returns (AppSettingPostResponse);
+  //状态变更，delete/locak/copy
+  rpc AppSettingStateSave (AppSettingStateRequest) returns (AppSettingStateResponse);
+  //配置信息下载
+  rpc AppSettingDownload (AppSettingDownloadRequest) returns (AppSettingDownloadResponse);
+}
+/********定义请求参数********/
+// 系统配置类型
+message AppSetting {
+  int32 IdxNum = 1;
+  string Yhid = 2;
+  string ValueRange = 3;
+  string SettingType = 4;
+  string SettingName = 5;
+  int32 SettingIndex = 6;
+  string SettingId = 7;
+  string SettingDesc = 8;
+  string SettingCode = 9;
+  string ReMarks = 10;
+  string NowValue = 11;
+  string LockTime = 12;
+  string LockReason = 13;
+  int32 IsLock = 14;
+  int32 IsFiexed = 15;
+  int32 Isdelete = 16;
+  string DefaultValue = 17;
+}
+// 系统配置下载请求
+message AppSettingDownloadRequest {
+  
+}
+
+// 系统配置下载响应
+message AppSettingDownloadResponse {
+  bool Code = 1;
+  string Message = 2;
+  repeated AppSetting Items = 3;
+}
+// 系统配置查询请求
+message AppSettingSearchRequest {
+  string SettingName = 1;
+  string SettingCode = 2;
+  int32 IsFiexed = 3;
+  int32 IsLock = 4;
+  string SettingDesc = 5;
+  int32 PageSize = 6;
+  int32 PageIndex = 7;
+}
+
+// 系统配置查询响应
+message AppSettingSearchResponse {
+  bool Code = 1;
+  string Message = 2;
+  //总条数
+  int32 Total = 3;
+  repeated AppSetting Items = 4;
+}
+
+// 系统配置提交请求
+message AppSettingPostRequest {
+  AppSetting Item = 1;
+}
+
+// 系统配置提交响应
+message AppSettingPostResponse {
+  bool Code = 1;
+  string Message = 2;
+  AppSetting Item = 3;
+}
+
+// 系统配置状态变更请求
+message AppSettingStateRequest {
+  string Type = 1;
+  AppSetting Item = 2;
+}
+
+// 系统配置状态变更响应
+message AppSettingStateResponse {
+  bool Code = 1;
+  string Message = 2;
+  AppSetting Item = 3;
+}
