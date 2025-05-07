@@ -67,10 +67,10 @@ namespace bbnApp.Application.Services.CODE
         {
             try
             {
-                var list = await dapperRepository.QueryAsync<DicTreeItemDto>($"select DicCode as Id,DicPCode as PId,DicName as Name,Remarks as Tag,True as IsLeaf,case when IsLock=0 then false else true end as IsLock from {StaticModel.DbName.bbn_code}.datadictionarycode where Isdelete=0 and IsLeaf=1 and IsLock=0 order by DicIndex asc");
+                var list = await dapperRepository.QueryAsync<DicTreeItemDto>($"select DicCode as Id,DicPCode as PId,DicName as Name,ifnull(ReMarks,DicCode) as Tag,True as IsLeaf,case when IsLock=0 then false else true end as IsLock from {StaticModel.DbName.bbn_code}.datadictionarycode where Isdelete=0 and IsLeaf=1 and IsLock=0 order by DicIndex asc");
                 foreach(var item in list)
                 {
-                    var children = await dapperRepository.QueryAsync<DicTreeItemDto>($"select ItemId as Id,DicCode as PId,ItemName as Name,ReMarks as Tag,true as IsLeaf,case when IsLock=0 then false else true end as IsLock from {StaticModel.DbName.bbn_code}.datadictionarylist where Isdelete=0 and IsLock=0 and DicCode='{item.Id}' order by ItemIndex asc;");
+                    var children = await dapperRepository.QueryAsync<DicTreeItemDto>($"select ItemId as Id,DicCode as PId,ItemName as Name,ifnull(ReMarks,DicCode) as Tag,true as IsLeaf,case when IsLock=0 then false else true end as IsLock from {StaticModel.DbName.bbn_code}.datadictionarylist where Isdelete=0 and IsLock=0 and DicCode='{item.Id}' order by ItemIndex asc;");
                     item.SubItems = [.. children];
                 }
                 await redisService.SetAsync("Dictionary",JsonConvert.SerializeObject(list));
