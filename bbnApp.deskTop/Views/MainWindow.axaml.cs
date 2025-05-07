@@ -47,6 +47,7 @@ public partial class MainWindow : SukiWindow
             // ¶©ÔÄÃüÁî
             vm.AppExitCommand.Subscribe(_ => AppExit());
         });
+        
     }
     /// <summary>
     /// ÍË³ö

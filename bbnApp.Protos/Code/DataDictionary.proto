@@ -58,6 +58,11 @@ message DataDictionaryItem{
 	 int32 Isdelete=11;
 	 int32 IdxNum=12;
 }
+
+// 字典树请求对象
+message DataDictionaryTreeRequest {
+    string FilterKey = 1;
+}
  
 // 树节点项 
 message DicTreeItem {
@@ -80,7 +85,6 @@ message DataDictionaryDownloadResponse {
     string Message = 2;
     repeated DicTreeItem Item = 3;
 }
-
 // 字典树请求对象
 message DataDictionaryTreeRequest {
     string FilterKey = 1;
