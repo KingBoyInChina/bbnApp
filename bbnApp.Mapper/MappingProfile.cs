@@ -88,6 +88,20 @@ namespace bbnApp.Service.GlobalService
             CreateMap<ItemSaveRequestDto, ItemSaveRequest>().ReverseMap();
             CreateMap<ItemSaveResponseDto, ItemSaveResponse>().ReverseMap();
             #endregion
+            #region 物资代码
+            CreateMap<MaterialTreeItemDto, MaterialTreeItem>().ReverseMap();
+            CreateMap<MaterialsCodeDto, MaterialsCode>().ReverseMap();
+            CreateMap<MaterialsCodeTreeRequestDto, MaterialsCodeTreeRequest>().ReverseMap();
+            CreateMap<MaterialsCodeTreeResponseDto, MaterialsCodeTreeResponse>().ReverseMap();
+            CreateMap<MaterialsCodeInfoRequestDto, MaterialsCodeInfoRequest>().ReverseMap();
+            CreateMap<MaterialsCodeInfoResponseDto, MaterialsCodeInfoResponse>().ReverseMap();
+            CreateMap<MaterialsCodeListRequestDto, MaterialsCodeListRequest>().ReverseMap();
+            CreateMap<MaterialsCodeListResponseDto, MaterialsCodeListResponse>().ReverseMap();
+            CreateMap<MaterialsCodeSaveRequestDto, MaterialsCodeSaveRequest>().ReverseMap();
+            CreateMap<MaterialsCodeSaveResponseDto, MaterialsCodeSaveResponse>().ReverseMap();
+            CreateMap<MaterialsCodeStateRequestDto, MaterialsCodeStateRequest>().ReverseMap();
+            CreateMap<MaterialsCodeStateResponseDto, MaterialsCodeStateResponse>().ReverseMap();
+            #endregion
         }
     }
 }

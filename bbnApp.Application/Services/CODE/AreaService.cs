@@ -289,7 +289,7 @@ namespace bbnApp.Application.Services.CODE
                         _area.Yhid = "000000";
                         _area.AreaPId = Data.AreaPId;
 
-                        AreaCode _paread = area.Where(x => x.AreaPId == Data.AreaPId && x.Yhid == "000000").OrderByDescending(x => x.AreaId).FirstOrDefault();
+                        AreaCode _paread = area.Where(x => x.AreaPId == Data.AreaPId && x.Yhid == "000000").OrderByDescending(x =>Convert.ToInt32(x.AreaId)).FirstOrDefault();
                         if (_paread != null)
                         {
                             _area.AreaId = Convert.ToString(Convert.ToInt64(_paread.AreaId) + 1);

@@ -221,6 +221,9 @@ public static class DependencyInjection
         services.AddScoped<IDataDictionaryService, DataDictionaryService>();
         //注册标准权限代码服务
         services.AddScoped<IOperationObjectsService, OperationObjectsService>();
+        //物资代码服务
+        services.AddScoped<IMaterialsCodeService, MaterialsCodeService>();
+         
 
         return services;
     }

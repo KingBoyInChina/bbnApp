@@ -6,8 +6,17 @@ package MaterialsCodeGrpc;
 
 /********定义AppSetting服务********/
 service MaterialsCodeGrpc {
-	//查询
-  rpc MaterialsTreeLoad (MaterialsTreeRequest) returns (MaterialsTreeResponse);
+  //获取物资树
+  rpc GetMaterailTree (MaterialsCodeTreeRequest) returns (MaterialsCodeTreeResponse);
+  //物资信息明细
+  rpc GetMaterialInfo (MaterialsCodeInfoRequest) returns (MaterialsCodeInfoResponse);
+  //物资信息列表
+  rpc GetMaterialList (MaterialsCodeListRequest) returns (MaterialsCodeListResponse);
+  //物资信息提交
+  rpc MaterialSave (MaterialsCodeSaveRequest) returns (MaterialsCodeSaveResponse);
+  //物资状态变更
+  rpc MaterialState (MaterialsCodeStateRequest) returns (MaterialsCodeStateResponse);
+
 }
 
 
@@ -42,14 +51,58 @@ message MaterialsCode {
   string LockTime = 17; // 锁定时间
   string LockReason = 18; // 锁定原因
   string ReMarks = 19; // 备注
+  int32 MaterialIndex=20;//物资序号
 }
-//物资代码树请求对象
-message MaterialsTreeRequest{
+
+// 物资树请求对象
+message MaterialsCodeTreeRequest {
     string FilterKey=1;
 }
-//物资代码树响应对象
-message MaterialsTreeResponse{
-    bool Code=1;
-    string Message=2;
-    repeated MaterialTreeItem Data=3;
+// 物资树响应
+message MaterialsCodeTreeResponse {
+    bool Code = 1; // 状态码
+    string Message = 2; // 消息内容
+    repeated MaterialTreeItem Items = 3; // 树
+}
+// 物资树请求对象
+message MaterialsCodeInfoRequest {
+    string MaterialId = 1; // 物资ID
+}
+// 物资信息读取响应
+message MaterialsCodeInfoResponse {
+    bool Code = 1; // 状态码
+    string Message = 2; // 消息内容
+    MaterialsCode Item = 3; // 树
+}
+// 物资清单请求对象
+message MaterialsCodeListRequest {
+    string MaterialType = 1; // 物资类型
+}
+// 物资清单响应
+message MaterialsCodeListResponse{
+    bool Code = 1; // 状态码
+    string Message = 2; // 消息内容
+    repeated MaterialsCode Items = 3; // 物资列表
+}
+
+// 物资信息提交请求对象
+message MaterialsCodeSaveRequest {
+    MaterialsCode Item = 1; // 物资代码对象
+}
+// 物资信息提交响应
+message MaterialsCodeSaveResponse {
+    bool Code = 1; // 状态码
+    string Message = 2; // 消息内容
+    MaterialsCode Item = 3; // 物资代码对象
+}
+// 物资状态请求对象
+message MaterialsCodeStateRequest {
+    string Type = 1; // 类型
+    string MaterialId = 2; // 物资ID
+}
+// 物资状态响应
+message MaterialsCodeStateResponse {
+    bool Code = 1; // 状态码
+    string Message = 2; // 消息内容
+    MaterialsCode Item = 3; // 物资代码对象
 }

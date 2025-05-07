@@ -203,10 +203,10 @@ namespace bbnApp.Application.Services.CODE
                     {
                         model = new AppSettings();
                         model.Yhid = postData.Yhid;
-                        var firstmodel = appsetting.OrderByDescending(x => x.SettingIndex).FirstOrDefault();
-                        if (firstmodel != null)
+                        var maxindex = appsetting.Max(x => x.SettingIndex);
+                        if (maxindex > 0)
                         {
-                            settingindex = Convert.ToInt32(firstmodel.SettingId) + 1;
+                            settingindex = maxindex++;
                             settingid = settingindex.ToString();
                         }
                         model.SettingId = settingid;

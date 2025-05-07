@@ -89,6 +89,10 @@ namespace bbnApp.DTOs.CodeDto
         /// 物资材质
         /// </summary>
         public string MaterialSupplies { get; set; }
+        /// <summary>
+        /// 序号
+        /// </summary>
+        public int MaterialIndex { get; set; }
 
         /// <summary>
         /// 危险物
@@ -141,4 +145,131 @@ namespace bbnApp.DTOs.CodeDto
         public string? ReMarks { get; set; }
     }
 
+    /// <summary>
+    /// 物资树请求对象
+    /// </summary>
+    public class MaterialsCodeTreeRequestDto
+    {
+        public string FilterKey { get; set; }
+    }
+    /// <summary>
+    /// 物资树响应
+    /// </summary>
+    public class MaterialsCodeTreeResponseDto
+    {
+        /// <summary>
+        /// 状态码
+        /// </summary>
+        public bool Code { get; set; }
+        /// <summary>
+        /// 消息内容
+        /// </summary>
+        public string Message { get; set; }
+        /// <summary>
+        /// 树
+        /// </summary>
+        public List<MaterialTreeItemDto>? Items { get; set; }
+    }
+    /// <summary>
+    /// 物资树请求对象
+    /// </summary>
+    public class MaterialsCodeInfoRequestDto
+    {
+        public string MaterialId { get; set; }
+    }
+    /// <summary>
+    /// 物资信息读取响应
+    /// </summary>
+    public class MaterialsCodeInfoResponseDto
+    {
+        /// <summary>
+        /// 状态码
+        /// </summary>
+        public bool Code { get; set; }
+        /// <summary>
+        /// 消息内容
+        /// </summary>
+        public string Message { get; set; }
+        /// <summary>
+        /// 树
+        /// </summary>
+        public MaterialsCodeDto? Item { get; set; }
+    }
+    /// <summary>
+    /// 物资清单求对象
+    /// </summary>
+    public class MaterialsCodeListRequestDto
+    {
+        public string MaterialType { get; set; }
+    }
+    /// <summary>
+    /// 物资清单读取响应
+    /// </summary>
+    public class MaterialsCodeListResponseDto
+    {
+        /// <summary>
+        /// 状态码
+        /// </summary>
+        public bool Code { get; set; }
+        /// <summary>
+        /// 消息内容
+        /// </summary>
+        public string Message { get; set; }
+        /// <summary>
+        /// 树
+        /// </summary>
+        public List<MaterialsCodeDto>? Item { get; set; }
+    }
+    /// <summary>
+    /// 物资信息提交请求对象
+    /// </summary>
+    public class MaterialsCodeSaveRequestDto
+    {
+        public MaterialsCodeDto? Item { get; set; }
+    }
+    /// <summary>
+    /// 物资信息提交响应
+    /// </summary>
+    public class MaterialsCodeSaveResponseDto
+    {
+        /// <summary>
+        /// 状态码
+        /// </summary>
+        public bool Code { get; set; }
+        /// <summary>
+        /// 消息内容
+        /// </summary>
+        public string Message { get; set; }
+        /// <summary>
+        /// 树
+        /// </summary>
+        public MaterialsCodeDto? Item { get; set; }
+    }
+
+    /// <summary>
+    /// 物资信息提交请求对象
+    /// </summary>
+    public class MaterialsCodeStateRequestDto
+    {
+        public string Type { get; set; }
+        public string MaterialId { get; set; }
+    }
+    /// <summary>
+    /// 物资信息提交响应
+    /// </summary>
+    public class MaterialsCodeStateResponseDto
+    {
+        /// <summary>
+        /// 状态码
+        /// </summary>
+        public bool Code { get; set; }
+        /// <summary>
+        /// 消息内容
+        /// </summary>
+        public string Message { get; set; }
+        /// <summary>
+        /// 树
+        /// </summary>
+        public MaterialsCodeDto? Item { get; set; }
+    }
 }
