@@ -193,7 +193,7 @@ namespace bbnApp.Application.Services.CODE
         {
             try
             {
-                if (await operatorService.IsAccess(user.Yhid, user.CompanyId, user.OperatorID, "datadictionarycode", type == "IsDelete"?"delete": "edit"))
+                if (await operatorService.IsAccess(user.Yhid, user.CompanyId, user.OperatorId, "datadictionarycode", type == "IsDelete"?"delete": "edit"))
                 {
                     var model = dbContext.Set<DataDictionaryCode>().FirstOrDefault(x => x.DicCode == data.Id);
                     if (model != null)
@@ -259,7 +259,7 @@ namespace bbnApp.Application.Services.CODE
         {
             try
             {
-                if (await operatorService.IsAccess(user.Yhid, user.CompanyId, user.OperatorID, "datadictionarycode", "permit"))
+                if (await operatorService.IsAccess(user.Yhid, user.CompanyId, user.OperatorId, "datadictionarycode", "permit"))
                 {
                     var dics = dbContext.Set<DataDictionaryCode>();
                     bool b = false;
@@ -336,7 +336,7 @@ namespace bbnApp.Application.Services.CODE
         {
             try
             {
-                if (await operatorService.IsAccess(user.Yhid, user.CompanyId, user.OperatorID, "datadictionarycode", "edit"))
+                if (await operatorService.IsAccess(user.Yhid, user.CompanyId, user.OperatorId, "datadictionarycode", "edit"))
                 {
                     var dic =dbContext.Set<DataDictionaryCode>().FirstOrDefault(x=>x.DicCode==DicCode&&x.Isdelete==0);
                     if (dic != null)
@@ -363,7 +363,7 @@ namespace bbnApp.Application.Services.CODE
         {
             try
             {
-                if (await operatorService.IsAccess(user.Yhid, user.CompanyId, user.OperatorID, "datadictionarycode", "edit"))
+                if (await operatorService.IsAccess(user.Yhid, user.CompanyId, user.OperatorId, "datadictionarycode", "edit"))
                 {
                     var dic = dbContext.Set<DataDictionaryCode>().FirstOrDefault(x => x.DicCode == data.DicCode&&x.Isdelete==0);
                     if (dic != null)
@@ -442,7 +442,7 @@ namespace bbnApp.Application.Services.CODE
         {
             try
             {
-                if (await operatorService.IsAccess(user.Yhid, user.CompanyId, user.OperatorID, "datadictionarycode", "edit"))
+                if (await operatorService.IsAccess(user.Yhid, user.CompanyId, user.OperatorId, "datadictionarycode", "edit"))
                 {
                     var model = dbContext.Set<DataDictionaryList>().FirstOrDefault(x => x.ItemId == itemid && x.Isdelete == 0);
                     if (model != null)
@@ -541,6 +541,30 @@ namespace bbnApp.Application.Services.CODE
             }
             return datas;
         }
-
+        /// <summary>
+        /// 获取字典对象
+        /// </summary>
+        /// <param name="itemid"></param>
+        /// <param name="yhid"></param>
+        /// <returns></returns>
+        public DataDictionaryList GetDicItem(string itemid,string yhid = "000000")
+        {
+            try
+            {
+                var model = dbContext.Set<DataDictionaryList>().FirstOrDefault(x => x.ItemId == itemid && x.Yhid == yhid && x.Isdelete == 0);
+                if (model != null)
+                {
+                    return model;
+                }
+                else
+                {
+                    return new DataDictionaryList();
+                }
+            }
+            catch(Exception ex)
+            {
+                return new DataDictionaryList();
+            }
+        }
     }
 }

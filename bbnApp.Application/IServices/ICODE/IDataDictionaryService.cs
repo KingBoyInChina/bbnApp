@@ -1,4 +1,5 @@
 ﻿using bbnApp.Common.Models;
+using bbnApp.Domain.Entities.Code;
 using bbnApp.DTOs.CodeDto;
 
 namespace bbnApp.Application.IServices.ICODE
@@ -64,5 +65,12 @@ namespace bbnApp.Application.IServices.ICODE
         /// <param name="user"></param>
         /// <returns></returns>
         Task<(bool, string, DataDictionaryItemDto)> DicItemState(string type, string itemid, UserModel user);
+        /// <summary>
+        /// 获取指定字典对象
+        /// </summary>
+        /// <param name="itemid"></param>
+        /// <param name="yhid"></param>
+        /// <returns></returns>
+        DataDictionaryList GetDicItem(string itemid, string yhid = "000000");
     }
 }

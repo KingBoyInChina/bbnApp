@@ -24,6 +24,10 @@ namespace bbnApp.Application.Services.CODE
         /// <summary>
         /// 
         /// </summary>
+        private readonly IDataDictionaryService dataDictionaryService;
+        /// <summary>
+        /// 
+        /// </summary>
         private readonly IRedisService redisService;
         /// <summary>
         /// 
@@ -47,7 +51,7 @@ namespace bbnApp.Application.Services.CODE
         /// </summary>
         /// <param name="dbContext"></param>
         /// <param name="redisService"></param>
-        public AreaService(IApplicationDbCodeContext dbContext, IRedisService redisService, IDapperRepository _dapperRepository, ILogger<OperatorService> logger, ExceptionlessClient exceptionlessClient, IOperatorService operatorService)
+        public AreaService(IApplicationDbCodeContext dbContext, IDataDictionaryService dataDictionaryService, IRedisService redisService, IDapperRepository _dapperRepository, ILogger<OperatorService> logger, ExceptionlessClient exceptionlessClient, IOperatorService operatorService)
         {
             this.dbContext = dbContext;
             this.redisService = redisService;
@@ -55,6 +59,7 @@ namespace bbnApp.Application.Services.CODE
             this._logger = logger;
             this._exceptionlessClient = exceptionlessClient;
             this.operatorService = operatorService;
+            this.dataDictionaryService = dataDictionaryService;
             string folderPath = Path.Combine(AppContext.BaseDirectory, "Store");
             if (!Directory.Exists(folderPath))
             {
@@ -229,7 +234,7 @@ namespace bbnApp.Application.Services.CODE
         {
             try
             {
-                if (await operatorService.IsAccess(user.Yhid, user.CompanyId, user.OperatorID, "areacode", "browse"))
+                if (await operatorService.IsAccess(user.Yhid, user.CompanyId, user.OperatorId, "areacode", "browse"))
                 {
                     StringBuilder SQL = new StringBuilder();
                     SQL.Append($"select ROW_NUMBER() OVER (ORDER BY AreaId ASC) as IdxNum,AreaId,AreaPId,AreaName,AreaFullName,AreaLeve,AreaLeveName,ifnull(AreaPoint,'') as AreaPoint,IsLock,ifnull(DATE_FORMAT(LockTime, '%Y-%m-%d'),'') as LockTime,ifnull(LockReason,'') as LockReason,ifnull(ReMarks,'') as ReMarks from {StaticModel.DbName.bbn_code}.areacode where Isdelete=0");
@@ -273,7 +278,7 @@ namespace bbnApp.Application.Services.CODE
         {
             try
             {
-                if (await operatorService.IsAccess(user.Yhid, user.CompanyId, user.OperatorID, "areacode", "edit"))
+                if (await operatorService.IsAccess(user.Yhid, user.CompanyId, user.OperatorId, "areacode", "edit"))
                 {
                     var area = dbContext.Set<AreaCode>();
                     bool b = false;
@@ -343,7 +348,7 @@ namespace bbnApp.Application.Services.CODE
         {
             try
             {
-                if (await operatorService.IsAccess(user.Yhid, user.CompanyId, user.OperatorID, "areacode", "delete"))
+                if (await operatorService.IsAccess(user.Yhid, user.CompanyId, user.OperatorId, "areacode", "delete"))
                 {
                     var area = dbContext.Set<AreaCode>();
                     AreaCode _area = area.Where(x => x.AreaId == Data.AreaId && x.Yhid == "000000").FirstOrDefault();
@@ -371,7 +376,7 @@ namespace bbnApp.Application.Services.CODE
         {
             try
             {
-                if (await operatorService.IsAccess(user.Yhid, user.CompanyId, user.OperatorID, "areacode", "edit"))
+                if (await operatorService.IsAccess(user.Yhid, user.CompanyId, user.OperatorId, "areacode", "edit"))
                 {
                     var area = dbContext.Set<AreaCode>();
                     AreaCode _area = area.Where(x => x.AreaId == Data.AreaId && x.Yhid == "000000").FirstOrDefault();
@@ -406,6 +411,23 @@ namespace bbnApp.Application.Services.CODE
             {
                 return (false,ex.Message.ToString());
             }
+        }
+        /// <summary>
+        /// 通过字典编码获取行政区划级别
+        /// </summary>
+        /// <param name="levecode"></param>
+        /// <returns></returns>
+        private (byte,string) GetAreaLeve(string levecode)
+        {
+            var data = dataDictionaryService.GetDicItem(levecode);
+            if (data != null)
+            {
+                if (!string.IsNullOrEmpty(data.ItemId))
+                {
+                    return (Convert.ToByte(data.ItemIndex),data.ItemName);
+                }
+            }
+            return (6,"村级");
         }
     }
 }

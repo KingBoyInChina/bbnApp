@@ -3,17 +3,13 @@ using bbnApp.Common.Models;
 using bbnApp.deskTop.Common;
 using bbnApp.deskTop.ViewModels;
 using bbnApp.DTOs.CodeDto;
-using BbnApp.Protos;
+using bbnApp.Protos;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Org.BouncyCastle.Crypto.Tls;
-using SukiUI.Dialogs;
-using SukiUI.Toasts;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using Tmds.DBus.Protocol;
 
 namespace bbnApp.deskTop.PlatformManagement.AreaCode
 {
@@ -58,7 +54,7 @@ namespace bbnApp.deskTop.PlatformManagement.AreaCode
         public AreaCodeEditPageViewModel(IDialog dialog)
         {
             this.dialog = dialog;
-            XzjbItem = new ObservableCollection<ComboboxItem>(CommAction.GetDicItems("1001"));
+            XzjbItem = new ObservableCollection<ComboboxItem>(CommAction.GetDicItems("1001",true));
         }
         /// <summary>
         /// 提交回调

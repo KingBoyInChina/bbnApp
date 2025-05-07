@@ -14,7 +14,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using bbnApp.Common.Models;
-using BbnApp.Protos;
+using bbnApp.Protos;
 using bbnApp.GrpcClients;
 using bbnApp.deskTop.Common;
 using bbnApp.DTOs.CodeDto;
@@ -124,7 +124,7 @@ namespace bbnApp.deskTop.PlatformManagement.AreaCode
         /// </summary>
         public void DataInit()
         {
-            XzjbItem = new ObservableCollection<ComboboxItem>(CommAction.GetDicItems("1001"));
+            XzjbItem = new ObservableCollection<ComboboxItem>(CommAction.GetDicItems("1001",true));
             InitValue = new AreaTreeNodeDto
             {
                 AreaId = UserContext.CurrentUser.AreaCode,
@@ -148,7 +148,7 @@ namespace bbnApp.deskTop.PlatformManagement.AreaCode
         {
             IsBusy = true;
 
-            dialog.ShowLoading("数据查询中", async (data) =>
+            dialog.ShowLoading("数据查询中", async (e) =>
             {
                 string arecode = UserContext.CurrentUser?.AreaCode;
                 AreaGridRequest _areaRequest = new AreaGridRequest
@@ -162,6 +162,7 @@ namespace bbnApp.deskTop.PlatformManagement.AreaCode
                 // 创建 Metadata（Header）
                 var headers = CommAction.GetHeader();
                 var response = await _client.GetAreaGridAsync(_areaRequest, headers);
+                dialog.LoadingClose(e);
                 if (response.Code)
                 {
                     var _data = _mapper.Map<IEnumerable<AreaItemDto>>(response.AreaItems);
@@ -275,7 +276,7 @@ namespace bbnApp.deskTop.PlatformManagement.AreaCode
             if (b)
             {
                 IsEdit = true;
-                dialog.ShowLoading("数据删除中", async (data) =>
+                dialog.ShowLoading("数据删除中", async (e) =>
                 {
                     var header = CommAction.GetHeader();
 
@@ -285,6 +286,7 @@ namespace bbnApp.deskTop.PlatformManagement.AreaCode
                     };
 
                     AreaDeleteResponse response = await _client.AreaDeleteAsync(request, header);
+                    dialog.LoadingClose(e);
                     if (response.Code)
                     {
                         dialog.Success("删除提示", $"{response.Message}");

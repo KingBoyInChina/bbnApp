@@ -3,7 +3,7 @@ using bbnApp.Application.DTOs.LoginDto;
 using bbnApp.Application.IServices.ICODE;
 using bbnApp.Domain.Entities.User;
 using bbnApp.DTOs.CodeDto;
-using BbnApp.Protos;
+using bbnApp.Protos;
 using bbnApp.Common.Models;
 using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
@@ -84,7 +84,7 @@ namespace bbnApp.Service.Services
                     Message = loginResponseDto.Message,
                     UserInfo =JsonConvert.DeserializeObject<UserInfo>(JsonConvert.SerializeObject(loginResponseDto.UserInfo))
                 };
-                response.TopMenus.AddRange(JsonConvert.DeserializeObject<List<BbnApp.Protos.TopMenuItem>>(JsonConvert.SerializeObject(loginResponseDto.TopMenus)));
+                response.TopMenus.AddRange(JsonConvert.DeserializeObject<List<TopMenuItem>>(JsonConvert.SerializeObject(loginResponseDto.TopMenus)));
                 // 使用 AutoMapper 映射响应
                 //var response = _mapper.Map<LoginResponse>(loginResponseDto);
             }
@@ -113,7 +113,7 @@ namespace bbnApp.Service.Services
             {
                 if (context.UserState.TryGetValue("User", out var userObj) && userObj is UserModel user)
                 {
-                    Operators _operator =await _operatorService.UpdatePassWord(user.Yhid,user.CompanyId,user.OperatorID,request.OldPassWord,request.NewPassWord);
+                    Operators _operator =await _operatorService.UpdatePassWord(user.Yhid,user.CompanyId,user.OperatorId,request.OldPassWord,request.NewPassWord);
                     if (_operator!=null)
                     {
                         response = new PassWordResponse

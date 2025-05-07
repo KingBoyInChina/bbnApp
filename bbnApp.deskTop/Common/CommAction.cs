@@ -12,7 +12,6 @@ using System.Text;
 using System.Threading.Tasks;
 using static bbnApp.deskTop.Common.CommModels;
 using Grpc.Core;
-using BbnApp.Protos;
 using bbnApp.Common.Models;
 using bbnApp.Core;
 
@@ -246,7 +245,7 @@ namespace bbnApp.deskTop.Common
         /// <returns></returns>
         public static Metadata GetHeader()
         {
-            UserInfo User = UserContext.CurrentUser;
+            UserModel User = UserContext.CurrentUser;
             var headers = new Metadata
                         {
                             { "Yhid", User.Yhid},
@@ -259,8 +258,9 @@ namespace bbnApp.deskTop.Common
         /// 获取数据字典
         /// </summary>
         /// <param name="ID"></param>
+        /// <param name="TagIsKey">针对行政级别这种特殊字典</param>
         /// <returns></returns>
-        public static List<ComboboxItem> GetDicItems(string ID)
+        public static List<ComboboxItem> GetDicItems(string ID,bool TagIsKey=false)
         {
             if (DicContext.DicItems == null) return new List<ComboboxItem>();
             var item = DicContext.DicItems.FirstOrDefault(x => x.Id == ID);
@@ -271,7 +271,14 @@ namespace bbnApp.deskTop.Common
                     List<ComboboxItem> items = new List<ComboboxItem>();
                     foreach (var x in item.SubItems)
                     {
-                        items.Add(new ComboboxItem(x.Id,x.Name,x.Tag));
+                        if (TagIsKey)
+                        {
+                            items.Add(new ComboboxItem(x.Tag, x.Name, x.Id));
+                        }
+                        else
+                        {
+                            items.Add(new ComboboxItem(x.Id, x.Name, x.Tag));
+                        }
                     }
                     return items;
                 }

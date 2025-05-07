@@ -1,6 +1,6 @@
 ﻿syntax = "proto3";
 
-option csharp_namespace = "BbnApp.Protos";
+option csharp_namespace = "bbnApp.Protos";
 
 package AppSettingGrpc;
 
@@ -38,7 +38,7 @@ message AppSetting {
 }
 // 系统配置下载请求
 message AppSettingDownloadRequest {
-  
+
 }
 
 // 系统配置下载响应

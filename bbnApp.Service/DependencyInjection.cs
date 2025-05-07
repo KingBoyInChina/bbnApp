@@ -11,13 +11,13 @@ using bbnApp.Infrastructure.Dapr;
 using bbnApp.Infrastructure.Data;
 using bbnApp.Service.GlobalService;
 using bbnApp.Service.Services;
-using BbnApp.Protos;
 using Exceptionless;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Text;
+using bbnApp.Protos;
 
 public static class DependencyInjection
 {

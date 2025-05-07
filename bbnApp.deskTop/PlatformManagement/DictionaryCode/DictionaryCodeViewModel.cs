@@ -6,7 +6,7 @@ using bbnApp.deskTop.PlatformManagement.AppSetting;
 using bbnApp.deskTop.Services;
 using bbnApp.DTOs.CodeDto;
 using bbnApp.GrpcClients;
-using BbnApp.Protos;
+using bbnApp.Protos;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;

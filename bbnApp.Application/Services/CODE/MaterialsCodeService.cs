@@ -1,6 +1,10 @@
 ﻿using bbnApp.Application.IServices.ICODE;
+using bbnApp.Common.Models;
 using bbnApp.Core;
+using bbnApp.Domain.Entities.Code;
+using bbnApp.DTOs.CodeDto;
 using Exceptionless;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -50,6 +54,25 @@ namespace bbnApp.Application.Services.CODE
             this._logger = logger;
             this._exceptionlessClient = exceptionlessClient;
             this.operatorService = operatorService;
+        }
+        /// <summary>
+        /// 获取物资树
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public async Task<(bool,string,List<MaterialTreeItemDto>)> GetMaterailTree(UserModel user)
+        {
+            try
+            {
+                var list =await dbContext.Set<MaterialsCode>().Where(x => x.Isdelete == 0 && x.Yhid == user.Yhid).OrderBy(x => x.MaterialIndex).ToListAsync();
+                //按
+
+                return (false,"",new List<MaterialTreeItemDto>());
+            }
+            catch (Exception ex)
+            {
+                return (false,ex.Message.ToString(),new List<MaterialTreeItemDto>());
+            }
         }
     }
 }

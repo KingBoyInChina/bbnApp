@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using bbnApp.DTOs.CodeDto;
-using BbnApp.Protos;
+using bbnApp.Protos;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

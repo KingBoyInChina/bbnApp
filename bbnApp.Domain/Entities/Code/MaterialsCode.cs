@@ -59,7 +59,7 @@ namespace bbnApp.Domain.Entities.Code
         [Description("序号")]
         [Comment("序号")]
         [Required]
-        public int SettingIndex { get; set; }
+        public int MaterialIndex { get; set; }
 
         [Column(TypeName = "varchar(20)")]
         [MaxLength(20)]

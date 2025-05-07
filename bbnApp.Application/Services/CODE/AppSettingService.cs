@@ -133,7 +133,7 @@ namespace bbnApp.Application.Services.CODE
             try
             {
 
-                if (await operatorService.IsAccess(user.Yhid, user.CompanyId, user.OperatorID, "appsettings", "browse"))
+                if (await operatorService.IsAccess(user.Yhid, user.CompanyId, user.OperatorId, "appsettings", "browse"))
                 {
                     StringBuilder SQL = new StringBuilder();
                     SQL.Append($"select ROW_NUMBER() OVER (ORDER BY SettingIndex ASC) as IdxNum,Yhid,SettingId,SettingCode,SettingName,SettingDesc,SettingIndex,SettingType,NowValue,DefaultValue,ValueRange,IsFiexed,IsLock,ifnull(DATE_FORMAT(LockTime, '%Y-%m-%d'),'') as LockTime,ifnull(LockReason,'') as LockReason,ifnull(ReMarks,'') as ReMarks from {StaticModel.DbName.bbn_code}.appsettings where Isdelete=0");
@@ -186,7 +186,7 @@ namespace bbnApp.Application.Services.CODE
         {
             try
             {
-                if (await operatorService.IsAccess(user.Yhid, user.CompanyId, user.OperatorID, "appsettings", "browse"))
+                if (await operatorService.IsAccess(user.Yhid, user.CompanyId, user.OperatorId, "appsettings", "browse"))
                 {
                     var postData = request.Item;
                     bool b = true;
@@ -343,7 +343,7 @@ namespace bbnApp.Application.Services.CODE
         {
             try
             {
-                if (await operatorService.IsAccess(user.Yhid, user.CompanyId, user.OperatorID, "appsettings", "permit"))
+                if (await operatorService.IsAccess(user.Yhid, user.CompanyId, user.OperatorId, "appsettings", "permit"))
                 {
                     AppSettingStateResponseDto response = new AppSettingStateResponseDto();
                     string type = request.Type;

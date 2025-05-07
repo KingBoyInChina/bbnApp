@@ -88,7 +88,7 @@
                     </MenuItem.Icon>
                   </MenuItem>
                   
-                  <MenuItem Command="{Binding ToggleWindowLockCommand}"
+									<MenuItem Command="{Binding ToggleWindowLockCommand}"
 											  Header="{Binding WindowLockedInfo}"
 											  ToolTip.Tip="设置窗体锁定状态">
 										<MenuItem.Icon>

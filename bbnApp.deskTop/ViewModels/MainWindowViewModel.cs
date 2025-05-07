@@ -24,7 +24,6 @@ using ReactiveUI;
 using bbnApp.deskTop.Features.Theming;
 using Exceptionless;
 using Serilog;
-using BbnApp.Protos;
 using System.Timers;
 using Avalonia.Threading;
 using bbnApp.Core;
@@ -37,7 +36,9 @@ using bbnApp.GrpcClients;
 using Grpc.Core;
 using bbnApp.DTOs.CodeDto;
 using AutoMapper;
-using Newtonsoft.Json;
+using bbnApp.Common.Models;
+using bbnApp.Protos;
+using bbnApp.Application.DTOs.LoginDto;
 
 namespace bbnApp.deskTop.ViewModels
 {
@@ -50,7 +51,7 @@ namespace bbnApp.deskTop.ViewModels
         /// <summary>
         /// 当前登录的操作员信息
         /// </summary>
-        [ObservableProperty] private UserInfo _loginUser;
+        [ObservableProperty] private UserModel _loginUser;
         /// <summary>
         /// 顶部菜单
         /// </summary>
@@ -496,7 +497,30 @@ namespace bbnApp.deskTop.ViewModels
             {
                 IsLogined = true;
                 TopMenuItems = _mapper.Map<AvaloniaList<TopMenuItemDto>>(response.TopMenus);
-                LoginUser = response.UserInfo;
+                UserInfoDto userInfo = _mapper.Map<UserInfoDto>(response.UserInfo);
+                //这里因为字段属性不一致，所以需要手动映射
+                LoginUser = new UserModel {
+                    Yhid = userInfo.Yhid,
+                    AreaCode = userInfo.AreaCode,
+                    AreaName = userInfo.AreaName,
+                    DateOfEmployment = userInfo.DateOfEmployment,
+                    EmailNum = userInfo.EmailNum,
+                    Expires = CommMethod.GetValueOrDefault(userInfo.Expires, DateTime.Now),
+                    IsLock = userInfo.IsLock,
+                    OperatorId = userInfo.OperatorId,
+                    Token = userInfo.Token,
+                    CompanyId = userInfo.CompanyId,
+                    CompanyName = userInfo.CompanyName,
+                    DepartMentId = userInfo.DepartMentId,
+                    DepartMentName = userInfo.DepartMentName,
+                    EmployeeId = userInfo.EmployeeId,
+                    EmployeeName = userInfo.EmployeeName,
+                    EmployeeNum = userInfo.EmployeeNum,
+                    PhoneNum = userInfo.PhoneNum,
+                    Position = userInfo.Position,
+                    PositionLeve = userInfo.PositionLeve,
+                    PassWordExpTime =CommMethod.GetValueOrDefault(userInfo.PassWordExpTime,DateTime.Now),
+                };
                 UserContext.CurrentUser = LoginUser;
                 //变更Tilte
                 Title = $"{LoginUser.CompanyName}-{LoginUser.DepartMentName}";
@@ -589,7 +613,7 @@ namespace bbnApp.deskTop.ViewModels
         /// <param name="response"></param>
         private void PassWordWindowCallBack(ISukiDialog window, PassWordResponse? response)
         {
-            LoginUser.PassWordExpTime = response?.PassWordExpTime;
+            LoginUser.PassWordExpTime =Convert.ToDateTime(response?.PassWordExpTime);
             UserContext.CurrentUser = LoginUser;
             window.Dismiss();
             dialog.Success("修改成功");

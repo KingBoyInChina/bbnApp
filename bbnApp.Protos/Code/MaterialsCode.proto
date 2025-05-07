@@ -1,0 +1,55 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "bbnApp.Protos";
+
+package MaterialsCodeGrpc;
+
+/********定义AppSetting服务********/
+service MaterialsCodeGrpc {
+	//查询
+  rpc MaterialsTreeLoad (MaterialsTreeRequest) returns (MaterialsTreeResponse);
+}
+
+
+//树节点
+message MaterialTreeItem {
+    string Id = 1;
+    string PId = 2;
+    string Name = 3;
+    string Tag = 4;
+    bool IsLeaf = 5;
+    bool IsLock = 6;
+    repeated MaterialTreeItem SubItems = 7;
+}
+// 物资代码类型
+message MaterialsCode {
+  int32 IdxNum = 1; // 序号
+  string Yhid = 2; // 用户组ID
+  string MaterialId = 3; // 物资ID
+  string MaterialType = 4; // 物资类型
+  string MaterialName = 5; // 物资名称
+  string MaterialCode = 6; // 物资代码
+  string MaterialBarCode = 7; // 物资条码
+  string MaterialForm = 8; // 物资形态
+  string MaterialSupplies = 9; // 物资材质
+  int32 IsDanger = 10; // 危险物
+  string DangerType = 11; // 危险分类
+  string Specifications = 12; // 规格
+  string Unit = 13; // 计量单位
+  string StorageEnvironment = 14; // 存储环境
+  string OtherParames = 15; // 其他参数
+  int32 IsLock = 16; // 锁定
+  string LockTime = 17; // 锁定时间
+  string LockReason = 18; // 锁定原因
+  string ReMarks = 19; // 备注
+}
+//物资代码树请求对象
+message MaterialsTreeRequest{
+    string FilterKey=1;
+}
+//物资代码树响应对象
+message MaterialsTreeResponse{
+    bool Code=1;
+    string Message=2;
+    repeated MaterialTreeItem Data=3;
+}

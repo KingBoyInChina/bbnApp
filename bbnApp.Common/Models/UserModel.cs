@@ -78,7 +78,7 @@ namespace bbnApp.Common.Models
         /// <summary>
         /// 操作员ID
         /// </summary>
-        public string OperatorID { get; set; }
+        public string OperatorId { get; set; }
         /// <summary>
         /// 密码到期时间
         /// </summary>
@@ -92,4 +92,4 @@ namespace bbnApp.Common.Models
         /// </summary>
         public DateTime Expires { get; set; }
     }
-}
+    }

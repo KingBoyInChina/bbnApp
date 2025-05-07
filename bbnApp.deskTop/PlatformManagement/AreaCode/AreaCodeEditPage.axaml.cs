@@ -1,11 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
-using bbnApp.DTOs.CodeDto;
-using BbnApp.Protos;
-using System;
 
 namespace bbnApp.deskTop.PlatformManagement.AreaCode;
 

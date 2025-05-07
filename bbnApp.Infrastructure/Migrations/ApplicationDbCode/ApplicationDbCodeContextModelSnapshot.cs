@@ -471,6 +471,11 @@ namespace bbnApp.Infrastructure.Migrations.ApplicationDbCode
                         .HasColumnType("varchar(20)")
                         .HasComment("物资形态");
 
+                    b.Property<int>("MaterialIndex")
+                        .HasMaxLength(3)
+                        .HasColumnType("int")
+                        .HasComment("序号");
+
                     b.Property<string>("MaterialName")
                         .IsRequired()
                         .HasMaxLength(40)
@@ -498,11 +503,6 @@ namespace bbnApp.Infrastructure.Migrations.ApplicationDbCode
                     b.Property<string>("ReMarks")
                         .HasColumnType("varchar(40)")
                         .HasComment("备注信息");
-
-                    b.Property<int>("SettingIndex")
-                        .HasMaxLength(3)
-                        .HasColumnType("int")
-                        .HasComment("序号");
 
                     b.Property<string>("Specifications")
                         .IsRequired()

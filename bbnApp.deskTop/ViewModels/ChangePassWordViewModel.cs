@@ -1,6 +1,6 @@
 ﻿using Avalonia.Controls.Notifications;
 using bbnApp.deskTop.Common;
-using BbnApp.Protos;
+using bbnApp.Protos;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Exceptionless;

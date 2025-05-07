@@ -2,7 +2,6 @@ using bbnApp.Application.IServices.ICODE;
 using bbnApp.Application.IServices.IINIT;
 using bbnApp.Infrastructure.Data;
 using bbnApp.Service.Services;
-using BbnApp.Protos;
 using Exceptionless;
 using Grpc.Core;
 using Serilog;

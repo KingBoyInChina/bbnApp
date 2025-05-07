@@ -2,7 +2,7 @@
 using bbnApp.deskTop.Common;
 using bbnApp.deskTop.ViewModels;
 using bbnApp.DTOs.CodeDto;
-using BbnApp.Protos;
+using bbnApp.Protos;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;

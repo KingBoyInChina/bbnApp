@@ -2,10 +2,9 @@
 using bbnApp.Application.IServices.ICODE;
 using bbnApp.Common.Models;
 using bbnApp.DTOs.CodeDto;
-using BbnApp.Protos;
+using bbnApp.Protos;
 using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
-using Org.BouncyCastle.Utilities;
 
 namespace bbnApp.Service.Services
 {

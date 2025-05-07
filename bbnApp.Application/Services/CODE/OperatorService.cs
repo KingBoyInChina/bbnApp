@@ -235,13 +235,13 @@ namespace bbnApp.Application.Services.CODE
                         LoginInfo? loginInfo = loginInfoList.Where(x => x.Yhid == model.Yhid && x.CompanyId == model.CompanyId && x.EmployeeId == model.EmployeeId && x.Exptime > DateTime.Now.AddHours(2)).FirstOrDefault();
 
                         //获取操作员可以使用的应用
-                        List<TopMenuItemDto> menus = await GetOperatorTopMenu(model.Yhid, model.CompanyId, model.OperatorID);
+                        List<TopMenuItemDto> menus = await GetOperatorTopMenu(model.Yhid, model.CompanyId, model.OperatorId);
                         
 
                         if (loginInfo == null)
                         {
                             //获取身份认证令牌
-                            JwtToken _token = _jwtService.GetJwtToken(model.OperatorID);
+                            JwtToken _token = _jwtService.GetJwtToken(model.OperatorId);
                             model.Token=_token.Token;
                             model.Expires= _token.Expires.ToString();
                             LoginStateSave(loginRequest, model, _token);

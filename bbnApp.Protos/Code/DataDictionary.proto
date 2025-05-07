@@ -1,6 +1,6 @@
 ﻿syntax = "proto3";
 
-option csharp_namespace = "BbnApp.Protos";
+option csharp_namespace = "bbnApp.Protos";
 
 package DataDictionaryGrpc;
 
@@ -58,7 +58,7 @@ message DataDictionaryItem{
 	 int32 Isdelete=11;
 	 int32 IdxNum=12;
 }
- 
+
 // 树节点项 
 message DicTreeItem {
     string Id = 1;
@@ -80,7 +80,6 @@ message DataDictionaryDownloadResponse {
     string Message = 2;
     repeated DicTreeItem Item = 3;
 }
-
 // 字典树请求对象
 message DataDictionaryTreeRequest {
     string FilterKey = 1;

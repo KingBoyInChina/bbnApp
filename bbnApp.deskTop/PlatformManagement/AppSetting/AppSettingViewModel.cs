@@ -7,7 +7,7 @@ using bbnApp.deskTop.PlatformManagement.AreaCode;
 using bbnApp.deskTop.Services;
 using bbnApp.DTOs.CodeDto;
 using bbnApp.GrpcClients;
-using BbnApp.Protos;
+using bbnApp.Protos;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Material.Icons;
@@ -109,10 +109,7 @@ namespace bbnApp.deskTop.PlatformManagement.AppSetting
         private async Task AppSettingLoad()
         {
             IsBusy = true;
-            dialog.ShowLoading("数据查询中",async (data) =>
-            {
-                await AppSettingLoadGrid();
-            });
+            AppSettingLoadGrid();
         }
         /// <summary>
         /// 查询
@@ -120,28 +117,34 @@ namespace bbnApp.deskTop.PlatformManagement.AppSetting
         /// <returns></returns>
         private async Task AppSettingLoadGrid()
         {
-            AppSettingSearchRequest _Request = new AppSettingSearchRequest
+
+            dialog.ShowLoading("数据查询中", async (e) =>
             {
-                PageIndex = _currentPage,
-                PageSize = _itemsPrePage,
-                SettingCode = FilterSettingCode,
-                SettingName = FilterSettingName,
-                SettingDesc = FilterSettingDesc,
-            };
-            // 创建 Metadata（Header）
-            var headers = CommAction.GetHeader();
-            var response = await _client.AppSettingGridLoadAsync(_Request, headers);
-            if (response.Code)
-            {
-                var _data = _mapper.Map<IEnumerable<AppSettingDto>>(response.Items);
-                AppSettingData = [.. _data];
-                TotalItems = response.Total;
-            }
-            else
-            {
-                dialog.Error("错误提示", $"数据查询异常：{response.Message}");
-            }
-            IsBusy = false;
+                AppSettingSearchRequest _Request = new AppSettingSearchRequest
+                {
+                    PageIndex = _currentPage,
+                    PageSize = _itemsPrePage,
+                    SettingCode = FilterSettingCode,
+                    SettingName = FilterSettingName,
+                    SettingDesc = FilterSettingDesc,
+                };
+                // 创建 Metadata（Header）
+                var headers = CommAction.GetHeader();
+                var response = await _client.AppSettingGridLoadAsync(_Request, headers);
+                dialog.LoadingClose(e);
+                if (response.Code)
+                {
+                    var _data = _mapper.Map<IEnumerable<AppSettingDto>>(response.Items);
+                    AppSettingData = [.. _data];
+                    TotalItems = response.Total;
+                }
+                else
+                {
+                    dialog.Error("错误提示", $"数据查询异常：{response.Message}");
+                }
+                IsBusy = false;
+            });
+            
         }
         /// <summary>
         /// 修改
@@ -197,7 +200,7 @@ namespace bbnApp.deskTop.PlatformManagement.AppSetting
         /// </summary>
         public async Task SettingState(string type, AppSettingDto item)
         {
-            dialog.ShowLoading("数据提交中", async (data) =>
+            dialog.ShowLoading("数据提交中", async (e) =>
             {
                 string tips = string.Empty;
                 if (string.IsNullOrEmpty(type))
@@ -206,7 +209,7 @@ namespace bbnApp.deskTop.PlatformManagement.AppSetting
                 }
                 else
                 {
-                    var itemdata = _mapper.Map<BbnApp.Protos.AppSetting>(item);
+                    var itemdata = _mapper.Map<Protos.AppSetting>(item);
                     AppSettingStateRequest settingStateRequest = new AppSettingStateRequest
                     {
                         Type = type,
@@ -214,6 +217,7 @@ namespace bbnApp.deskTop.PlatformManagement.AppSetting
                     };
                     var headers = CommAction.GetHeader();
                     var response = await _client.AppSettingStateSaveAsync(settingStateRequest, headers);
+                    dialog.LoadingClose(e);
                     if (response.Code)
                     {
                         dialog.Success("提示", response.Message);

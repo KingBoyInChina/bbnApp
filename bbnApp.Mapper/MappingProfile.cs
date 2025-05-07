@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using bbnApp.Application.DTOs.LoginDto;
 using bbnApp.DTOs.CodeDto;
-using BbnApp.Protos;
+using bbnApp.Protos;
 
 namespace bbnApp.Service.GlobalService
 {

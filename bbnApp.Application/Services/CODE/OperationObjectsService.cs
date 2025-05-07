@@ -136,7 +136,7 @@ namespace bbnApp.Application.Services.CODE
         {
             try
             {
-                if (await operatorService.IsAccess(user.Yhid, user.CompanyId, user.OperatorID, "operationobjectscode","permit"))
+                if (await operatorService.IsAccess(user.Yhid, user.CompanyId, user.OperatorId, "operationobjectscode","permit"))
                 {
                     var EFObj = dbContext.Set<OperationObjectsCode>();
                     var model = EFObj.FirstOrDefault(x => x.ObjCode == data.ObjCode);
@@ -213,7 +213,7 @@ namespace bbnApp.Application.Services.CODE
         {
             try
             {
-                if (await operatorService.IsAccess(user.Yhid, user.CompanyId, user.OperatorID, "operationobjectscode", "permit"))
+                if (await operatorService.IsAccess(user.Yhid, user.CompanyId, user.OperatorId, "operationobjectscode", "permit"))
                 {
                     var EFObj = dbContext.Set<OperationObjectsCode>();
                     var model = EFObj.FirstOrDefault(x => x.ObjCode == ObjCode&&x.Isdelete==0);
@@ -274,7 +274,7 @@ namespace bbnApp.Application.Services.CODE
         {
             try
             {
-                if (await operatorService.IsAccess(user.Yhid, user.CompanyId, user.OperatorID, "operationobjectscode", "permit"))
+                if (await operatorService.IsAccess(user.Yhid, user.CompanyId, user.OperatorId, "operationobjectscode", "permit"))
                 {
 
                     var EFObj = dbContext.Set<OperationObjectsCode>();

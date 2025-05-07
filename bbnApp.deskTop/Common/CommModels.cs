@@ -1,6 +1,6 @@
 ﻿using Avalonia.Media.Imaging;
+using bbnApp.Common.Models;
 using bbnApp.DTOs.CodeDto;
-using BbnApp.Protos;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -56,7 +56,7 @@ namespace bbnApp.deskTop.Common
     /// </summary>
     public static class UserContext
     {
-        public static UserInfo CurrentUser { get; set; }
+        public static UserModel CurrentUser { get; set; }
     }
     /// <summary>
     /// 字典信息

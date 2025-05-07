@@ -2,7 +2,7 @@
 using bbnApp.deskTop.Common;
 using bbnApp.deskTop.ViewModels;
 using bbnApp.DTOs.CodeDto;
-using BbnApp.Protos;
+using bbnApp.Protos;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SukiUI.Dialogs;
@@ -134,7 +134,7 @@ namespace bbnApp.deskTop.PlatformManagement.AppSetting
                 else
                 {
                     IsBusy = true;
-                    BbnApp.Protos.AppSetting data = new BbnApp.Protos.AppSetting
+                    var data = new bbnApp.Protos.AppSetting
                     {
                         IdxNum=0,
                         SettingName = AppSettingItem.SettingName,

@@ -162,6 +162,9 @@ namespace bbnApp.deskTop.Common
         /// <param name="ac"></param>
         public void ShowLoading(string title="请求处理中",Action<(ISukiToast, Timer)> ac=null,int maxvalue=100)
         {
+            //先清楚所有提示框
+            ToastManager.DismissAll();
+
             var (toast, timer) = Loading(title, maxvalue);
             try
             {

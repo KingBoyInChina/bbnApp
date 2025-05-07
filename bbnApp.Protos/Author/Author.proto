@@ -1,6 +1,6 @@
 ﻿syntax = "proto3";
 
-option csharp_namespace = "BbnApp.Protos";
+option csharp_namespace = "bbnApp.Protos";
 
 package author;
 
@@ -76,45 +76,45 @@ message LoginResponse {
 ///用户信息
 message UserInfo {
   //用户组ID
-  string yhid =1;
+  string Yhid =1;
   //机构ID
-  string companyId=2;
+  string CompanyId=2;
   //机构名称
-  string companyName=3;
+  string CompanyName=3;
   //员工ID
-  string employeeId=4;
+  string EmployeeId=4;
   ///员工名称
-  string employeeName=5;
+  string EmployeeName=5;
   // 员工工号
-  string employeeNum=6;
+  string EmployeeNum=6;
   // 部门ID
-  string departMentId=7;
+  string DepartMentId=7;
   // 部门名称
-  string departMentName=8;
+  string DepartMentName=8;
   // 职务级别
   uint32 positionLeve=9;
   // 职务名称
-  string position=10;
+  string Position=10;
   // 联系电话
-  string phoneNum=11;
+  string PhoneNum=11;
   // 邮箱
-  string emailNum=12;
+  string EmailNum=12;
   // 入职时间
-  string dateOfEmployment=13;
+  string DateOfEmployment=13;
   // 所在区划代码
-  string areaCode=14;
+  string AreaCode=14;
   // 所在区划名称
-  string areaName=15;
+  string AreaName=15;
   //账号锁定
-  bool isLock=16;
+  bool IsLock=16;
   //操作员ID
   string OperatorId=17;
   //密码有效期
-  string passWordExpTime=18;
+  string PassWordExpTime=18;
   //有效时间
-  string token=19;
+  string Token=19;
   //有效期
-  string expires=20;
+  string Expires=20;
 }
 //顶部菜单
 message TopMenuItem {
