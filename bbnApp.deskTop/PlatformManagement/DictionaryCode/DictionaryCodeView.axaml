@@ -53,7 +53,7 @@
                   </StackPanel>
                 </Button>
 
-                <Button Classes="Basic" Command="{Binding NodeEditCommand}">
+                <Button Classes="Basic" Command="{Binding NodeAddCommand}">
                   <StackPanel Orientation="Horizontal">
                     <avalonia:MaterialIcon Kind="Plus" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
                     <TextBlock Foreground="{DynamicResource SukiText}">新建</TextBlock>
@@ -116,7 +116,7 @@
                 <TextBlock Text=")"></TextBlock>
                 <TextBlock Foreground="{DynamicResource SukiText}">项目清单</TextBlock>
                 
-                <avalonia:MaterialIcon Kind="{Binding DicSelected.IsLock,Converter={x:Static converters:IntToTextConverters.Lock}}" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+                <avalonia:MaterialIcon Kind="{Binding DicSelected.IsLock,Converter={x:Static converters:IntToIconConverters.FileLock}}" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
 
               </StackPanel>
                 

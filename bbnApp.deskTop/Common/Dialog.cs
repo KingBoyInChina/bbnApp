@@ -1,12 +1,21 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Platform.Storage;
 using Avalonia.Threading;
-using Microsoft.Extensions.Hosting;
+using Avalonia;
+using bbnApp.deskTop.Common.CommonViews;
+using DynamicData;
+using Splat;
 using SukiUI.Dialogs;
 using SukiUI.Toasts;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
+using bbnApp.deskTop.Views;
+using AvaloniaEdit.Utils;
+using Avalonia.Media.Imaging;
+using System.IO;
 
 namespace bbnApp.deskTop.Common
 {
@@ -106,7 +115,59 @@ namespace bbnApp.deskTop.Common
                 .Dismiss().After(TimeSpan.FromSeconds(delay))
                 .Queue();
         }
+        /// <summary>
+        /// Prompt
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="okText"></param>
+        /// <returns></returns>
+        public async Task<(bool,string)> Prompt(string title="提示",string okText = "提交")
+        {
+            try
+            {
+                (bool,string) result = (false, "");
+                var tsc = new TaskCompletionSource<bool>();
+                var viewModel = new InputPromptViewModel();
+                ///new InputPromptViewModel(dialog)
+                DialogManager.CreateDialog()
+                .WithViewModel(dialog => {
+                    var viewModel = new InputPromptViewModel();
+                    viewModel.ViewModelInit(dialog, (data) =>
+                    {
+                        if (data.Item1)
+                        {
+                            result = data;
+                            tsc.SetResult(false);
+                        }
+                        else
+                        {
+                            tsc.SetResult(false);
+                        }
+                    });
+                    return viewModel;
+                })
+                .TryShow();
 
+                //viewModel.ViewModelInit(DialogManager, (data) =>
+                //{
+                //    if (data.Item1)
+                //    {
+                //        result = data;
+                //        tsc.SetResult(false);
+                //    }
+                //    else
+                //    {
+                //        tsc.SetResult(false);
+                //    }
+                //});
+                await tsc.Task;
+                return result;
+            }
+            catch(Exception ex)
+            {
+                return (false,ex.Message.ToString());
+            }
+        }
         /// <summary>
         /// 成功提示
         /// </summary>
@@ -170,7 +231,15 @@ namespace bbnApp.deskTop.Common
             {
                 if (ac != null)
                 {
-                    ac((toast, timer));
+                    try
+                    {
+                        ac((toast, timer));
+                    }
+                    catch(Exception ex)
+                    {
+                        Error("提示",ex.Message.ToString());
+                        LoadingClose((toast, timer));
+                    }
                 }
             }
             catch (Exception ex)
@@ -199,6 +268,30 @@ namespace bbnApp.deskTop.Common
             if (e.Item2 != null)
             {
                 e.Item2.Dispose();
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ctr"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public async Task<(bool, string, byte[]?, Bitmap?)> FileSelected(UserControl uc, string type="")
+        {
+            try
+            {
+                CommModels.FileModle? ObjFile = await CommAction.OpenFileAndGetDetails(uc, null, false);
+                if (ObjFile != null)
+                {
+                    byte[] fileBite=await File.ReadAllBytesAsync(ObjFile.FilePath);
+                    Bitmap _bit = new Bitmap(ObjFile.FilePath);
+                    return (true, "", fileBite,_bit);
+                }
+                return (false,"无有效的文件信息",null,null);
+            }
+            catch (Exception ex)
+            {
+                return (false,ex.Message.ToString(),null,null);
             }
         }
     }

@@ -42,8 +42,9 @@ namespace bbnApp.Application.IServices.ICODE
         /// </summary>
         /// <param name="type"></param>
         /// <param name="MaterialId"></param>
+        /// <param name="LockReason"></param>
         /// <param name="user"></param>
         /// <returns></returns>
-        Task<(bool, string, MaterialsCodeDto)> MaterialState(string type, string MaterialId, UserModel user);
+        Task<(bool, string, MaterialsCodeDto)> MaterialState(string type, string MaterialId,string LockReason, UserModel user);
     }
 }

@@ -1,4 +1,6 @@
-﻿using Avalonia.Controls.Notifications;
+﻿using Avalonia.Controls;
+using Avalonia.Controls.Notifications;
+using Avalonia.Media.Imaging;
 using SukiUI.Toasts;
 using System;
 using System.Threading.Tasks;
@@ -25,6 +27,13 @@ namespace bbnApp.deskTop.Common
         /// <param name="okText"></param>
         /// <returns></returns>
         Task<bool> Alert(string title = "提示", string content = "确定要进行操作吗？", string okText = "确定");
+        /// <summary>
+        /// Prompt
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="okText"></param>
+        /// <returns></returns>
+        Task<(bool, string)> Prompt(string title = "提示", string okText = "提交");
         /// <summary>
         /// 错误提示
         /// </summary>
@@ -63,5 +72,12 @@ namespace bbnApp.deskTop.Common
         /// </summary>
         /// <param name="e"></param>
         void LoadingClose((ISukiToast, Timer) e);
+        /// <summary>
+        /// 文件选择
+        /// </summary>
+        /// <param name="ctr"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        Task<(bool, string, byte[]?, Bitmap?)> FileSelected(UserControl uc, string type = "");
     }
 }

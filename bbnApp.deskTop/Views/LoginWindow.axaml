@@ -71,7 +71,7 @@
 												<StackPanel Orientation="Horizontal">
 													<TextBox Width="300" suki:TextBoxExtensions.Prefix="" Watermark="工号/手机号/邮箱" Text="{Binding Username,Mode=TwoWay}"/>
 												</StackPanel>
-												<StackPanel Margin="6,18,0,3" Orientation="Horizontal" VerticalAlignment="Center">
+												<StackPanel Margin="6,10,0,3" Orientation="Horizontal" VerticalAlignment="Center">
 													<avalonia:MaterialIcon Kind="Password"></avalonia:MaterialIcon>
                           <TextBlock
                             InputMethod.IsInputMethodEnabled="False"

@@ -9,13 +9,12 @@
   <ItemGroup>
     <Folder Include="User\" />
     <Folder Include="Author\" />
+    <Folder Include="Code\" />
+    <Folder Include="Business\" />
     <Protobuf Include="Author\**" GrpcServices="Server,Client" />
     <Protobuf Include="User\**" GrpcServices="Server,Client" />
-    <Protobuf Include="Code\Area.proto" GrpcServices="Server,Client" />
-    <Protobuf Include="Code\AppSetting.proto" GrpcServices="Server,Client" />
-    <Protobuf Include="Code\DataDictionary.proto" GrpcServices="Server,Client" />
-    <Protobuf Include="Code\OperationObjectCode.proto" GrpcServices="Server,Client" />
-    <Protobuf Include="Code\MaterialsCode.proto" GrpcServices="Server,Client" />
+    <Protobuf Include="Code\**" GrpcServices="Server,Client" />
+    <Protobuf Include="Business\**" GrpcServices="Server,Client" />
     
   </ItemGroup>
 

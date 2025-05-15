@@ -257,6 +257,15 @@ namespace bbnApp.deskTop.PlatformManagement.DictionaryCode
         /// <param name="node"></param>
         /// <returns></returns>
         [RelayCommand]
+        private async Task NodeAdd()
+        {
+            await NodeEdit(true);
+        }
+        /// <summary>
+        /// 系欸但编辑
+        /// </summary>
+        /// <param name="creat"></param>
+        /// <returns></returns>
         private async Task NodeEdit(bool creat=true)
         {
             if (creat)
@@ -270,12 +279,12 @@ namespace bbnApp.deskTop.PlatformManagement.DictionaryCode
                     }
                     else
                     {
-                        NodeWindow(GetNewNode(), new DicTreeItemDto { Name = "根节点", Id = "-1" });
+                        NodeWindow(GetNewNode(_selectedTreeNode == null?"-1": _selectedTreeNode.Id), _selectedTreeNode == null ? new DicTreeItemDto { Name = "根节点", Id = "-1" }: new DicTreeItemDto { Name = _selectedTreeNode.Name, Id = _selectedTreeNode.Id });
                     }
                 }
                 else
                 {
-                    NodeWindow(GetNewNode(), new DicTreeItemDto { Name = "根节点", Id = "-1" });
+                    NodeWindow(GetNewNode(_selectedTreeNode == null ? "-1" : _selectedTreeNode.Id), _selectedTreeNode == null ? new DicTreeItemDto { Name = "根节点", Id = "-1" } : new DicTreeItemDto { Name = _selectedTreeNode.Name, Id = _selectedTreeNode.Id });
                 }
             }
             else if(DicSelected!=null) {
@@ -333,6 +342,8 @@ namespace bbnApp.deskTop.PlatformManagement.DictionaryCode
                 DicSpell="",
                 AppId = "",
                 AppName = "",
+                IsLeaf=1,
+                IsLock=0,
                 LockReason="",
                 LockTime=""
             };
@@ -399,25 +410,29 @@ namespace bbnApp.deskTop.PlatformManagement.DictionaryCode
         {
             try
             {
-                dialog.ShowLoading("字典清单加载中", async (e) =>
+                if (DicSelected != null)
                 {
-                    DataDictionaryItemSearchRequestDto request = new DataDictionaryItemSearchRequestDto { 
-                        DicCode=DicSelected.DicCode,
-                        ItemName=""
-                    };
-                    var header = CommAction.GetHeader();
-                    var data = await _client.ItemsSearchAsync(_mapper.Map<DataDictionaryItemSearchRequest>(request), header);
-                    if (data.Code)
+                    dialog.ShowLoading("字典清单加载中", async (e) =>
                     {
-                        dialog.Success("提示", data.Message);
-                        ItemData = [.. _mapper.Map<List<DataDictionaryItemDto>>(data.Items)];
-                    }
-                    else
-                    {
-                        dialog.Error("错误提示", data.Message);
-                    }
-                    dialog.LoadingClose(e);
-                });
+                        DataDictionaryItemSearchRequestDto request = new DataDictionaryItemSearchRequestDto
+                        {
+                            DicCode = DicSelected.DicCode,
+                            ItemName = ""
+                        };
+                        var header = CommAction.GetHeader();
+                        var data = await _client.ItemsSearchAsync(_mapper.Map<DataDictionaryItemSearchRequest>(request), header);
+                        if (data.Code)
+                        {
+                            dialog.Success("提示", data.Message);
+                            ItemData = [.. _mapper.Map<List<DataDictionaryItemDto>>(data.Items)];
+                        }
+                        else
+                        {
+                            dialog.Error("错误提示", data.Message);
+                        }
+                        dialog.LoadingClose(e);
+                    });
+                }
             }
             catch (Exception ex)
             {

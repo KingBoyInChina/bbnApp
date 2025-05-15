@@ -308,31 +308,24 @@ namespace bbnApp.deskTop.PlatformManagement.AreaCode
         [RelayCommand]
         private async Task AreaLockAction(object obj)
         {
-            dialog.ShowLoading("数据处理中中", async (data) =>
+            AreaItemDto areaItem = (AreaItemDto)obj;
+            if ((bool)areaItem.IsLock)
             {
-                AreaItemDto areaItem = (AreaItemDto)obj;
-                if ((bool)areaItem.IsLock)
+                string info = (bool)areaItem.IsLock ? $"确定要解除{areaItem.AreaName}的锁定吗？" : $"确定要锁定{areaItem.AreaName}吗？";
+                bool b = await dialog.Confirm("提示", info);
+                if (b)
                 {
-                    string info = (bool)areaItem.IsLock ? $"确定要解除{areaItem.AreaName}的锁定吗？" : $"确定要锁定{areaItem.AreaName}吗？";
-                    bool b = await dialog.Confirm("提示", info);
-                    if (b)
-                    {
-                        await AreaLockSubmit(areaItem, string.Empty);
-                    }
+                    AreaLockSubmit(areaItem, string.Empty);
                 }
-                else
+            }
+            else
+            {
+                var data = await dialog.Prompt("请填写停用原因", "提交");
+                if (data.Item1)
                 {
-                    dialogManager.CreateDialog()
-                        .WithViewModel(dialog => new InputPromptViewModel(dialog, async (v) =>
-                        {
-                            if (!string.IsNullOrEmpty(v))
-                            {
-                                await AreaLockSubmit(areaItem, v);
-                            }
-                        }))
-                        .TryShow();
+                    AreaLockSubmit(areaItem, data.Item2);
                 }
-            });
+            }
         }
         /// <summary>
         /// 
@@ -340,26 +333,39 @@ namespace bbnApp.deskTop.PlatformManagement.AreaCode
         /// <param name="areaItem"></param>
         /// <param name="LockReason"></param>
         /// <returns></returns>
-        private async Task AreaLockSubmit(AreaItemDto areaItem, string LockReason)
+        private void AreaLockSubmit(AreaItemDto areaItem, string LockReason)
         {
-            var header = CommAction.GetHeader();
 
-            AreaLockRequest request = new AreaLockRequest
+            dialog.ShowLoading("数据处理中中", async (e) =>
             {
-                AreaId = areaItem.AreaId,
-                LockReason = LockReason,
-            };
+                try
+                {
+                    var header = CommAction.GetHeader();
 
-            AreaLockResponse response = await _client.AreaLockAsync(request, header);
-            if (response.Code)
-            {
-                dialog.Success("提示", $"地区状态操作成功");
-                _ = AreaGridLoad();
-            }
-            else
-            {
-                dialog.Error("错误提示", $"数据删除异常：{response.Message}");
-            }
+                    AreaLockRequest request = new AreaLockRequest
+                    {
+                        AreaId = areaItem.AreaId,
+                        LockReason = LockReason,
+                    };
+
+                    AreaLockResponse response = await _client.AreaLockAsync(request, header);
+                    dialog.LoadingClose(e);
+                    if (response.Code)
+                    {
+                        dialog.Success("提示", $"地区状态操作成功");
+                        _ = AreaGridLoad();
+                    }
+                    else
+                    {
+                        dialog.Error("错误提示", $"数据删除异常：{response.Message}");
+                    }
+                }
+                catch(Exception ex)
+                {
+                    dialog.Error("提示",ex.Message.ToString());
+                }
+            });
+            
         }
 
         public void OnPageChanged(Pagination pagination, int currentPage, int itemsPerPage, IEnumerable pagedData)

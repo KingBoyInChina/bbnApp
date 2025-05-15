@@ -28,6 +28,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
             .Where(static t => t.IsClass && !t.IsAbstract && (t.Namespace == "bbnApp.Domain.Entities.User"
             || t.Namespace == "bbnApp.Domain.Entities.UserLogin"
             || t.Namespace == "bbnApp.Domain.Entities.Safe"
+            || t.Namespace == "bbnApp.Domain.Entities.Business"
             ));
 
         // 动态注册 DbSet<T>

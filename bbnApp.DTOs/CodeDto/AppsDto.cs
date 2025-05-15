@@ -9,11 +9,11 @@ namespace bbnApp.DTOs.CodeDto
         /// <summary>
         /// 版本号
         /// </summary>
-        public string Version { get; set; }
+        public string Version { get; set; } = string.Empty;
         /// <summary>
         /// 机构ID
         /// </summary>
-        public string CompanyId { get; set; }
+        public string CompanyId { get; set; } = string.Empty;
     }
     /// <summary>
     /// 机构返回信息
@@ -23,14 +23,14 @@ namespace bbnApp.DTOs.CodeDto
         /// <summary>
         /// 状态码
         /// </summary>
-        public bool Code { get; set; }
+        public bool Code { get; set; } = false;
         /// <summary>
         /// 消息内容
         /// </summary>
-        public string Message { get; set; }
+        public string Message { get; set; } = string.Empty;
         /// <summary>
         /// 机构清单
         /// </summary>
-        public List<TopMenuItemDto> Items { get; set; }
+        public List<TopMenuItemDto> Items { get; set; } = new List<TopMenuItemDto>();
     }
 }

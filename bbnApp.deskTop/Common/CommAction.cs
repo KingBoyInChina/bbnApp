@@ -14,6 +14,8 @@ using static bbnApp.deskTop.Common.CommModels;
 using Grpc.Core;
 using bbnApp.Common.Models;
 using bbnApp.Core;
+using System.Collections.ObjectModel;
+using System.IO;
 
 namespace bbnApp.deskTop.Common
 {
@@ -156,6 +158,28 @@ namespace bbnApp.deskTop.Common
                     break;
             }
             return new PixelPoint((int)x, (int)y);
+        }
+        /// <summary>
+        /// 设置选中项
+        /// </summary>
+        /// <param name="list"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static ComboboxItem SetSelectedItem(ObservableCollection<ComboboxItem> list,string value)
+        {
+            if (list != null && list.Count > 0)
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    return list.FirstOrDefault();
+                }
+                else
+                {
+                    var item = list.FirstOrDefault(x => x.Id == value);
+                    return item;
+                }
+            }
+            return null;
         }
         /// <summary>
         /// 图片添加添加水印

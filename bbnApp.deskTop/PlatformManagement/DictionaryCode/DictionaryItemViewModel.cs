@@ -99,12 +99,17 @@ namespace bbnApp.deskTop.PlatformManagement.DictionaryCode
                                 int index = SelectedItem.ItemIndex + 1;
                                 SelectedItem = new DataDictionaryItemDto();
                                 await Task.Delay(500);
-                                SelectedItem = new DataDictionaryItemDto { 
-                                    DicCode=SelectedNode.DicCode,
-                                    ItemIndex=index,
-                                    ReMarks="",
-                                    ItemName="",
-                                    ItemId=""
+                                SelectedItem = new DataDictionaryItemDto {
+                                    Yhid = _tempItem.Yhid,
+                                    DicCode = _tempNode.DicCode,
+                                    ItemIndex = index,
+                                    ItemSpell = "",
+                                    IsLock = 0,
+                                    LockTime = "",
+                                    LockReason="",
+                                    ReMarks = "",
+                                    ItemName = "",
+                                    ItemId = ""
                                 };
                             }
                             else

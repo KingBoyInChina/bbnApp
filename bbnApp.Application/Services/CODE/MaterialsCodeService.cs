@@ -176,29 +176,33 @@ namespace bbnApp.Application.Services.CODE
                 if (await operatorService.IsAccess(user.Yhid, user.CompanyId, user.OperatorId, "materialscode",string.IsNullOrEmpty(data.MaterialId)?"add": "edit"))
                 {
                     var EFObj = dbContext.Set<MaterialsCode>();
-                    var model = EFObj.Where(x => x.MaterialId == data.MaterialId && x.Isdelete == 0 && x.Yhid == user.Yhid).FirstOrDefault();
+                    var model =string.IsNullOrEmpty(data.MaterialId)?null: EFObj.Where(x => x.MaterialId == data.MaterialId && x.Isdelete == 0 && x.Yhid == user.Yhid).FirstOrDefault();
                     bool b = false;
+                    int index = 1;
                     if(model==null)
                     {
                         model = new MaterialsCode();
-                        var maxid = await EFObj.Select(x=>Convert.ToInt32(x.MaterialId)).MaxAsync();
-                        if (maxid<1)
+                        
+                        var modeldata = EFObj.Where(x => x.MaterialType == data.MaterialType && x.Isdelete == 0 && x.Yhid == user.Yhid).OrderByDescending(x=>Convert.ToInt32(x.MaterialId)).FirstOrDefault();
+                        if (modeldata == null)
                         {
-                            model.MaterialId = data.MaterialType + "0001";
+                            model.MaterialId = data.MaterialType + "001";
                         }
                         else
                         {
+                            int maxid = Convert.ToInt32(modeldata.MaterialId);
                             maxid++;
                             model.MaterialId = maxid.ToString();
+                            index=modeldata.MaterialIndex;
                         }
-                        model.MaterialId = data.MaterialId;
+                        index++;
                         model.Yhid = user.Yhid;
                         model.Isdelete = 0;
                         model.IsLock = 0;
                         b = true;
                     }
                     model.MaterialType = data.MaterialType;
-                    model.MaterialIndex = data.MaterialIndex;
+                    model.MaterialIndex = data.MaterialIndex==int.MinValue? index:model.MaterialIndex;
                     model.MaterialName = data.MaterialName;
                     model.MaterialCode = CommMethod.GetChineseSpell(model.MaterialName,false);
                     model.MaterialBarCode = data.MaterialBarCode;
@@ -280,7 +284,7 @@ namespace bbnApp.Application.Services.CODE
         /// <param name="MaterialId"></param>
         /// <param name="user"></param>
         /// <returns></returns>
-        public async Task<(bool,string,MaterialsCodeDto)> MaterialState(string type,string MaterialId,UserModel user)
+        public async Task<(bool,string,MaterialsCodeDto)> MaterialState(string type,string MaterialId,string LockReason,UserModel user)
         {
             try
             {
@@ -304,7 +308,7 @@ namespace bbnApp.Application.Services.CODE
                         {
                             #region 锁定
                             model.IsLock =Convert.ToByte(model.IsLock == 0 ? 1 : 0);
-                            model.LockReason = model.IsLock == 1 ? $"{user.EmployeeName}({user.EmployeeId})锁定操作" : $"{user.EmployeeName}({user.EmployeeId})解锁操作";
+                            model.LockReason = model.IsLock == 1 ? $"{user.EmployeeName}({user.EmployeeId}){LockReason}" : $"{user.EmployeeName}({user.EmployeeId})解锁";
                             model.LastModified = DateTime.Now;
                             await dbContext.SaveChangesAsync();
                             return (true, "数据状态变更完成", ModelToDto(model));
@@ -346,11 +350,11 @@ namespace bbnApp.Application.Services.CODE
                 Specifications = data.Specifications,
                 Unit = data.Unit,
                 StorageEnvironment = data.StorageEnvironment,
-                OtherParames = data.OtherParames,
+                OtherParames = CommMethod.GetValueOrDefault(data.OtherParames, ""),
                 IsLock = data.IsLock,
-                LockTime = Share.CommMethod.GetValueOrDefault(data.LockTime, ""),
-                LockReason = data.LockReason,
-                ReMarks = data.ReMarks,
+                LockTime = CommMethod.GetValueOrDefault(data.LockTime, ""),
+                LockReason = CommMethod.GetValueOrDefault(data.LockReason, ""),
+                ReMarks =CommMethod.GetValueOrDefault(data.ReMarks, ""),
                 MaterialIndex = data.MaterialIndex
             }; 
         }

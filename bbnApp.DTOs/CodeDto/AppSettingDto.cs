@@ -90,15 +90,15 @@
         /// <summary>
         /// 状态码
         /// </summary>
-        public bool Code { get; set; }
+        public bool Code { get; set; } = false;
         /// <summary>
         /// 消息内容
         /// </summary>
-        public string Message { get; set; }
+        public string Message { get; set; } = string.Empty;
         /// <summary>
         /// 配置对象
         /// </summary>
-        public List<AppSettingDto>? Items { get; set; }
+        public List<AppSettingDto>? Items { get; set; }=new List<AppSettingDto>();
     }
     /// <summary>
     /// 系统配置查询请求
@@ -108,31 +108,31 @@
         /// <summary>
         /// 配置参数名称
         /// </summary>
-        public string? SettingName { get; set; }
+        public string? SettingName { get; set; }= string.Empty;
         /// <summary>
         /// 配置代码
         /// </summary>
-        public string? SettingCode { get; set; }
+        public string? SettingCode { get; set; }=string.Empty;
         /// <summary>
         /// 锁定
         /// </summary>
-        public byte IsFiexed { get; set; }
+        public byte IsFiexed { get; set; } = 0;
         /// <summary>
         /// 固定
         /// </summary>
-        public byte IsLock { get; set; }
+        public byte IsLock { get; set; } = 0;
         /// <summary>
         /// 说明
         /// </summary>
-        public string? SettingDesc { get; set; }
+        public string? SettingDesc { get; set; } = string.Empty;
         /// <summary>
         /// 单页条数
         /// </summary>
-        public int PageSize { get; set; }
+        public int PageSize { get; set; } = 1;
         /// <summary>
         /// 分页序号
         /// </summary>
-        public int PageIndex { get; set; }
+        public int PageIndex { get; set; } = 15;
     }
     /// <summary>
     /// 系统配置查询响应
@@ -142,19 +142,19 @@
         /// <summary>
         /// 状态码
         /// </summary>
-        public bool Code { get; set; }
+        public bool Code { get; set; } = false;
         /// <summary>
         /// 消息内容
         /// </summary>
-        public string Message { get; set; }
+        public string Message { get; set; } = string.Empty;
         /// <summary>
         /// 总数
         /// </summary>
-        public int Total { get; set; }
+        public int Total { get; set; } = 0;
         /// <summary>
         /// 配置对象
         /// </summary>
-        public List<AppSettingDto>? Items { get; set; }
+        public List<AppSettingDto>? Items { get; set; } = new List<AppSettingDto>();
     }
     #endregion
     #region 系统配置提交
@@ -162,8 +162,8 @@
     /// 系统配置提交请求
     /// </summary>
     public class AppSettingPostRequestDto
-    { 
-        public AppSettingDto Item { get; set; }
+    {
+        public AppSettingDto Item { get; set; } = new AppSettingDto();
     }
     /// <summary>
     /// 系统配置提交响应
@@ -173,15 +173,15 @@
         /// <summary>
         /// 状态码
         /// </summary>
-        public bool Code { get; set; }
+        public bool Code { get; set; } = false;
         /// <summary>
         /// 消息内容
         /// </summary>
-        public string Message { get; set; }
+        public string Message { get; set; } = string.Empty;
         /// <summary>
         /// 配置对象
         /// </summary>
-        public AppSettingDto? Item { get; set; }
+        public AppSettingDto? Item { get; set; } = new AppSettingDto();
     }
     #endregion
     #region 系统配置状态变更
@@ -193,11 +193,11 @@
         /// <summary>
         /// 动作类型
         /// </summary>
-        public string Type { get; set; }
+        public string Type { get; set; }= string.Empty;
         /// <summary>
         /// 配置对象
         /// </summary>
-        public AppSettingDto Item { get; set; }
+        public AppSettingDto Item { get; set; } = new AppSettingDto();
     }
     /// <summary>
     /// 系统配置状态变更响应
@@ -207,15 +207,15 @@
         /// <summary>
         /// 状态码
         /// </summary>
-        public bool Code { get; set; }
+        public bool Code { get; set; } = false;
         /// <summary>
         /// 消息内容
         /// </summary>
-        public string Message { get; set; }
+        public string Message { get; set; } = string.Empty;
         /// <summary>
         /// 配置对象
         /// </summary>
-        public AppSettingDto? Item { get; set; }
+        public AppSettingDto? Item { get; set; } = new AppSettingDto();
     }
     #endregion
 }

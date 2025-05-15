@@ -1,0 +1,63 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "bbnApp.Protos";
+
+package UploadFileGrpc;
+
+/********定义UploadFile服务********/
+service UploadFileGrpc {
+	//查询
+  rpc UploadFilePost (UploadFileRequest) returns (UploadFileResponse);
+  //状态变更，read/delete/locak/copy
+  rpc UploadFileState (UploadFileStateRequest) returns (UploadFileStateResponse);
+}
+/********定义请求参数********/
+// 文件上传项
+message UploadFileItem {
+    
+    string LinkTable = 1; // 对应表
+    string LinkKey = 2; // 对应表主键
+    string ReMarks=3;
+    repeated FileItems Files=4;
+}
+///
+message FileItems{
+    bytes FileBytes = 1; // 二进制文件
+    string FileName = 2; // 文件名称
+    string FileExt = 3; // 文件类型
+    string FileId = 4; // 文件ID
+}
+
+// 文件上传请求
+message UploadFileRequest {
+   UploadFileItem Item = 1; // 文件上传项
+}
+// 文件上传响应
+message UploadFileResponse {
+    bool Code = 1; // 状态
+    string Message = 2; // 消息
+    UploadFileItem Item = 3; // 文件上传项
+}
+// 上传文件状态变更请求
+message UploadFileStateRequest {
+    string FileId = 1; // 文件ID
+    string Type = 2; // 操作类型
+    string LockReason = 3; // 锁定原因-锁定操作时需要
+}
+// 上传文件状态变更响应
+message UploadFileStateResponse {
+    bool Code = 1; // 状态
+    string Message = 2; // 消息
+    FileItems Item = 3; // 文件上传项
+}
+// 上传文件读取请求,通过LinkKey+LinkTable读取
+message UploadFileReadRequest {
+    string LinkKey = 1; // 文件ID
+    string LinkTable = 2; // 操作类型
+}
+// 上传文件读取响应
+message UploadFileReadResponse {
+    bool Code = 1; // 状态
+    string Message = 2; // 消息
+    UploadFileItem Item = 3; // 文件上传项
+}

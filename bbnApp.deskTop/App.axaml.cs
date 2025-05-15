@@ -36,6 +36,7 @@ using bbnApp.deskTop.Common.CommonViews;
 using bbnApp.deskTop.PlatformManagement.AppSetting;
 using bbnApp.deskTop.PlatformManagement.DictionaryCode;
 using bbnApp.deskTop.PlatformManagement.OperationCode;
+using bbnApp.deskTop.PlatformManagement.MaterialsCode;
 
 namespace bbnApp.deskTop;
 
@@ -73,11 +74,16 @@ public partial class App :Avalonia.Application
 
             var views = ConfigureViews(services);
 
-            var provider = ConfigureServices(configuration,services);
+
+            DataTemplates.Add(new ViewLocator(views));
+            DisableAvaloniaDataAnnotationValidation();
+
+
+            var provider = ConfigureServices(configuration, services);
 
             // 获取 ExceptionService 实例
             var exceptionService = provider.GetRequiredService<ExceptionService>();
-            
+
             // 订阅 UI 线程中的未处理异常
             Dispatcher.UIThread.UnhandledException += exceptionService.OnDispatcherUnhandledException;
 
@@ -87,8 +93,6 @@ public partial class App :Avalonia.Application
             // 订阅异步任务中的未处理异常
             TaskScheduler.UnobservedTaskException += exceptionService.OnUnobservedTaskException;
 
-            DataTemplates.Add(new ViewLocator(views));
-            DisableAvaloniaDataAnnotationValidation();
             desktop.MainWindow = views.CreateView<MainWindowViewModel>(provider) as Window;
         }
 
@@ -140,7 +144,9 @@ public partial class App :Avalonia.Application
             .AddView<DictionaryCodeView,DictionaryCodeViewModel>(services)
             .AddView<DictionaryItemView, DictionaryItemViewModel>(services)
             .AddView<CustomThemeDialogView, CustomThemeDialogViewModel>(services)
+            .AddView<MaterialsCodeView, MaterialsCodeViewModel>(services)
             .AddView<OperationCodeView, OperationCodeViewModel>(services)
+            
             .AddView<InputPrompt, InputPromptViewModel>(services);
     }
 

@@ -180,7 +180,7 @@ namespace bbnApp.Service.GlobalService
                 {
                     // 异常监听逻辑
                     LogException(ex, context);
-                    throw new RpcException(new Status(StatusCode.Internal, $"拦截器中请求产生了异常{ex.StackTrace.ToString()}"));
+                    throw new RpcException(new Status(StatusCode.Internal, $"[GetUser]拦截器中请求产生了异常{ex.StackTrace.ToString()}"));
                 }
                 finally
                 {

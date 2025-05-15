@@ -272,7 +272,7 @@ namespace bbnApp.Application.Services.CODE
                         model.Isdelete = 0;
                         model.IsLeaf = 0;
                         model.DicPCode =string.IsNullOrEmpty(data.DicPCode)?"-1": data.DicPCode;
-                        var pmodel = dics.Where(x => x.DicPCode == data.DicPCode).OrderByDescending(x=>Convert.ToInt32(x.DicPCode)).FirstOrDefault();
+                        var pmodel = dics.Where(x => x.DicPCode == data.DicPCode).OrderByDescending(x=>Convert.ToInt32(x.DicCode)).FirstOrDefault();
                         if (pmodel == null)
                         {
                             model.DicCode = model.DicPCode=="-1"? "10":model.DicPCode+"01";

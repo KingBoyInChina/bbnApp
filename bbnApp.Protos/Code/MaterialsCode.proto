@@ -99,6 +99,7 @@ message MaterialsCodeSaveResponse {
 message MaterialsCodeStateRequest {
     string Type = 1; // 类型
     string MaterialId = 2; // 物资ID
+    string LockReason=3;// 锁定原因
 }
 // 物资状态响应
 message MaterialsCodeStateResponse {

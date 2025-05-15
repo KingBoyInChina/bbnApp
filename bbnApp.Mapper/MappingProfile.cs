@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using bbnApp.Application.DTOs.LoginDto;
+using bbnApp.DTOs.BusinessDto;
 using bbnApp.DTOs.CodeDto;
 using bbnApp.Protos;
 
@@ -101,6 +102,13 @@ namespace bbnApp.Service.GlobalService
             CreateMap<MaterialsCodeSaveResponseDto, MaterialsCodeSaveResponse>().ReverseMap();
             CreateMap<MaterialsCodeStateRequestDto, MaterialsCodeStateRequest>().ReverseMap();
             CreateMap<MaterialsCodeStateResponseDto, MaterialsCodeStateResponse>().ReverseMap();
+            #endregion
+            #region 文件上传
+            CreateMap<UploadFileItemDto, UploadFileItem>().ReverseMap();
+            CreateMap<UploadFileRequestDto, UploadFileRequest>().ReverseMap();
+            CreateMap<UploadFileResponseDto, UploadFileResponse>().ReverseMap();
+            CreateMap<UploadFileStateRequestDto, UploadFileStateRequest>().ReverseMap();
+            CreateMap<UploadFileStateResponseDto, UploadFileStateResponse>().ReverseMap();
             #endregion
         }
     }

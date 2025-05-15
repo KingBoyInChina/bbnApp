@@ -54,4 +54,8 @@
   <Style Selector="TextBlock.NOTNULL">
     <Setter Property="Foreground" Value="Red"></Setter>
   </Style>
+
+  <Style Selector="StackPanel.FormCell">
+    <Setter Property="Margin" Value="5,10"></Setter>
+  </Style>
 </Styles>

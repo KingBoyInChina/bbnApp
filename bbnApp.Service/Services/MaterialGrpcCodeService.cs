@@ -36,7 +36,7 @@ namespace bbnApp.Service.Services
             {
                 if (context.UserState.TryGetValue("User", out var userObj) && userObj is UserModel user)
                 {
-                    OperationObjectTreeRequestDto data = _mapper.Map<OperationObjectTreeRequestDto>(request);
+                    MaterialsCodeTreeRequestDto data = _mapper.Map<MaterialsCodeTreeRequestDto>(request);
                     var (code, msg, list) = await _materialsService.GetMaterailTree(user);
                     response = new MaterialsCodeTreeResponse
                     {
@@ -202,7 +202,7 @@ namespace bbnApp.Service.Services
             {
                 if (context.UserState.TryGetValue("User", out var userObj) && userObj is UserModel user)
                 {
-                    var (code, msg, result) = await _materialsService.MaterialState(request.Type,request.MaterialId, user);
+                    var (code, msg, result) = await _materialsService.MaterialState(request.Type,request.MaterialId,request.LockReason, user);
                     response = new MaterialsCodeStateResponse
                     {
                         Code = code,

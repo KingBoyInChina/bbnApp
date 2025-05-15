@@ -41,7 +41,7 @@ public static class IntToIconConverters
     public static readonly IntToIconConverter Visibility = new(MaterialIconKind.EyeClosed, MaterialIconKind.Eye);
     public static readonly IntToIconConverter Simple = new(MaterialIconKind.Close, MaterialIconKind.Ticket);
     public static readonly IntToIconConverter FullScreen = new(MaterialIconKind.Fullscreen, MaterialIconKind.FullscreenExit);
-    public static readonly IntToIconConverter FileLock = new(MaterialIconKind.File, MaterialIconKind.FileLock);
+    public static readonly IntToIconConverter FileLock = new(MaterialIconKind.FileLock,MaterialIconKind.File);
     public static readonly IntToIconConverter FileLeaf = new(MaterialIconKind.File, MaterialIconKind.Folder);
 }
 

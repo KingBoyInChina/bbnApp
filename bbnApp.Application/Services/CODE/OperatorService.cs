@@ -281,7 +281,7 @@ namespace bbnApp.Application.Services.CODE
                 #region 记录登录信息
                 #region 登录信息
                 var logininfo = _codeContext.Set<LoginInfo>();
-                LoginInfo _logininfo = logininfo.ToList().FirstOrDefault(x => x.EmployeeId == model.EmployeeId);
+                LoginInfo _logininfo = logininfo.FirstOrDefault(x => x.EmployeeId == model.EmployeeId);
 
                 if (_logininfo == null)
                 {

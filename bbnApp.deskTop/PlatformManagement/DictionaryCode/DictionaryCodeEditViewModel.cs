@@ -90,7 +90,8 @@ namespace bbnApp.deskTop.PlatformManagement.DictionaryCode
                     {
                         Item = SelectedNode,
                     };
-                    var data = await _client.DicPostAsync(mapper.Map<DataDictionarySaveRequest>(request),CommAction.GetHeader());
+                    var postdata = mapper.Map<DataDictionarySaveRequest>(request);
+                    var data = await _client.DicPostAsync(postdata, CommAction.GetHeader());
                     if (data.Code)
                     {
                         dialog.Success("提示",data.Message);

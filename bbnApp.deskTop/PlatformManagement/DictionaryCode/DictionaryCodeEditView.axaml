@@ -55,7 +55,7 @@
 
       <StackPanel Orientation="Horizontal" Margin="10">
         <TextBlock VerticalAlignment="Center" Classes="Caption">备注说明：</TextBlock>
-        <TextBox Watermark="备注说明" MaxLength="100" Width="300" Text="{Binding SelectedNode.ReMarks}" Height="80" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
+        <TextBox Watermark="备注说明" MaxLength="100" Width="300" Text="{Binding SelectedNode.ReMarks}" Height="100" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
       </StackPanel>
 
       <StackPanel Orientation="Horizontal" Margin="10">
