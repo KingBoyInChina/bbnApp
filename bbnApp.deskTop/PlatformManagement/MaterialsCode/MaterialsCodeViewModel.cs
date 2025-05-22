@@ -5,6 +5,7 @@ using bbnApp.Common.Models;
 using bbnApp.deskTop.Common;
 using bbnApp.deskTop.Features;
 using bbnApp.deskTop.Services;
+using bbnApp.DTOs.BusinessDto;
 using bbnApp.DTOs.CodeDto;
 using bbnApp.GrpcClients;
 using bbnApp.Protos;
@@ -13,6 +14,7 @@ using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using Material.Icons;
 using Org.BouncyCastle.Asn1.Ocsp;
+using Org.BouncyCastle.Utilities;
 using SukiUI.Dialogs;
 using System;
 using System.Collections.Generic;
@@ -50,6 +52,7 @@ namespace bbnApp.deskTop.PlatformManagement.MaterialsCode
         /// 
         /// </summary>
         private MaterialsCodeGrpc.MaterialsCodeGrpcClient _client;
+        private UploadFileGrpc.UploadFileGrpcClient _uploadClient;
         /// <summary>
         /// 
         /// </summary>
@@ -83,6 +86,7 @@ namespace bbnApp.deskTop.PlatformManagement.MaterialsCode
             this.nav = nav;
             this.dialog = dialog;
             _client = grpcClientFactory.CreateClient<MaterialsCodeGrpc.MaterialsCodeGrpcClient>();
+            _uploadClient = grpcClientFactory.CreateClient<UploadFileGrpc.UploadFileGrpcClient>();
             _mapper = mapper;
             this.dialog = dialog;
         }
@@ -172,6 +176,7 @@ namespace bbnApp.deskTop.PlatformManagement.MaterialsCode
         {
             try
             {
+                ImageClear();
                 _selectedTreeNode = node;
                 if (node.IsLeaf)
                 {
@@ -196,6 +201,10 @@ namespace bbnApp.deskTop.PlatformManagement.MaterialsCode
                 MaterialSelected = _mapper.Map<MaterialsCodeDto>(data.Item);
                 //设置选中项目
                 SetItemSelected();
+                if (!string.IsNullOrEmpty(MaterialSelected.MaterialId))
+                {
+                    _=FileRead(MaterialSelected.MaterialId);
+                }
             }
             else
             {
@@ -340,6 +349,7 @@ namespace bbnApp.deskTop.PlatformManagement.MaterialsCode
                 if (b)
                 {
                      await MaterialStateSave(data);
+                    ImageClear();
                 }
                 #endregion
             }
@@ -401,6 +411,31 @@ namespace bbnApp.deskTop.PlatformManagement.MaterialsCode
         /// </summary>
         [ObservableProperty] private bool _imageShow = false;
         /// <summary>
+        /// 
+        /// </summary>
+        [ObservableProperty] private FileItemsDto _materialImageInfo = new FileItemsDto();
+        /// <summary>
+        /// 待上传的文件请求对象
+        /// </summary>
+        private UploadFileRequestDto request = null;
+        /// <summary>
+        /// 图片信息清空
+        /// </summary>
+        private void ImageClear()
+        {
+            ImageShow = false;
+            if (MaterialImage != null)
+            {
+                MaterialImage.Dispose();
+                MaterialImage = null;
+            }
+            if (request != null)
+            {
+                request = null;
+            }
+            MaterialImageInfo = new FileItemsDto();
+        }
+        /// <summary>
         /// 文件选择
         /// </summary>
         [RelayCommand]
@@ -408,19 +443,115 @@ namespace bbnApp.deskTop.PlatformManagement.MaterialsCode
         {
             try
             {
+                if (MaterialSelected != null&&!string.IsNullOrEmpty(MaterialSelected.MaterialId)) { 
                 var data =await dialog.FileSelected(NowControl, "image");
-                if (data.Item1)
-                {
-                    MaterialImage = data.Item4;
+                    if (data.Item1)
+                    {
+                        MaterialImage = data.Item4;
+                        byte[] imagebytes = data.Item3;
+                        var header = CommAction.GetHeader();
+
+                        FileItemsDto items = new FileItemsDto
+                        {
+                            FileBytes = imagebytes,
+                            FileId = MaterialImageInfo.FileId,
+                            FileExt = data.Item5.Extension,
+                            FileName = data.Item5.Name
+                        };
+
+                        UploadFileItemDto fileData = new UploadFileItemDto
+                        {
+                            ReMarks = (imagebytes.Length/1024).ToString("0")+"Kb",
+                            LinkKey = MaterialSelected.MaterialId,
+                            LinkTable = "materialscode",
+                            Files =new List<FileItemsDto> { items }
+                        };
+
+                        request = new UploadFileRequestDto
+                        {
+                            Item = fileData
+                        };
+                        bool post=await dialog.Confirm("提示", "是否上传当前文件？", "上传", "取消");
+                        if (post)
+                        {
+                            FileUploadCommand.Execute(null);
+                        }
+                    }
                 }
                 else
                 {
-                    dialog.Error("提示", data.Item2);
+                    dialog.Error("提示", "请先选择物资信息");
                 }
             }
             catch(Exception ex)
             {
                 dialog.Error("提示",ex.Message.ToString());
+            }
+        }
+        /// <summary>
+        /// 上传
+        /// </summary>
+        /// <returns></returns>
+        [RelayCommand]
+        private async Task FileUpload()
+        {
+            try
+            {
+                if (request != null)
+                {
+                    var response = await _uploadClient.UploadFilePostAsync(_mapper.Map<UploadFileRequest>(request), CommAction.GetHeader());
+                    if (response.Code)
+                    {
+                        dialog.Success("提示", response.Message);
+                        request = null;
+                    }
+                    else
+                    {
+                        dialog.Error("提示", response.Message);
+                    }
+                }
+                else
+                {
+                    dialog.Error("提示", "请先选择需要上传的文件");
+                }
+            }
+            catch (Exception ex)
+            {
+                dialog.Error("提示", ex.Message.ToString());
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="linkKey"></param>
+        /// <param name="linkTable"></param>
+        /// <returns></returns>
+        private async Task FileRead(string linkKey,string linkTable= "materialscode")
+        {
+            try
+            {
+                var header = CommAction.GetHeader();
+                UploadFileReadRequestDto request = new UploadFileReadRequestDto
+                {
+                    LinkKey = linkKey,
+                    LinkTable = linkTable
+                };
+
+                var response = await _uploadClient.UploadFileReadAsync(_mapper.Map<UploadFileReadRequest>(request), header);
+                if (response.Code)
+                {
+                    UploadFileItemDto item=_mapper.Map<UploadFileItemDto>(response.Item);
+                    if (item != null)
+                    {
+                        MaterialImageInfo = item.Files[0];
+                        MaterialImage =CommAction.ByteArrayToBitmap(MaterialImageInfo.FileBytes);
+                    }
+                }
+                ImageShow = true;
+            }
+            catch(Exception ex)
+            {
+                dialog.Error("提示", ex.Message.ToString());
             }
         }
     }

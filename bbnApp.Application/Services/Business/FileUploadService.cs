@@ -1,21 +1,15 @@
-﻿using bbnApp.Application.IServices.ICODE;
-using bbnApp.Application.Services.CODE;
+﻿using bbnApp.Application.IServices.IBusiness;
+using bbnApp.Application.IServices.ICODE;
 using bbnApp.Common.Models;
 using bbnApp.Core;
 using bbnApp.Domain.Entities.Business;
 using bbnApp.DTOs.BusinessDto;
 using Exceptionless;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace bbnApp.Application.Services.Business
 {
-    public class FileUploadService
+    public class FileUploadService: IFileUploadService
     {
         /// <summary>
         /// 
@@ -24,7 +18,7 @@ namespace bbnApp.Application.Services.Business
         /// <summary>
         /// 
         /// </summary>
-        private readonly ILogger<OperatorService> _logger;
+        private readonly ILogger<FileUploadService> _logger;
         /// <summary>
         /// 
         /// </summary>
@@ -38,7 +32,7 @@ namespace bbnApp.Application.Services.Business
         /// </summary>
         /// <param name="dbContext"></param>
         /// <param name="redisService"></param>
-        public FileUploadService(IApplicationDbContext dbContext, ILogger<OperatorService> logger, ExceptionlessClient exceptionlessClient, IOperatorService operatorService)
+        public FileUploadService(IApplicationDbContext dbContext, ILogger<FileUploadService> logger, ExceptionlessClient exceptionlessClient, IOperatorService operatorService)
         {
             this.dbContext = dbContext;
             this._logger = logger;
@@ -75,6 +69,7 @@ namespace bbnApp.Application.Services.Business
                         }
                         #region 写数据
                         model.FileEx = item.FileExt;
+                        model.FileType = model.FileEx.Replace(".","");
                         model.FileName = item.FileName;
                         model.LinkKey = Obj.LinkKey;
                         model.LinkTable = Obj.LinkTable;
@@ -88,16 +83,16 @@ namespace bbnApp.Application.Services.Business
                             Directory.CreateDirectory(Path.Combine("Files", model.LinkTable));
                         }
                         string FilePath = Path.Combine("Files", model.LinkTable, model.FileId + model.FileEx);
-                        await File.WriteAllBytesAsync(FilePath, item.FileByes);
-                        model.FilePath = FilePath;
+                        await File.WriteAllBytesAsync(FilePath, item.FileBytes);
+                        model.FilePath =Path.GetFullPath(FilePath);
                         model.LastModified = DateTime.Now;
                         if (b)
                         {
                             await UploadFile.AddAsync(model);
                         }
                         list.Add(model);
-                        await dbContext.SaveChangesAsync();
                     }
+                    await dbContext.SaveChangesAsync();
                     return (true, "文件上传完成", ModelToDto(list));
                 }
                 else
@@ -243,7 +238,7 @@ namespace bbnApp.Application.Services.Business
                 FileId = model.FileId,
                 FileExt = model.FileEx,
                 FileName = model.FileName,
-                FileByes = bytes,
+                FileBytes = bytes,
             };
         }
     }

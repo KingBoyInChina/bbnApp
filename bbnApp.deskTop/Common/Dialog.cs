@@ -276,7 +276,7 @@ namespace bbnApp.deskTop.Common
         /// <param name="ctr"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public async Task<(bool, string, byte[]?, Bitmap?)> FileSelected(UserControl uc, string type="")
+        public async Task<(bool, string, byte[]?, Bitmap?,FileInfo?)> FileSelected(UserControl uc, string type="")
         {
             try
             {
@@ -285,13 +285,13 @@ namespace bbnApp.deskTop.Common
                 {
                     byte[] fileBite=await File.ReadAllBytesAsync(ObjFile.FilePath);
                     Bitmap _bit = new Bitmap(ObjFile.FilePath);
-                    return (true, "", fileBite,_bit);
+                    return (true, "", fileBite,_bit, ObjFile.ObjFile);
                 }
-                return (false,"无有效的文件信息",null,null);
+                return (false,"无有效的文件信息",null,null,null);
             }
             catch (Exception ex)
             {
-                return (false,ex.Message.ToString(),null,null);
+                return (false,ex.Message.ToString(),null,null,null);
             }
         }
     }

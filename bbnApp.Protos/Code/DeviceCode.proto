@@ -1,0 +1,122 @@
+﻿
+syntax = "proto3";
+
+option csharp_namespace = "bbnApp.Protos";
+
+package DeviceCodeGrpc;
+
+/********定义DeviceCode服务********/
+service DeviceCodeGrpc {
+    //设备树加载
+    rpc DeviceTreeLoad (DeviceCodeTreeRequest) returns (DeviceCodeTreeResponse);
+	//设备信息提交
+    rpc DeviceCodePost (DeviceCodePostRequest) returns (DeviceCodePostResponse);
+    //设备状态变更
+    rpc DeviceCodeState (DeviceCodeStateRequest) returns (DeviceCodeStateResponse);
+    //设备构成状态变更
+    rpc DeviceStructCodeState (DeviceStructStateRequest) returns (DeviceStructStateResponse);
+}
+
+// 设备代码树节点
+message DeviceCodeTreeNode {
+    string Id = 1; // ID
+    string PId = 2; // 父ID
+    string Name = 3; // 名称
+    string Tag = 4; // Tag
+    bool IsLeaf = 5; // 是否是叶子节点
+    bool IsLock = 6; // 锁定
+    repeated DeviceCodeTreeNode SubItems = 7; // 子节点
+}
+
+// 设备代码项
+message DeviceCodeItem {
+    int32 IdxNum = 1; // 索引
+    string Yhid = 2; // 用户ID
+    string DeviceId = 3; // 设备ID
+    string Code = 4; // 设备代码
+    string DeviceType = 5; // 设备分类
+    string DeviceSpecifications = 6; // 规格
+    string DeviceModel = 7; // 型号
+    string DeviceBarCode = 8; // 条码号
+    string Usage = 9; // 用途
+    string StorageEnvironment = 10; // 存储环境
+    string UsageEnvironment = 11; // 使用环境
+    int32 ServiceLife = 12; // 使用寿命
+    string LifeUnit = 13; // 计量单位
+    int32 IsLock = 14; // 锁定状态
+    string LockTime = 15; // 锁定时间
+    string LockReason = 16; // 锁定原因
+    string ReMarks = 17; // 备注信息
+    string DeviceName = 18; // 设备代码
+}
+
+// 设备构成项
+message DeviceStructItem {
+    int32 IdxNum = 1; // 索引
+    string Yhid = 2; // 用户ID
+    string StructId = 3; // 构成ID
+    string DeviceId = 4; // 设备ID
+    string MaterialId = 5; // 物资ID
+    string MaterialName = 6; // 物资名称
+    int32 UtilizeQuantity = 7; // 使用数量
+    string QuantityUnit = 8; // 计量单位
+    int32 IsLock = 9; // 锁定状态
+    string LockTime = 10; // 锁定时间
+    string LockReason = 11; // 锁定原因
+    string ReMarks = 12; // 备注信息
+}
+
+// 设备代码树请求
+message DeviceCodeTreeRequest {
+    string FilterValue = 1; // 过滤条件
+}
+
+// 设备代码树响应
+message DeviceCodeTreeResponse {
+    bool Code = 1; // 是否成功
+    string Message = 2; // 消息
+    repeated DeviceCodeItem deviceCodeItems = 3; // 数据
+}
+
+// 设备代码请求对象
+message DeviceCodePostRequest {
+    DeviceCodeItem DeviceCodeItem = 1; // 设备代码对象
+    repeated DeviceStructItem DeviceStructItems = 2; // 设备构成对象
+}
+
+// 设备代码响应对象
+message DeviceCodePostResponse {
+    bool Code = 1; // 是否成功
+    string Message = 2; // 消息
+    DeviceCodeItem Item = 3; // 设备代码对象
+    repeated DeviceStructItem List = 4; // 设备构成对象
+}
+
+// 设备代码状态请求对象
+message DeviceCodeStateRequest {
+    string DeviceId = 1; // 设备ID
+    string State = 2; // 状态
+    string Reason = 3; // 原因
+}
+
+// 设备代码状态响应对象
+message DeviceCodeStateResponse {
+    bool Code = 1; // 是否成功
+    string Message = 2; // 消息
+    DeviceCodeItem Item = 3; // 设备代码对象
+    repeated DeviceStructItem List = 4; // 设备构成对象
+}
+
+// 设备构成状态请求对象
+message DeviceStructStateRequest {
+    string StructId = 1; // 构成ID
+    string State = 2; // 状态
+    string Reason = 3; // 原因
+}
+
+// 设备构成状态响应对象
+message DeviceStructStateResponse {
+    bool Code = 1; // 是否成功
+    string Message = 2; // 消息
+    repeated DeviceStructItem List = 3; // 设备构成对象
+}

@@ -1,0 +1,29 @@
+﻿
+syntax = "proto3";
+
+option csharp_namespace = "bbnApp.Protos";
+
+package TopicCodesGrpc;
+
+/********定义DeviceCode服务********/
+service TopicCodesGrpc {
+    
+}
+
+// 订阅代码类型
+message TopicCodes {
+    string Yhid = 1; // 用户组ID
+    string TopicId = 2; // 订阅代码ID
+    string Code = 3; // 订阅代码
+    string TopicName = 4; // 订阅名称
+    string TopicRoter = 5; // 路由地址
+    string TopicType = 6; // 订阅分类,设备/基站等
+    string DeviceType = 7; // 设备分类代码
+    string DeviceIds = 8; // 设备ID,需要指定设备的情况
+    int32 IsLock = 9; // 锁定状态
+    string LockTime = 10; // 锁定时间
+    string LockReason = 11; // 锁定原因
+    string ReMarks = 12; // 备注信息
+    int32 Isdelete = 13; // 删除状态
+    string LastModified = 14; // 末次数据变更时间
+}

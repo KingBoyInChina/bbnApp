@@ -36,7 +36,7 @@ namespace bbnApp.DTOs.BusinessDto
         /// <summary>
         /// 二进制文件
         /// </summary>
-        public byte[] FileByes { get; set; } = Array.Empty<byte>();
+        public byte[] FileBytes { get; set; } = Array.Empty<byte>();
         /// <summary>
         /// 文件名称
         /// </summary>

@@ -3,6 +3,7 @@ using Avalonia.Controls.Notifications;
 using Avalonia.Media.Imaging;
 using SukiUI.Toasts;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using System.Timers;
 
@@ -78,6 +79,6 @@ namespace bbnApp.deskTop.Common
         /// <param name="ctr"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        Task<(bool, string, byte[]?, Bitmap?)> FileSelected(UserControl uc, string type = "");
+        Task<(bool, string, byte[]?, Bitmap?, FileInfo?)> FileSelected(UserControl uc, string type = "");
     }
 }

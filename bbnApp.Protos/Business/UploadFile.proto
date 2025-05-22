@@ -8,8 +8,10 @@ package UploadFileGrpc;
 service UploadFileGrpc {
 	//查询
   rpc UploadFilePost (UploadFileRequest) returns (UploadFileResponse);
-  //状态变更，read/delete/locak/copy
+  //状态变更，read/delete/locak
   rpc UploadFileState (UploadFileStateRequest) returns (UploadFileStateResponse);
+  //通过LinkKey+LinkTable读取文件
+  rpc UploadFileRead (UploadFileReadRequest) returns (UploadFileReadResponse);
 }
 /********定义请求参数********/
 // 文件上传项

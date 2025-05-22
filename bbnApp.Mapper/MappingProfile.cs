@@ -3,6 +3,7 @@ using bbnApp.Application.DTOs.LoginDto;
 using bbnApp.DTOs.BusinessDto;
 using bbnApp.DTOs.CodeDto;
 using bbnApp.Protos;
+using Google.Protobuf;
 
 namespace bbnApp.Service.GlobalService
 {
@@ -10,6 +11,10 @@ namespace bbnApp.Service.GlobalService
     {
         public MappingProfile()
         {
+            // 配置 byte[] 到 ByteString 的映射
+            CreateMap<byte[], ByteString>()
+                .ConvertUsing(src => src == null ? null : ByteString.CopyFrom(src));
+
             // 定义映射关系
             CreateMap<UserInfoDto, UserInfo>().ReverseMap();
             CreateMap<TopMenuItemDto, TopMenuItem>().ReverseMap();
@@ -103,12 +108,57 @@ namespace bbnApp.Service.GlobalService
             CreateMap<MaterialsCodeStateRequestDto, MaterialsCodeStateRequest>().ReverseMap();
             CreateMap<MaterialsCodeStateResponseDto, MaterialsCodeStateResponse>().ReverseMap();
             #endregion
+            #region 设备代码
+            // DeviceCodeItemDto <-> DeviceCodeItem
+            CreateMap<DeviceCodeTreeNodeDto, DeviceCodeTreeNode>().ReverseMap();
+
+            // DeviceStructItemDto <-> DeviceStructItem
+            CreateMap<DeviceStructItemDto, DeviceStructItem>()
+                .ReverseMap();
+
+            // DeviceCodeTreeRequestDto <-> DeviceCodeTreeRequest
+            CreateMap<DeviceCodeTreeRequestDto, DeviceCodeTreeRequest>()
+                .ReverseMap();
+
+            // DeviceCodeTreeResponseDto <-> DeviceCodeTreeResponse
+            CreateMap<DeviceCodeTreeResponseDto, DeviceCodeTreeResponse>()
+                .ReverseMap();
+
+            // DeviceCodePostRequestDto <-> DeviceCodePostRequest
+            CreateMap<DeviceCodePostRequestDto, DeviceCodePostRequest>()
+                .ReverseMap();
+
+            // DeviceCodePostResponseDto <-> DeviceCodePostResponse
+            CreateMap<DeviceCodePostResponseDto, DeviceCodePostResponse>()
+                .ReverseMap();
+
+            // DeviceCodeStateRequest <-> DeviceCodeStateRequest
+            CreateMap<DeviceCodeStateRequestDto, DeviceCodeStateRequest>()
+                .ReverseMap();
+
+            // DeviceCodeStateResponse <-> DeviceCodeStateResponse
+            CreateMap<DeviceCodeStateResponseDto, DeviceCodeStateResponse>()
+                .ReverseMap();
+
+            // DeviceStructStateRquest <-> DeviceStructStateRequest
+            CreateMap<DeviceStructStateRquestDto, DeviceStructStateRequest>()
+                .ReverseMap();
+
+            // DeviceStructStateResponse <-> DeviceStructStateResponse
+            CreateMap<DeviceStructStateResponse, DeviceStructStateResponse>()
+                .ReverseMap();
+            #endregion
             #region 文件上传
+            CreateMap<FileItemsDto, FileItems>().ForMember(dest => dest.FileBytes, opt => opt.MapFrom(src => src.FileBytes)).ReverseMap();
             CreateMap<UploadFileItemDto, UploadFileItem>().ReverseMap();
             CreateMap<UploadFileRequestDto, UploadFileRequest>().ReverseMap();
             CreateMap<UploadFileResponseDto, UploadFileResponse>().ReverseMap();
             CreateMap<UploadFileStateRequestDto, UploadFileStateRequest>().ReverseMap();
             CreateMap<UploadFileStateResponseDto, UploadFileStateResponse>().ReverseMap();
+            CreateMap<UploadFileStateResponseDto, UploadFileStateResponse>().ReverseMap();
+            CreateMap<UploadFileReadRequestDto, UploadFileReadRequest>().ReverseMap();
+            CreateMap<UploadFileReadResponseDto, UploadFileReadResponse>().ReverseMap();
+            
             #endregion
         }
     }

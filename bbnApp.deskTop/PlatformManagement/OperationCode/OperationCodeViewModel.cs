@@ -76,7 +76,7 @@ namespace bbnApp.deskTop.PlatformManagement.OperationCode
         /// <param name="ToastManager"></param>
         /// <param name="DialogManager"></param>
         /// <param name="nav"></param>
-        public OperationCodeViewModel(ISukiDialogManager DialogManager, PageNavigationService nav, IGrpcClientFactory grpcClientFactory, IMapper mapper, IDialog dialog) : base("PlatformManagement", "操作对象", MaterialIconKind.UnidentifiedFlyingObject, "", 4)
+        public OperationCodeViewModel(ISukiDialogManager DialogManager, PageNavigationService nav, IGrpcClientFactory grpcClientFactory, IMapper mapper, IDialog dialog) : base("PlatformManagement", "操作对象", MaterialIconKind.UnidentifiedFlyingObject, "", 99)
         {
             this.dialogManager = DialogManager;
             this.nav = nav;

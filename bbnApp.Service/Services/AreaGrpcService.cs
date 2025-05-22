@@ -14,12 +14,10 @@ namespace bbnApp.Service.Services
     public class AreaGrpcService :AreaGrpc.AreaGrpcBase
     {
         private readonly IAreaService _areaService;
-        private readonly IOperatorService _operatorService;
         private readonly IMapper _mapper;
-        public AreaGrpcService(IAreaService areaService, IOperatorService operatorService, IMapper mapper)
+        public AreaGrpcService(IAreaService areaService,  IMapper mapper)
         {
             _areaService = areaService;
-            _operatorService = operatorService;
             _mapper = mapper;
         }
         /// <summary>

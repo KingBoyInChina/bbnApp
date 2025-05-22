@@ -11,12 +11,10 @@ namespace bbnApp.Service.Services
     public class AppSettingGrpcService: AppSettingGrpc.AppSettingGrpcBase
     {
         private readonly IAppSettingService _appSettingService;
-        private readonly IOperatorService _operatorService;
         private readonly IMapper _mapper;
-        public AppSettingGrpcService(IAppSettingService appSettingService, IOperatorService operatorService, IMapper mapper)
+        public AppSettingGrpcService(IAppSettingService appSettingService,  IMapper mapper)
         {
             _appSettingService = appSettingService;
-            _operatorService = operatorService;
             _mapper = mapper;
         }
         /// <summary>

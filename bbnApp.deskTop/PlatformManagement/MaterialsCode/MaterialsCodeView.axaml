@@ -118,154 +118,172 @@
 
         </suki:GroupBox.Header>
         <Grid>
-          <Grid.RowDefinitions>
-            <RowDefinition Height="auto"></RowDefinition>
-            <RowDefinition Height="auto"></RowDefinition>
-            <RowDefinition Height="auto"></RowDefinition>
-            <RowDefinition Height="auto"></RowDefinition>
-            <RowDefinition Height="auto"></RowDefinition>
-            <RowDefinition Height="auto"></RowDefinition>
-          </Grid.RowDefinitions>
-          
-          <UniformGrid Columns="4" Grid.Row="0">
-            <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Column="0">
-              <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">物资分类：</TextBlock>
-              <ComboBox Width="230" HorizontalAlignment="Stretch" ItemsSource="{Binding MaterialType}" SelectedItem="{Binding MaterialTypeSelected}">
-                <ComboBox.ItemTemplate>
-                  <DataTemplate>
-                    <TextBlock Text="{Binding Name}"/>
-                  </DataTemplate>
-                </ComboBox.ItemTemplate>
-              </ComboBox>
-              <TextBlock VerticalAlignment="Center" Classes="NOTNULL">*</TextBlock>
-            </StackPanel>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"></ColumnDefinition>
+            <ColumnDefinition>*</ColumnDefinition>
+          </Grid.ColumnDefinitions>
 
-            <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Column="1">
-              <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">物资名称：</TextBlock>
-              <TextBox Width="230" Text="{Binding MaterialSelected.MaterialName}"/>
-              <TextBlock VerticalAlignment="Center" Classes="NOTNULL">*</TextBlock>
-            </StackPanel>
+          <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="auto"></RowDefinition>
+              <RowDefinition Height="auto"></RowDefinition>
+              <RowDefinition Height="auto"></RowDefinition>
+              <RowDefinition Height="auto"></RowDefinition>
+              <RowDefinition Height="auto"></RowDefinition>
+              <RowDefinition Height="auto"></RowDefinition>
+              <RowDefinition Height="auto"></RowDefinition>
+            </Grid.RowDefinitions>
 
-            <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Column="2">
-              <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">物资规格：</TextBlock>
-              <TextBox Width="230" Text="{Binding MaterialSelected.Specifications}"/>
-              <TextBlock VerticalAlignment="Center" Classes="NOTNULL">*</TextBlock>
-            </StackPanel>
+            <UniformGrid Columns="3" Grid.Row="0">
+              <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Column="0">
+                <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">物资分类：</TextBlock>
+                <ComboBox Width="230" HorizontalAlignment="Stretch" ItemsSource="{Binding MaterialType}" SelectedItem="{Binding MaterialTypeSelected}">
+                  <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                      <TextBlock Text="{Binding Name}"/>
+                    </DataTemplate>
+                  </ComboBox.ItemTemplate>
+                </ComboBox>
+                <TextBlock VerticalAlignment="Center" Classes="NOTNULL">*</TextBlock>
+              </StackPanel>
+
+              <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Column="1">
+                <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">物资名称：</TextBlock>
+                <TextBox Width="230" Text="{Binding MaterialSelected.MaterialName}"/>
+                <TextBlock VerticalAlignment="Center" Classes="NOTNULL">*</TextBlock>
+              </StackPanel>
+
+              <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Column="2">
+                <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">物资规格：</TextBlock>
+                <TextBox Width="230" Text="{Binding MaterialSelected.Specifications}"/>
+                <TextBlock VerticalAlignment="Center" Classes="NOTNULL">*</TextBlock>
+              </StackPanel>
+
+
+            </UniformGrid>
+
+            <UniformGrid  Columns="3" Grid.Row="1">
+
+              <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Column="0">
+                <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">物资条码：</TextBlock>
+                <TextBox Width="230" Text="{Binding MaterialSelected.MaterialBarCode}"/>
+              </StackPanel>
+              
+              <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Column="1">
+                <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">物资形态：</TextBlock>
+                <ComboBox Width="230" ItemsSource="{Binding MaterialForm}" SelectedItem="{Binding MaterialFormSelected}">
+                  <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                      <TextBlock Text="{Binding Name}"/>
+                    </DataTemplate>
+                  </ComboBox.ItemTemplate>
+                </ComboBox>
+                <TextBlock VerticalAlignment="Center" Classes="NOTNULL">*</TextBlock>
+              </StackPanel>
+
+              <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Column="2">
+                <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">物资材质：</TextBlock>
+                <ComboBox Width="230" ItemsSource="{Binding MaterialSupplies}" SelectedItem="{Binding MaterialSuppliesSelected}">
+                  <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                      <TextBlock Text="{Binding Name}"/>
+                    </DataTemplate>
+                  </ComboBox.ItemTemplate>
+                </ComboBox>
+                <TextBlock VerticalAlignment="Center" Classes="NOTNULL">*</TextBlock>
+              </StackPanel>
+            </UniformGrid>
+
+            <UniformGrid Columns="3" Grid.Row="2">
+              
+              <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Column="0">
+                <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">计量单位：</TextBlock>
+                <ComboBox Width="230" ItemsSource="{Binding MaterialUnit}" SelectedItem="{Binding MaterialUnitSelected}">
+                  <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                      <TextBlock Text="{Binding Name}"/>
+                    </DataTemplate>
+                  </ComboBox.ItemTemplate>
+                </ComboBox>
+                <TextBlock VerticalAlignment="Center" Classes="NOTNULL">*</TextBlock>
+              </StackPanel>
+
+              <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Column="1">
+                <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">危险物资：</TextBlock>
+                <ToggleSwitch IsChecked="{Binding MaterialSelected.IsDanger}"></ToggleSwitch>
+                <ComboBox IsVisible="{Binding MaterialSelected.IsDanger,Converter={StaticResource IntToBoolConverter}}" Width="185" ItemsSource="{Binding MaterialDangerType}" SelectedItem="{Binding MaterialDangerTypeSelected}">
+                  <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                      <TextBlock Text="{Binding Name}"/>
+                    </DataTemplate>
+                  </ComboBox.ItemTemplate>
+                </ComboBox>
+              </StackPanel>
+
+              <StackPanel Grid.Column="2" Classes="FormCell" Orientation="Horizontal" >
+                <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">物资锁定：</TextBlock>
+                <ToggleSwitch IsEnabled="False" IsChecked="{Binding MaterialSelected.IsLock}"></ToggleSwitch>
+                <TextBlock VerticalAlignment="Center" IsVisible="{Binding MaterialSelected.IsLock,Converter={StaticResource IntToBoolConverter}}" Text="{Binding MaterialSelected.LockTime}"></TextBlock>
+                <TextBlock VerticalAlignment="Center" IsVisible="{Binding MaterialSelected.IsLock,Converter={StaticResource IntToBoolConverter}}" Text="{Binding MaterialSelected.LockReason}"></TextBlock>
+              </StackPanel>
+            </UniformGrid>
             
-            <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Column="3">
-              <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">物资条码：</TextBlock>
-              <TextBox Width="230" Text="{Binding MaterialSelected.MaterialBarCode}"/>
-            </StackPanel>
-
-          </UniformGrid>
-
-          <UniformGrid  Columns="4" Grid.Row="1">
-            <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Column="0">
-              <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">物资形态：</TextBlock>
-              <ComboBox Width="230" ItemsSource="{Binding MaterialForm}" SelectedItem="{Binding MaterialFormSelected}">
-                <ComboBox.ItemTemplate>
-                  <DataTemplate>
-                    <TextBlock Text="{Binding Name}"/>
-                  </DataTemplate>
-                </ComboBox.ItemTemplate>
-              </ComboBox>
-              <TextBlock VerticalAlignment="Center" Classes="NOTNULL">*</TextBlock>
-            </StackPanel>
-
-            <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Column="1">
-              <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">物资材质：</TextBlock>
-              <ComboBox Width="230" ItemsSource="{Binding MaterialSupplies}" SelectedItem="{Binding MaterialSuppliesSelected}">
-                <ComboBox.ItemTemplate>
-                  <DataTemplate>
-                    <TextBlock Text="{Binding Name}"/>
-                  </DataTemplate>
-                </ComboBox.ItemTemplate>
-              </ComboBox>
-              <TextBlock VerticalAlignment="Center" Classes="NOTNULL">*</TextBlock>
-            </StackPanel>
-            
-            <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Column="2">
-              <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">计量单位：</TextBlock>
-              <ComboBox Width="230" ItemsSource="{Binding MaterialUnit}" SelectedItem="{Binding MaterialUnitSelected}">
-                <ComboBox.ItemTemplate>
-                  <DataTemplate>
-                    <TextBlock Text="{Binding Name}"/>
-                  </DataTemplate>
-                </ComboBox.ItemTemplate>
-              </ComboBox>
-              <TextBlock VerticalAlignment="Center" Classes="NOTNULL">*</TextBlock>
-            </StackPanel>
-            
-            <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Column="3">
-              <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">危险物资：</TextBlock>
-              <ToggleSwitch IsChecked="{Binding MaterialSelected.IsDanger}"></ToggleSwitch>
-              <ComboBox IsVisible="{Binding MaterialSelected.IsDanger,Converter={StaticResource IntToBoolConverter}}" Width="185" ItemsSource="{Binding MaterialDangerType}" SelectedItem="{Binding MaterialDangerTypeSelected}">
-                <ComboBox.ItemTemplate>
-                  <DataTemplate>
-                    <TextBlock Text="{Binding Name}"/>
-                  </DataTemplate>
-                </ComboBox.ItemTemplate>
-              </ComboBox>
-            </StackPanel>
-          </UniformGrid>
-
-          <UniformGrid Columns="2" Grid.Row="2">
-            
-            <StackPanel Grid.Column="0" Classes="FormCell" Orientation="Horizontal">
+            <StackPanel Grid.Row="3" Classes="FormCell" Orientation="Horizontal">
               <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">存储环境：</TextBlock>
-              <TextBox Width="540" AcceptsReturn="True" TextWrapping="Wrap" Height="100" Text="{Binding MaterialSelected.StorageEnvironment}"/>
+              <TextBox Width="540" AcceptsReturn="True" TextWrapping="Wrap" Text="{Binding MaterialSelected.StorageEnvironment}"/>
             </StackPanel>
 
-            <StackPanel Grid.Column="1" Classes="FormCell" Orientation="Horizontal">
+            <StackPanel Grid.Row="4" Classes="FormCell" Orientation="Horizontal">
               <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">其他参数：</TextBlock>
-              <TextBox Width="540" AcceptsReturn="True" TextWrapping="Wrap" Height="100" Text="{Binding MaterialSelected.OtherParames}"/>
+              <TextBox Width="540" AcceptsReturn="True" TextWrapping="Wrap" Text="{Binding MaterialSelected.OtherParames}"/>
             </StackPanel>
 
-          </UniformGrid>
-
-          <UniformGrid Columns="2" Grid.Row="3">
-            <StackPanel  Classes="FormCell" Orientation="Horizontal" Grid.Column="0">
+            <StackPanel Grid.Row="5" Classes="FormCell" Orientation="Horizontal">
               <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">备注说明：</TextBlock>
               <TextBox Width="540" Text="{Binding MaterialSelected.ReMarks}" />
             </StackPanel>
 
-            <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Column="1">
-              <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">物资锁定：</TextBlock>
-              <ToggleSwitch IsEnabled="False" IsChecked="{Binding MaterialSelected.IsLock}"></ToggleSwitch>
-              <TextBlock VerticalAlignment="Center" IsVisible="{Binding MaterialSelected.IsLock,Converter={StaticResource IntToBoolConverter}}" Text="{Binding MaterialSelected.LockTime}"></TextBlock>
-              <TextBlock VerticalAlignment="Center" IsVisible="{Binding MaterialSelected.IsLock,Converter={StaticResource IntToBoolConverter}}" Text="{Binding MaterialSelected.LockReason}"></TextBlock>
-            </StackPanel>
-          </UniformGrid>
-
-          <UniformGrid Columns="4" Grid.Row="4" IsVisible="{Binding ImageShow}">
-
-            <suki:GlassCard Classes="HeaderCard" Margin="10" Grid.Column="0">
+          </Grid>
+          <StackPanel Grid.Column="1">
+            <suki:GlassCard Classes="HeaderCard" Margin="10">
               <suki:GroupBox>
                 <suki:GroupBox.Header>
+                  
                   <UniformGrid Columns="2">
                     <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Grid.Column="0">
                       <avalonia:MaterialIcon Kind="Image" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
                       <TextBlock Foreground="{DynamicResource SukiText}">物资图片</TextBlock>
                     </StackPanel>
-                    <my:Space HorizontalAlignment="Right" Orientation="Horizontal" VerticalAlignment="Center">
-                      <Button Command="{Binding FileSelecedCommand}" Classes="Basic">
+                    <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                      <Button IsEnabled="{Binding ImageShow}" Command="{Binding FileSelecedCommand}" Classes="Basic">
+                        <StackPanel Orientation="Horizontal">
+                          <avalonia:MaterialIcon Kind="Filter" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+                          <TextBlock Foreground="{DynamicResource SukiText}">选择</TextBlock>
+                        </StackPanel>
+                      </Button>
+
+                      <Button IsEnabled="{Binding ImageShow}" Command="{Binding FileUploadCommand}" Classes="Basic">
                         <StackPanel Orientation="Horizontal">
                           <avalonia:MaterialIcon Kind="Upload" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
                           <TextBlock Foreground="{DynamicResource SukiText}">上传</TextBlock>
                         </StackPanel>
                       </Button>
-                    </my:Space>
+                    </StackPanel>
                   </UniformGrid>
                 </suki:GroupBox.Header>
 
-                <Image Source="{Binding MaterialImage}" Width="300" Height="400" Stretch="Uniform"></Image>
+                <StackPanel Orientation="Vertical">
+                  <Image Source="{Binding MaterialImage}" Width="270" Height="360" Stretch="Uniform"></Image>
 
-
+                  <Border Height="1" Background="WhiteSmoke" HorizontalAlignment="Stretch"></Border>
+                  <TextBlock HorizontalAlignment="Center" Foreground="Gray" VerticalAlignment="Center" >物资信息提交后再上传图片</TextBlock>
+                </StackPanel>
               </suki:GroupBox>
-              </suki:GlassCard>
-          </UniformGrid>
+            </suki:GlassCard>
+          </StackPanel>
           
         </Grid>
+
       </suki:GroupBox>
     </suki:GlassCard>
 

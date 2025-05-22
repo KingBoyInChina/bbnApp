@@ -336,5 +336,17 @@ namespace bbnApp.deskTop.Common
             }
             return ("", "");
         }
+        /// <summary>
+        /// byte[] 转bitmap
+        /// </summary>
+        /// <param name="imageBytes"></param>
+        /// <returns></returns>
+        public static Bitmap ByteArrayToBitmap(byte[] imageBytes)
+        {
+            using (var memoryStream = new MemoryStream(imageBytes))
+            {
+                return new Bitmap(memoryStream);
+            }
+        }
     }
 }

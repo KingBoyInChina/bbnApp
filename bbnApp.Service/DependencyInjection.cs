@@ -18,6 +18,8 @@ using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Text;
 using bbnApp.Protos;
+using bbnApp.Application.IServices.IBusiness;
+using bbnApp.Application.Services.Business;
 
 public static class DependencyInjection
 {
@@ -223,7 +225,9 @@ public static class DependencyInjection
         services.AddScoped<IOperationObjectsService, OperationObjectsService>();
         //物资代码服务
         services.AddScoped<IMaterialsCodeService, MaterialsCodeService>();
-         
+        //文件上传服务
+        services.AddScoped<IFileUploadService, FileUploadService>();
+
 
         return services;
     }

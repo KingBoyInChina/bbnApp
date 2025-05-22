@@ -25,23 +25,6 @@ namespace bbnApp.Application.Services.CODE
         /// <summary>
         /// 
         /// </summary>
-        private readonly IRedisService redisService;
-        /// <summary>
-        /// 
-        /// </summary>
-        private readonly IDapperRepository dapperRepository;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private readonly ILogger<OperatorService> _logger;
-        /// <summary>
-        /// 
-        /// </summary>
-        private readonly ExceptionlessClient _exceptionlessClient;
-        /// <summary>
-        /// 
-        /// </summary>
         private readonly IOperatorService operatorService;
         /// <summary>
         /// 数据字典
@@ -52,13 +35,9 @@ namespace bbnApp.Application.Services.CODE
         /// </summary>
         /// <param name="dbContext"></param>
         /// <param name="redisService"></param>
-        public MaterialsCodeService(IApplicationDbCodeContext dbContext, IDataDictionaryService dataDictionaryService, IRedisService redisService, IDapperRepository _dapperRepository, ILogger<OperatorService> logger, ExceptionlessClient exceptionlessClient, IOperatorService operatorService)
+        public MaterialsCodeService(IApplicationDbCodeContext dbContext, IDataDictionaryService dataDictionaryService, IOperatorService operatorService)
         {
             this.dbContext = dbContext;
-            this.redisService = redisService;
-            this.dapperRepository = _dapperRepository;
-            this._logger = logger;
-            this._exceptionlessClient = exceptionlessClient;
             this.operatorService = operatorService;
             this.dataDictionaryService = dataDictionaryService;
         }

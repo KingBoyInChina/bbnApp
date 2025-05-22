@@ -536,5 +536,6 @@ namespace bbnApp.Share
             // 使用 Regex.IsMatch 进行验证
             return Regex.IsMatch(input, pattern);
         }
+        
     }
 }
