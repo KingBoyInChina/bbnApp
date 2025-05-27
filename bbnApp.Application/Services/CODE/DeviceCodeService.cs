@@ -19,29 +19,12 @@ namespace bbnApp.Application.Services.CODE
     /// <summary>
     /// 设备代码服务
     /// </summary>
-    public class DeviceCodeService
+    public class DeviceCodeService: IDeviceCodeService
     {
         /// <summary>
         /// 
         /// </summary>
         private readonly IApplicationDbCodeContext dbContext;
-        /// <summary>
-        /// 
-        /// </summary>
-        private readonly IRedisService redisService;
-        /// <summary>
-        /// 
-        /// </summary>
-        private readonly IDapperRepository dapperRepository;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private readonly ILogger<OperatorService> _logger;
-        /// <summary>
-        /// 
-        /// </summary>
-        private readonly ExceptionlessClient _exceptionlessClient;
         /// <summary>
         /// 
         /// </summary>
@@ -55,13 +38,9 @@ namespace bbnApp.Application.Services.CODE
         /// </summary>
         /// <param name="dbContext"></param>
         /// <param name="redisService"></param>
-        public DeviceCodeService(IApplicationDbCodeContext dbContext, IDataDictionaryService dataDictionaryService, IRedisService redisService, IDapperRepository _dapperRepository, ILogger<OperatorService> logger, ExceptionlessClient exceptionlessClient, IOperatorService operatorService)
+        public DeviceCodeService(IApplicationDbCodeContext dbContext, IDataDictionaryService dataDictionaryService, IOperatorService operatorService)
         {
             this.dbContext = dbContext;
-            this.redisService = redisService;
-            this.dapperRepository = _dapperRepository;
-            this._logger = logger;
-            this._exceptionlessClient = exceptionlessClient;
             this.operatorService = operatorService;
             this.dataDictionaryService = dataDictionaryService;
         }
@@ -70,7 +49,7 @@ namespace bbnApp.Application.Services.CODE
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        public async Task<(bool, string, List<DeviceCodeTreeNodeDto>)> GetMaterailTree(UserModel user)
+        public async Task<(bool, string, List<DeviceCodeTreeNodeDto>)> GetDeviceTree(UserModel user)
         {
             try
             {
@@ -97,7 +76,7 @@ namespace bbnApp.Application.Services.CODE
                         DeviceCodeTreeNodeDto item = new DeviceCodeTreeNodeDto
                         {
                             Id = data.DeviceId,
-                            Name = data.DeviceName,
+                            Name = data.DeviceName+"("+data.DeviceModel+")",
                             Tag = data.Code,
                             IsLeaf = true,
                             IsLock = data.IsLock == 0 ? false : true
@@ -196,23 +175,23 @@ namespace bbnApp.Application.Services.CODE
                     #endregion
                     #region 逻辑校验
                     StringBuilder error = new StringBuilder();
-                    if (!string.IsNullOrEmpty(model.DeviceName))
+                    if (string.IsNullOrEmpty(model.DeviceName))
                     {
                         error.AppendLine($"设备名称不能为空");
                     }
-                    if (!string.IsNullOrEmpty(model.DeviceType))
+                    if (string.IsNullOrEmpty(model.DeviceType))
                     {
                         error.AppendLine($"设备分类不能为空");
                     }
-                    if (!string.IsNullOrEmpty(model.DeviceSpecifications))
+                    if (string.IsNullOrEmpty(model.DeviceSpecifications))
                     {
                         error.AppendLine($"设备规格不能为空");
                     }
-                    if (!string.IsNullOrEmpty(model.DeviceModel))
+                    if (string.IsNullOrEmpty(model.DeviceModel))
                     {
                         error.AppendLine($"设备型号不能为空");
                     }
-                    if (!string.IsNullOrEmpty(model.Usage))
+                    if (string.IsNullOrEmpty(model.Usage))
                     {
                         error.AppendLine($"设备用途不能为空");
                     }
@@ -220,7 +199,7 @@ namespace bbnApp.Application.Services.CODE
                     {
                         error.AppendLine($"设备使用寿命不能为空");
                     }
-                    if (!string.IsNullOrEmpty(model.LifeUnit))
+                    if (string.IsNullOrEmpty(model.LifeUnit))
                     {
                         error.AppendLine($"设备使用寿命计量单位不能为空");
                     }
@@ -247,28 +226,18 @@ namespace bbnApp.Application.Services.CODE
                                 #region 新增
                                 structdata = new DeviceStruct();
                                 structdata.Yhid = user.Yhid;
-                                var modeldata = EFStructObj.Where(x => x.DeviceId == deviceModel.DeviceId && x.Isdelete == 0 && x.Yhid == user.Yhid).OrderByDescending(x => Convert.ToInt64(x.DeviceId)).FirstOrDefault();
-                                if (modeldata == null)
-                                {
-                                    structdata.StructId = deviceModel.DeviceId + "001";
-                                }
-                                else
-                                {
-                                    int maxid = Convert.ToInt32(modeldata.StructId);
-                                    maxid++;
-                                    structdata.StructId = maxid.ToString();
-                                }
+                                structdata.StructId = System.Guid.NewGuid().ToString("N");
                                 structdata.DeviceId = model.DeviceId;
-                                structdata.MaterialId = structmodel.MaterialId;
-                                var materialModel= dbContext.Set<MaterialsCode>().FirstOrDefault(x => x.MaterialId == structmodel.MaterialId && x.Isdelete == 0 && x.Yhid == user.Yhid);
-                                if (materialModel != null)
-                                {
-                                    structdata.MaterialName = materialModel.MaterialName;
-                                }
                                 structdata.IsLock = 0;
                                 structdata.Isdelete = 0;
                                 #endregion
                                 bstruct = true;
+                            }
+                            structdata.MaterialId = structmodel.MaterialId;
+                            var materialModel = dbContext.Set<MaterialsCode>().FirstOrDefault(x => x.MaterialId == structmodel.MaterialId && x.Isdelete == 0 && x.Yhid == user.Yhid);
+                            if (materialModel != null)
+                            {
+                                structdata.MaterialName = materialModel.MaterialName;
                             }
                             structdata.UtilizeQuantity = structmodel.UtilizeQuantity;
                             structdata.QuantityUnit = structmodel.QuantityUnit;
@@ -408,15 +377,60 @@ namespace bbnApp.Application.Services.CODE
             }
         }
         /// <summary>
+        /// 设备清单查询
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public async Task<(bool,string,List<DeviceCodeItemDto>)> DeviceSearch(DeviceCodeSearchRequestDto request, UserModel user)
+        {
+            try
+            {
+                var list =await dbContext.Set<DeviceCode>().Where(x => x.Isdelete == 0 && x.Yhid == user.Yhid).OrderBy(x => x.DeviceType).ToListAsync();
+                if (!string.IsNullOrEmpty(request.DeviceName))
+                {
+                    list = list.Where(x => x.DeviceName.Contains(request.DeviceName)).ToList();
+                }
+                if (!string.IsNullOrEmpty(request.DeviceModel))
+                {
+                    list = list.Where(x => x.DeviceName.Contains(request.DeviceModel)).ToList();
+                }
+                if (!string.IsNullOrEmpty(request.DeviceType))
+                {
+                    list = list.Where(x => x.DeviceName.Contains(request.DeviceType)).ToList();
+                }
+                return (true,"数据读取成功", DeviceCodesToDtos(list));
+            }
+            catch(Exception ex)
+            {
+                return (false,ex.Message.ToString(),new List<DeviceCodeItemDto>());
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="models"></param>
+        /// <returns></returns>
+        private List<DeviceCodeItemDto> DeviceCodesToDtos(List<DeviceCode> models)
+        {
+            List<DeviceCodeItemDto> list = new List<DeviceCodeItemDto>();
+            int index = 1;
+            foreach(var item in models)
+            {
+                list.Add(DeviceModelToDto(item,index));
+                index++;
+            }
+            return list;
+        }
+        /// <summary>
         /// 设备对象转DTO
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        private DeviceCodeItemDto DeviceModelToDto(DeviceCode model)
+        private DeviceCodeItemDto DeviceModelToDto(DeviceCode model,int index=1)
         {
             return new DeviceCodeItemDto()
             {
-                IdxNum = 1,
+                IdxNum = index,
                 Yhid = model.Yhid,
                 DeviceId = model.DeviceId,
                 DeviceName = model.DeviceName,

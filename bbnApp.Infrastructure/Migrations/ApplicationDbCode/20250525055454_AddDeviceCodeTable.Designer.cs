@@ -12,7 +12,7 @@ using bbnApp.Infrastructure.Data;
 namespace bbnApp.Infrastructure.Migrations.ApplicationDbCode
 {
     [DbContext(typeof(ApplicationDbCodeContext))]
-    [Migration("20250518132030_AddDeviceCodeTable")]
+    [Migration("20250525055454_AddDeviceCodeTable")]
     partial class AddDeviceCodeTable
     {
         /// <inheritdoc />
@@ -438,6 +438,12 @@ namespace bbnApp.Infrastructure.Migrations.ApplicationDbCode
                         .HasMaxLength(80)
                         .HasColumnType("varchar(80)")
                         .HasComment("型号");
+
+                    b.Property<string>("DeviceName")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("varchar(80)")
+                        .HasComment("设备名称");
 
                     b.Property<string>("DeviceSpecifications")
                         .HasMaxLength(80)

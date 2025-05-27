@@ -175,7 +175,7 @@ namespace bbnApp.deskTop.Common
                 }
                 else
                 {
-                    var item = list.FirstOrDefault(x => x.Id == value);
+                    var item = list.FirstOrDefault(x => x.Id == value|| x.Name == value);
                     return item;
                 }
             }

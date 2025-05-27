@@ -109,9 +109,11 @@ namespace bbnApp.Service.GlobalService
             CreateMap<MaterialsCodeStateResponseDto, MaterialsCodeStateResponse>().ReverseMap();
             #endregion
             #region 设备代码
-            // DeviceCodeItemDto <-> DeviceCodeItem
+            // DeviceCodeTreeNodeDto <-> DeviceCodeTreeNode
             CreateMap<DeviceCodeTreeNodeDto, DeviceCodeTreeNode>().ReverseMap();
-
+            // DeviceCodeItemDto <-> DeviceCodeItem
+            CreateMap<DeviceCodeItemDto, DeviceCodeItem>().ReverseMap();
+            
             // DeviceStructItemDto <-> DeviceStructItem
             CreateMap<DeviceStructItemDto, DeviceStructItem>()
                 .ReverseMap();
@@ -147,6 +149,15 @@ namespace bbnApp.Service.GlobalService
             // DeviceStructStateResponse <-> DeviceStructStateResponse
             CreateMap<DeviceStructStateResponse, DeviceStructStateResponse>()
                 .ReverseMap();
+            CreateMap<DeviceCodeSearchRequestDto, DeviceCodeSearchRequest>()
+                .ReverseMap();
+            CreateMap<DeviceCodeSearchResponseDto, DeviceCodeSearchResponse>()
+                .ReverseMap();
+            CreateMap<DeviceCodeInfoRequestDto, DeviceCodeInfoRequest>()
+                .ReverseMap();
+            CreateMap<DeviceCodeInfoResponseDto, DeviceCodeInfoResponse>()
+                .ReverseMap();
+            
             #endregion
             #region 文件上传
             CreateMap<FileItemsDto, FileItems>().ForMember(dest => dest.FileBytes, opt => opt.MapFrom(src => src.FileBytes)).ReverseMap();

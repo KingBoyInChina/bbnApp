@@ -2,7 +2,6 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
-using bbnApp.deskTop.PlatformManagement.DictionaryCode;
 using bbnApp.DTOs.CodeDto;
 
 namespace bbnApp.deskTop.PlatformManagement.MaterialsCode;

@@ -225,6 +225,8 @@ public static class DependencyInjection
         services.AddScoped<IOperationObjectsService, OperationObjectsService>();
         //物资代码服务
         services.AddScoped<IMaterialsCodeService, MaterialsCodeService>();
+        //设备代码
+        services.AddScoped<IDeviceCodeService, DeviceCodeService>();
         //文件上传服务
         services.AddScoped<IFileUploadService, FileUploadService>();
 

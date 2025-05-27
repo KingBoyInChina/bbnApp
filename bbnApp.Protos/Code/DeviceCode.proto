@@ -9,10 +9,14 @@ package DeviceCodeGrpc;
 service DeviceCodeGrpc {
     //设备树加载
     rpc DeviceTreeLoad (DeviceCodeTreeRequest) returns (DeviceCodeTreeResponse);
+    //设备信息加载
+    rpc DeviceInfoLoad (DeviceCodeInfoRequest) returns (DeviceCodeInfoResponse);
 	//设备信息提交
     rpc DeviceCodePost (DeviceCodePostRequest) returns (DeviceCodePostResponse);
     //设备状态变更
     rpc DeviceCodeState (DeviceCodeStateRequest) returns (DeviceCodeStateResponse);
+    //设备信息查询
+    rpc DeviceListLoad (DeviceCodeSearchRequest) returns (DeviceCodeSearchResponse);
     //设备构成状态变更
     rpc DeviceStructCodeState (DeviceStructStateRequest) returns (DeviceStructStateResponse);
 }
@@ -65,7 +69,20 @@ message DeviceStructItem {
     string LockReason = 11; // 锁定原因
     string ReMarks = 12; // 备注信息
 }
+// 设备代码树请求
+message DeviceCodeSearchRequest {
+    string DeviceType = 1; // 过滤条件
+    string DeviceName = 2; // 过滤条件
+    string DeviceBarCode = 3; // 过滤条件
+    string DeviceModel=4;
+}
 
+// 设备代码树响应
+message DeviceCodeSearchResponse {
+    bool Code = 1; // 是否成功
+    string Message = 2; // 消息
+    repeated DeviceCodeItem List = 3; // 数据
+}
 // 设备代码树请求
 message DeviceCodeTreeRequest {
     string FilterValue = 1; // 过滤条件
@@ -75,7 +92,19 @@ message DeviceCodeTreeRequest {
 message DeviceCodeTreeResponse {
     bool Code = 1; // 是否成功
     string Message = 2; // 消息
-    repeated DeviceCodeItem deviceCodeItems = 3; // 数据
+    repeated DeviceCodeTreeNode DeviceCodeItems = 3; // 数据
+}
+
+// 设备信息读取请求
+message DeviceCodeInfoRequest {
+    string DeviceId = 1; // ID
+}
+// 设备信息读取响应
+message DeviceCodeInfoResponse {
+    bool Code = 1; // 是否成功
+    string Message = 2; // 消息
+    DeviceCodeItem Item=3; // 设备代码对象
+    repeated DeviceStructItem List = 4; // 数据
 }
 
 // 设备代码请求对象

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using bbnApp.Common.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -193,6 +194,71 @@ namespace bbnApp.DTOs.CodeDto
         /// </summary>
         public string? ReMarks { get; set; } = string.Empty;
     }
+    
+    /// <summary>
+    /// 设备代码清单请求对象
+    /// </summary>
+    public class DeviceCodeSearchRequestDto
+    {
+        /// <summary>
+        /// 过滤条件
+        /// </summary>
+        public string DeviceType { get; set; } = string.Empty;
+        public string DeviceName { get; set; } = string.Empty;
+        public string DeviceBarCode { get; set; } = string.Empty;
+        public string DeviceModel { get; set; } = string.Empty;
+    }
+    /// <summary>
+    /// 设备代码清单响应对象
+    /// </summary>
+    public class DeviceCodeSearchResponseDto
+    {
+        /// <summary>
+        /// 是否成功
+        /// </summary>
+        public bool Code { get; set; } = false;
+        /// <summary>
+        /// 消息
+        /// </summary>
+        public string Message { get; set; } = string.Empty;
+        /// <summary>
+        /// 数据
+        /// </summary>
+        public List<DeviceCodeItemDto> List { get; set; } = new List<DeviceCodeItemDto>();
+    }
+    /// <summary>
+    /// 设备代码信息请求对象
+    /// </summary>
+    public class DeviceCodeInfoRequestDto
+    {
+        /// <summary>
+        /// 设备ID
+        /// </summary>
+        public string DeviceId { get; set; } = string.Empty;
+    }
+    /// <summary>
+    /// 设备代码清单响应对象
+    /// </summary>
+    public class DeviceCodeInfoResponseDto
+    {
+        /// <summary>
+        /// 是否成功
+        /// </summary>
+        public bool Code { get; set; } = false;
+        /// <summary>
+        /// 消息
+        /// </summary>
+        public string Message { get; set; } = string.Empty;
+        /// <summary>
+        /// 数据
+        /// </summary>
+        public DeviceCodeItemDto Item { get; set; } = new DeviceCodeItemDto();
+        /// <summary>
+        /// 数据
+        /// </summary>
+        public List<DeviceStructItemDto> List { get; set; } = new List<DeviceStructItemDto>();
+    }
+
     /// <summary>
     /// 设备代码树请求对象
     /// </summary>
@@ -219,7 +285,7 @@ namespace bbnApp.DTOs.CodeDto
         /// <summary>
         /// 数据
         /// </summary>
-        public List<DeviceCodeItemDto> deviceCodeItems { get; set; } = new List<DeviceCodeItemDto>();
+        public List<DeviceCodeTreeNodeDto> DeviceCodeItems { get; set; } = new List<DeviceCodeTreeNodeDto>();
     }
     /// <summary>
     /// 设备代码请求对象
@@ -229,7 +295,7 @@ namespace bbnApp.DTOs.CodeDto
         /// <summary>
         /// 设备代码对象
         /// </summary>
-        public DeviceCodeItem DeviceCodeItem { get; set; } = new DeviceCodeItem();
+        public DeviceCodeItemDto DeviceCodeItem { get; set; } = new DeviceCodeItemDto();
         /// <summary>
         /// 设备构成对象
         /// </summary>
@@ -251,7 +317,7 @@ namespace bbnApp.DTOs.CodeDto
         /// <summary>
         /// 设备代码对象
         /// </summary>
-        public DeviceCodeItem Item { get; set; } = new DeviceCodeItem();
+        public DeviceCodeItemDto Item { get; set; } = new DeviceCodeItemDto();
         /// <summary>
         /// 设备构成对象
         /// </summary>

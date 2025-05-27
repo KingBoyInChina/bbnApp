@@ -426,39 +426,47 @@ namespace bbnApp.deskTop.ViewModels
             CustomBackgroundStyleChanged?.Invoke(_customShader);
         }
         /// <summary>
+        /// 初始化完毕
+        /// </summary>
+        private bool PageInited = false;
+        /// <summary>
         /// 选择
         /// </summary>
         /// <param name="tag"></param>
         [RelayCommand]
         private async Task AppTagSelected(object? sender)
         {
-            if (LoginUser == null)
+            if (PageInited)
             {
-                dialog.Error("提示", "无效的登录信息,请先登录");
-            }
-            else
-            {
-                if (sender is not MenuItem item) return;
-                string tag = item.Tag.ToString();
-                if (SelectedToolTag != tag)
+                if (LoginUser == null)
                 {
-                    IAvaloniaReadOnlyList<BbnPageBase> pagelist;
-                    if (pagesDic.ContainsKey(tag))
+                    dialog.Error("提示", "无效的登录信息,请先登录");
+                }
+                else
+                {
+                    if (sender is not MenuItem item) return;
+                    string tag = item.Tag.ToString();
+                    if (SelectedToolTag != tag)
                     {
-                        pagesDic.TryGetValue(tag, out pagelist);
+                        IAvaloniaReadOnlyList<BbnPageBase> pagelist;
+                        if (pagesDic.ContainsKey(tag))
+                        {
+                            pagesDic.TryGetValue(tag, out pagelist);
+                        }
+                        else
+                        {
+                            pagelist = new AvaloniaList<BbnPageBase>(BbnPages.Where(x => x.Tag == item.Tag.ToString()).ToList());
+                            pagesDic.Add(tag, pagelist);
+                        }
+                        dialog.ShowLoading($"页面正在载入中,请稍等...", async (e) =>
+                        {
+                            SelectedPages = new AvaloniaList<BbnPageBase>(pagelist);
+                            SelectedToolTag = tag;
+                            await Task.Delay(500);
+                            dialog.LoadingClose(e);
+                        });
+
                     }
-                    else
-                    {
-                        pagelist = new AvaloniaList<BbnPageBase>(BbnPages.Where(x => x.Tag == item.Tag.ToString()).ToList());
-                        pagesDic.Add(tag, pagelist);
-                    }
-                    dialog.ShowLoading($"页面正在载入中,请稍等...", async (e) => {
-                        SelectedPages = new AvaloniaList<BbnPageBase>(pagelist);
-                        SelectedToolTag = tag;
-                        await Task.Delay(500);
-                        dialog.LoadingClose(e);
-                    });
-                    
                 }
             }
         }
@@ -865,6 +873,7 @@ namespace bbnApp.deskTop.ViewModels
                     await AppSettingDownload(header);//系统配置下载
                     await DicDataDownload(header);//数据字典下载
                     dialog.LoadingClose(e);
+                    PageInited = true;
                 },500);
 
             }

@@ -420,6 +420,12 @@ namespace bbnApp.Infrastructure.Migrations.ApplicationDbCode
                         .HasColumnOrder(1)
                         .HasComment("设备ID");
 
+                    b.Property<string>("DeviceName")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("varchar(80)")
+                        .HasComment("设备名称");
+
                     b.Property<string>("Code")
                         .IsRequired()
                         .HasMaxLength(40)

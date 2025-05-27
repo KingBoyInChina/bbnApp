@@ -37,6 +37,8 @@ using bbnApp.deskTop.PlatformManagement.AppSetting;
 using bbnApp.deskTop.PlatformManagement.DictionaryCode;
 using bbnApp.deskTop.PlatformManagement.OperationCode;
 using bbnApp.deskTop.PlatformManagement.MaterialsCode;
+using bbnApp.Domain.Entities.Code;
+using bbnApp.deskTop.PlatformManagement.DeviceCode;
 
 namespace bbnApp.deskTop;
 
@@ -145,6 +147,7 @@ public partial class App :Avalonia.Application
             .AddView<DictionaryItemView, DictionaryItemViewModel>(services)
             .AddView<CustomThemeDialogView, CustomThemeDialogViewModel>(services)
             .AddView<MaterialsCodeView, MaterialsCodeViewModel>(services)
+            .AddView<DeviceCodeView, DeviceCodeViewModel>(services)
             .AddView<OperationCodeView, OperationCodeViewModel>(services)
             
             .AddView<InputPrompt, InputPromptViewModel>(services);
