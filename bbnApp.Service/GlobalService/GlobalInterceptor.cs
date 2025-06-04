@@ -53,7 +53,7 @@ namespace bbnApp.Service.GlobalService
         /// <summary>
         /// 代码库上下文
         /// </summary>
-        private readonly IApplicationDbCodeContext _codeContext;
+        private readonly IApplicationDbContext _codeContext;
         /// <summary>
         /// 拦截器
         /// </summary>
@@ -62,7 +62,7 @@ namespace bbnApp.Service.GlobalService
         /// <param name="codeContext"></param>
         /// <param name="httpContextAccessor"></param>
         /// <param name="operatorService"></param>
-        public GlobalInterceptor(IConfiguration configuration, IMemoryCache cache, IApplicationDbCodeContext codeContext, IHttpContextAccessor httpContextAccessor, IOperatorService operatorService)
+        public GlobalInterceptor(IConfiguration configuration, IMemoryCache cache, IApplicationDbContext codeContext, IHttpContextAccessor httpContextAccessor, IOperatorService operatorService)
         {
             _cache = cache;
             AllowedIps = new HashSet<string>(configuration.GetSection("IpRateLimiting:IpWhitelist").Get<IEnumerable<string>>());

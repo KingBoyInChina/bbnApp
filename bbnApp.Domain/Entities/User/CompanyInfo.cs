@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace bbnApp.Domain.Entities.User
 {
     /// <summary>
-    /// 机构信息表（个人/个体/企业/集团）
+    /// 机构信息表
     /// </summary>
     [PrimaryKey(nameof(Yhid), nameof(CompanyId))] // 配置复合主键
     public class CompanyInfo

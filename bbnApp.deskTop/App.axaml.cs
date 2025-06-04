@@ -39,6 +39,9 @@ using bbnApp.deskTop.PlatformManagement.OperationCode;
 using bbnApp.deskTop.PlatformManagement.MaterialsCode;
 using bbnApp.Domain.Entities.Code;
 using bbnApp.deskTop.PlatformManagement.DeviceCode;
+using bbnApp.deskTop.PlatformManagement.TopicCode;
+using bbnApp.deskTop.OrganizationStructure.Company;
+using bbnApp.deskTop.OrganizationStructure.DepartMent;
 
 namespace bbnApp.deskTop;
 
@@ -149,7 +152,10 @@ public partial class App :Avalonia.Application
             .AddView<MaterialsCodeView, MaterialsCodeViewModel>(services)
             .AddView<DeviceCodeView, DeviceCodeViewModel>(services)
             .AddView<OperationCodeView, OperationCodeViewModel>(services)
-            
+            .AddView<TopicCodeView, TopicCodeViewModel>(services)
+            .AddView<CompanyView, CompanyViewModel>(services)
+            .AddView<DepartMentView, DepartMentViewModel>(services)
+
             .AddView<InputPrompt, InputPromptViewModel>(services);
     }
 

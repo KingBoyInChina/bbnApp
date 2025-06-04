@@ -16,17 +16,17 @@ namespace bbnApp.deskTop.ViewModels
         /// <param name="_mapper"></param>
         /// <returns></returns>
         /// <exception cref="System.Exception"></exception>
-        public static async Task<(bool,string,List<CompanyItemDto>)> CompanyItemsLoad(Author.AuthorClient _client, IMapper _mapper)
+        public static async Task<(bool,string,List<CompanyItemDto>)> CompanyItemsLoad(CompanyGrpcService.CompanyGrpcServiceClient _client, IMapper _mapper)
         {
             try
             {
-                CompanyRequest _companyRequest = new CompanyRequest
+                CompanyRequestDto _companyRequest = new CompanyRequestDto
                 {
                     Version = "1.0.0",
                     CompanyId = "/"
                 };
 
-                var response = await _client.GetCompanyItemsAsync(_companyRequest);
+                var response = await _client.GetCompanyItemsAsync(_mapper.Map<CompanyRequest>(_companyRequest));
                 if (response.Code)
                 {
                     return (true, "",_mapper.Map<List<CompanyItemDto>>(response.CompanyItems));

@@ -54,6 +54,7 @@ namespace bbnApp.deskTop.ViewModels
         private readonly IDialog dialog;
 
         private readonly Author.AuthorClient client;
+        private readonly CompanyGrpcService.CompanyGrpcServiceClient companyclient;
 
         private readonly ISukiDialog window;
 
@@ -61,11 +62,12 @@ namespace bbnApp.deskTop.ViewModels
 
         private readonly IMapper mapper;
 
-        public LoginWindowViewModel(ISukiDialog window, Author.AuthorClient client, IDialog dialog, Action<ISukiDialog, bool, string, LoginResponse> ac, List<CompanyItemDto> companyItems, IRedisService _redisService,IMapper _mapper)
+        public LoginWindowViewModel(ISukiDialog window, Author.AuthorClient client, CompanyGrpcService.CompanyGrpcServiceClient companyclient, IDialog dialog, Action<ISukiDialog, bool, string, LoginResponse> ac, List<CompanyItemDto> companyItems, IRedisService _redisService,IMapper _mapper)
         {
             this._redisService = _redisService;
             this.window = window;
             this.client = client;
+            this.companyclient = companyclient;
             this.dialog = dialog;
             this.ac = ac;
             CompanyItems = companyItems==null?[]:[.. companyItems];//机构信息
@@ -105,7 +107,7 @@ namespace bbnApp.deskTop.ViewModels
             try
             {
                 IsCompanyReload = true;
-                var (b,msg,_items) = await BasicRequest.CompanyItemsLoad(client, mapper);
+                var (b,msg,_items) = await BasicRequest.CompanyItemsLoad(companyclient, mapper);
                 if (!b)
                 {
                     dialog.Error("提示", msg);

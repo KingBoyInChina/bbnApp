@@ -185,10 +185,10 @@ public static class DependencyInjection
         });
 
         // 注册 gRPC 服务
-        services.AddScoped<Author.AuthorBase, AuthorService>();
-        services.AddScoped<AreaGrpc.AreaGrpcBase, AreaGrpcService>();
-        services.AddScoped<AppSettingGrpc.AppSettingGrpcBase, AppSettingGrpcService>();
-        services.AddScoped<DataDictionaryGrpc.DataDictionaryGrpcBase, DataDictionaryGrpcService>();
+        //services.AddScoped<Author.AuthorBase, AuthorService>();
+        //services.AddScoped<AreaGrpc.AreaGrpcBase, AreaGrpcService>();
+        //services.AddScoped<AppSettingGrpc.AppSettingGrpcBase, AppSettingGrpcService>();
+        //services.AddScoped<DataDictionaryGrpc.DataDictionaryGrpcBase, DataDictionaryGrpcService>();
         //注册gRPC工厂
         services.AddSingleton<IGrpcClientFactory, BbnGrpcClientFactory>();
 
@@ -209,6 +209,8 @@ public static class DependencyInjection
 
         // 注册 DapperRepository
         services.AddScoped<IDapperRepository, DapperRepository>();
+        //注册高德地图服务
+        services.AddScoped<IGuideService, GuideService>();
         // 注册行政区划代码服务
         services.AddScoped<IAreaService, AreaService>();
         // 注册通用字典服务
@@ -217,6 +219,8 @@ public static class DependencyInjection
         services.AddScoped<IOperatorService, OperatorService>();
         // 注册机构服务
         services.AddScoped<ICompanyService, CompanyService>();
+        // 注册部门服务
+        services.AddScoped<IDepartMentService, DepartMentService>();
         // 注册系统配置服务
         services.AddScoped<IAppSettingService, AppSettingService>();
         //注册字典服务
@@ -227,6 +231,8 @@ public static class DependencyInjection
         services.AddScoped<IMaterialsCodeService, MaterialsCodeService>();
         //设备代码
         services.AddScoped<IDeviceCodeService, DeviceCodeService>();
+        //订阅服务
+        services.AddScoped<ITopicCodesService, TopicCodesService>();
         //文件上传服务
         services.AddScoped<IFileUploadService, FileUploadService>();
 

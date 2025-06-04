@@ -6,42 +6,11 @@ package author;
 
 //定义Author服务
 service Author {
-	//获取机构清单
-  rpc GetCompanyItems (CompanyRequest) returns (CompanyResponse);
 	//登录
   rpc Login (LoginRequest) returns (LoginResponse);
 	//密码变更
   rpc UpdatePassWord(PassWordRequest) returns (PassWordResponse);
 }
-
-///机构初始化请求
-message CompanyRequest {
-  //版本号
-  string Version = 1;
-  //默认机构id
-  string CompanyId = 2;
-}
-///登录响应
-message CompanyResponse {
-  //返回码
-  bool Code = 1;
-  //返回信息
-  string Message = 2;
-  //用户信息
-  repeated CompanyItem CompanyItems = 3;
-}
-///机构对象
-message CompanyItem {
-  //用户组ID
-  string Yhid =1;
-  //机构ID
-  string Id=2;
-  //机构名称
-  string Name=3;
-  //标识
-  string Tag=4;
-}
-
 
 ///登录请求
 message LoginRequest {

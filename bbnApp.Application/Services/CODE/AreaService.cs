@@ -4,6 +4,7 @@ using bbnApp.Core;
 using bbnApp.Domain.Entities.Code;
 using bbnApp.Domain.Entities.UserLogin;
 using bbnApp.DTOs.CodeDto;
+using bbnApp.DTOs.CommDto;
 using bbnApp.Share;
 using Dapper;
 using Exceptionless;
@@ -11,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualBasic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace bbnApp.Application.Services.CODE
@@ -412,22 +414,6 @@ namespace bbnApp.Application.Services.CODE
                 return (false,ex.Message.ToString());
             }
         }
-        /// <summary>
-        /// 通过字典编码获取行政区划级别
-        /// </summary>
-        /// <param name="levecode"></param>
-        /// <returns></returns>
-        private (byte,string) GetAreaLeve(string levecode)
-        {
-            var data = dataDictionaryService.GetDicItem(levecode);
-            if (data != null)
-            {
-                if (!string.IsNullOrEmpty(data.ItemId))
-                {
-                    return (Convert.ToByte(data.ItemIndex),data.ItemName);
-                }
-            }
-            return (6,"村级");
-        }
+        
     }
 }

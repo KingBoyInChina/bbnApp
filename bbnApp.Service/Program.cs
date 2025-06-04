@@ -1,6 +1,7 @@
 using bbnApp.Application.IServices.ICODE;
 using bbnApp.Application.IServices.IINIT;
 using bbnApp.Infrastructure.Data;
+using bbnApp.Protos;
 using bbnApp.Service.Services;
 using Exceptionless;
 using Grpc.Core;
@@ -100,13 +101,17 @@ using (var scope = app.Services.CreateScope())
 
 // ≈‰÷√ gRPC ∑˛ŒÒ
 app.MapGrpcService<AuthorService>();
+app.MapGrpcService<CompanyInfoGrpcService>();
 app.MapGrpcService<AreaGrpcService>();
 app.MapGrpcService<AppSettingGrpcService>();
 app.MapGrpcService<DataDictionaryGrpcService>();
 app.MapGrpcService<OperationObjectGrpcService>();
 app.MapGrpcService<MaterialGrpcCodeService>();
 app.MapGrpcService<DeviceCodeGrpcService>();
+app.MapGrpcService<TopicCodesGrpcService>();
 app.MapGrpcService<FileUploadGrpcService>();
+app.MapGrpcService<GuideGrpcService>();
+app.MapGrpcService<DepartMentGrpcService>();
 
 app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
 

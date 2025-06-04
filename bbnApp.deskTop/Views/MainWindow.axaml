@@ -513,23 +513,49 @@
         </StackPanel>
       </MenuItem.Header>
     </MenuItem>
-    <MenuItem IsVisible="{StaticResource TopMenuToEnableConverter}" Command="{Binding AppTagSelectedCommand}" CommandParameter="{Binding ., RelativeSource={RelativeSource Self}}" Tag="FileManagement">
+    <MenuItem IsVisible="{StaticResource TopMenuToEnableConverter}" CommandParameter="{Binding ., RelativeSource={RelativeSource Self}}">
       <MenuItem.Header>
         <StackPanel Orientation="Horizontal">
           <icon:IconFont Kind="bbn-folder" Foreground="{DynamicResource SukiText}"/>
           <Border BorderBrush="{DynamicResource SukiText}" Classes="Split"></Border>
-          <TextBlock Text="文件管理"></TextBlock>
+          <TextBlock Text="文件中心"></TextBlock>
         </StackPanel>
       </MenuItem.Header>
+
+      <MenuItem Header="文件管理" IsVisible="{StaticResource TopMenuToEnableConverter}" Command="{Binding AppTagSelectedCommand}" CommandParameter="{Binding ., RelativeSource={RelativeSource Self}}" Tag="FileManagement">
+        <MenuItem.Icon>
+          <icon:IconFont MKind="Files"></icon:IconFont>
+        </MenuItem.Icon>
+      </MenuItem>
+
+      <MenuItem Header="AI模型管理" IsVisible="{StaticResource TopMenuToEnableConverter}" Command="{Binding AppTagSelectedCommand}" CommandParameter="{Binding ., RelativeSource={RelativeSource Self}}" Tag="AIModelManagement">
+        <MenuItem.Icon>
+          <icon:IconFont MKind="Moderator"></icon:IconFont>
+        </MenuItem.Icon>
+      </MenuItem>
+      
     </MenuItem>
-    <MenuItem IsVisible="{StaticResource TopMenuToEnableConverter}" Command="{Binding AppTagSelectedCommand}" CommandParameter="{Binding ., RelativeSource={RelativeSource Self}}" Tag="PlatformManagement">
+    <MenuItem IsVisible="{StaticResource TopMenuToEnableConverter}" CommandParameter="{Binding ., RelativeSource={RelativeSource Self}}">
       <MenuItem.Header>
         <StackPanel Orientation="Horizontal">
           <icon:IconFont Kind="bbn-server" Foreground="{DynamicResource SukiText}"/>
           <Border BorderBrush="{DynamicResource SukiText}" Classes="Split"></Border>
-          <TextBlock Text="平台管理"></TextBlock>
+          <TextBlock Text="平台中心"></TextBlock>
         </StackPanel>
       </MenuItem.Header>
+
+      <MenuItem Header="组织结构" IsVisible="{StaticResource TopMenuToEnableConverter}" Command="{Binding AppTagSelectedCommand}" CommandParameter="{Binding ., RelativeSource={RelativeSource Self}}" Tag="OrganizationStructure">
+        <MenuItem.Icon>
+          <icon:IconFont MKind="Users"></icon:IconFont>
+        </MenuItem.Icon>
+      </MenuItem>
+
+      <MenuItem Header="代码管理" IsVisible="{StaticResource TopMenuToEnableConverter}" Command="{Binding AppTagSelectedCommand}" CommandParameter="{Binding ., RelativeSource={RelativeSource Self}}" Tag="PlatformManagement">
+        <MenuItem.Icon>
+          <icon:IconFont MKind="Database"></icon:IconFont>
+        </MenuItem.Icon>
+      </MenuItem>
+
     </MenuItem>
     <MenuItem Header="辅助工具" IsVisible="{StaticResource TopMenuToEnableConverter}" CommandParameter="{Binding ., RelativeSource={RelativeSource Self}}">
       <MenuItem.Header>

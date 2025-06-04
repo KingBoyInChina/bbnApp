@@ -1,0 +1,54 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "bbnApp.Protos";
+
+package GuideGrpc;
+
+/********定义高德地图服务********/
+service GuideGrpc {
+  //获取匹配地址清单
+  rpc GetLoactionList (GetLoactionRequest) returns (GetLoactionResponse);
+  //获取默认匹配地址
+  rpc GetDefaultLoaction (GetDefaultLoactionRequest) returns (GetDefaultLoactionResponse);
+}
+/********定义请求参数********/
+// 系统配置类型
+message Geocode {
+  string Address = 1;
+  string Country = 2;
+  string Province = 3;
+  string Citycode = 4;
+  string City = 5;
+  string Adcode = 6;
+  string Level = 7;
+  string Street = 8;
+  string Number = 9;
+  string Location = 10;
+}
+
+// 获取匹配地址清单
+message GetLoactionRequest {
+  string City = 1;
+  string Address = 2;
+  string Output = 3;
+}
+
+// 获取匹配地址清单响应
+message GetLoactionResponse {
+  bool Code = 1;
+  string Message = 2;
+  repeated Geocode Items = 4;
+}
+// 获取默认匹配地址
+message GetDefaultLoactionRequest {
+  string City = 1;
+  string Address = 2;
+  string Output = 3;
+}
+
+// 获取默认匹配地址清单响应
+message GetDefaultLoactionResponse {
+  bool Code = 1;
+  string Message = 2;
+  Geocode Item = 4;
+}

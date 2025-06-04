@@ -5,25 +5,108 @@ option csharp_namespace = "bbnApp.Protos";
 
 package TopicCodesGrpc;
 
-/********定义DeviceCode服务********/
+
+/********定义TopicCodes服务********/
 service TopicCodesGrpc {
-    
+    //设备树加载
+    rpc TopicCodesTreeLoad (TopicCodesTreeRequest) returns (TopicCodesTreeResponse);
+    //设备信息加载
+    rpc TopicCodesInfoLoad (TopicCodesInfoRequest) returns (TopicCodesInfoResponse);
+	//设备信息提交
+    rpc TopicCodesPost (TopicCodesPostRequest) returns (TopicCodesPostResponse);
+    //设备状态变更
+    rpc TopicCodesState (TopicCodesStateRequest) returns (TopicCodesStateResponse);
+    //设备信息查询
+    rpc TopicCodesListLoad (TopicCodesSearchRequest) returns (TopicCodesSearchResponse);
 }
 
-// 订阅代码类型
-message TopicCodes {
-    string Yhid = 1; // 用户组ID
-    string TopicId = 2; // 订阅代码ID
-    string Code = 3; // 订阅代码
-    string TopicName = 4; // 订阅名称
-    string TopicRoter = 5; // 路由地址
-    string TopicType = 6; // 订阅分类,设备/基站等
-    string DeviceType = 7; // 设备分类代码
-    string DeviceIds = 8; // 设备ID,需要指定设备的情况
-    int32 IsLock = 9; // 锁定状态
-    string LockTime = 10; // 锁定时间
-    string LockReason = 11; // 锁定原因
-    string ReMarks = 12; // 备注信息
-    int32 Isdelete = 13; // 删除状态
-    string LastModified = 14; // 末次数据变更时间
+// 订阅代码树节点
+message TopicCodesTreeNode {
+    string Id = 1; // ID
+    string PId = 2; // 父ID
+    string Name = 3; // 名称
+    string Tag = 4; // Tag
+    bool IsLeaf = 5; // 是否是叶子节点
+    bool IsLock = 6; // 锁定状态
+    repeated TopicCodesTreeNode SubItems = 7; // 子节点
+}
+
+// 订阅代码对象
+message TopicCodesItem {
+    int32 IdxNum = 1; // 序号
+    string Yhid = 2; // 用户ID
+    string TopicId = 3; // 订阅代码ID
+    string Code = 4; // 订阅代码
+    string TopicName = 5; // 订阅名称
+    string TopicRoter = 6; // 路由地址
+    string TopicType = 7; // 订阅分类
+    string DeviceType = 8; // 设备分类代码
+    string DeviceIds = 9; // 设备ID
+    int32 IsLock = 10; // 锁定状态
+    string LockTime = 11; // 锁定时间
+    string LockReason = 12; // 锁定原因
+    string ReMarks = 13; // 备注信息
+}
+
+// 订阅代码清单请求对象
+message TopicCodesSearchRequest {
+    string TopicType = 1; // 过滤条件
+    string TopicName = 2; // 过滤条件
+}
+
+// 订阅代码清单响应对象
+message TopicCodesSearchResponse {
+    bool Code = 1; // 是否成功
+    string Message = 2; // 消息
+    repeated TopicCodesItem List = 3; // 数据
+}
+
+// 订阅代码信息请求对象
+message TopicCodesInfoRequest {
+    string TopicId = 1; // 设备ID
+}
+
+// 订阅代码信息响应对象
+message TopicCodesInfoResponse {
+    bool Code = 1; // 是否成功
+    string Message = 2; // 消息
+    TopicCodesItem Item = 3; // 数据
+}
+
+// 订阅代码树请求对象
+message TopicCodesTreeRequest {
+    string FilterValue = 1; // 过滤条件
+}
+
+// 订阅代码树响应对象
+message TopicCodesTreeResponse {
+    bool Code = 1; // 是否成功
+    string Message = 2; // 消息
+    repeated TopicCodesTreeNode TopicCodesItems = 3; // 数据
+}
+
+// 订阅代码请求对象
+message TopicCodesPostRequest {
+    TopicCodesItem TopicCodesItem = 1; // 订阅代码对象
+}
+
+// 订阅代码响应对象
+message TopicCodesPostResponse {
+    bool Code = 1; // 是否成功
+    string Message = 2; // 消息
+    TopicCodesItem Item = 3; // 订阅代码对象
+}
+
+// 订阅代码状态请求对象
+message TopicCodesStateRequest {
+    string TopicId = 1; // ID
+    string State = 2; // 状态
+    string Reason = 3; // 原因
+}
+
+// 订阅代码状态响应对象
+message TopicCodesStateResponse {
+    bool Code = 1; // 是否成功
+    string Message = 2; // 消息
+    TopicCodesItem Item = 3; // 订阅代码对象
 }

@@ -12,13 +12,11 @@ namespace bbnApp.Service.Services
     public class DataDictionaryGrpcService:DataDictionaryGrpc.DataDictionaryGrpcBase
     {
         private readonly IDataDictionaryService _dataDictionaryService;
-        private readonly IOperatorService _operatorService;
         private readonly IMapper _mapper;
 
-        public DataDictionaryGrpcService(IDataDictionaryService dataDictionaryService, IOperatorService operatorService, IMapper mapper)
+        public DataDictionaryGrpcService(IDataDictionaryService dataDictionaryService,IMapper mapper)
         {
             _dataDictionaryService = dataDictionaryService;
-            _operatorService = operatorService;
             _mapper = mapper;
         }
         /// <summary>

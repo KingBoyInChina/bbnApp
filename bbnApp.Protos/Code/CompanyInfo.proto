@@ -1,0 +1,142 @@
+﻿
+syntax = "proto3";
+
+option csharp_namespace = "bbnApp.Protos";
+
+package CompanyGrpc;
+
+//定义Author服务
+service CompanyGrpcService {
+  //获取机构清单
+  rpc GetCompanyItems (CompanyRequest) returns (CompanyResponse);
+  //获取机构清单（树形结构）
+  rpc GetCompanyTree (CompanyTreeRequest)returns (CompanyTreeResponse);
+  //获取机构信息
+  rpc GetCompanyInfo (CompanyInfoRequest) returns (CompanyInfoResponse);
+  //机构信息提交
+  rpc SaveCompanyInfo (CompanySaveRequest) returns (CompanySaveResponse);
+  //机构状态变更
+  rpc StateCompanyInfo (CompanyStateRequest) returns (CompanyStateResponse);
+}
+
+// 树形对象
+message CompanyTreeItem {
+    string Id = 1; // ID
+    string PId = 2; // 上级ID
+    string Name = 3; // 名称
+    string Tag = 4; // Tag
+    bool IsLeaf = 5; // 是否为叶子节点
+    repeated CompanyTreeItem SubItems = 6; // 子节点
+    bool IsLock=7;//锁定
+}
+
+// 机构对象
+message CompanyItem {
+    string Yhid = 1; // 用户组ID
+    string Id = 2; // 机构ID
+    string Name = 3; // 名称
+    string Tag = 4; // Tag
+}
+
+// 机构信息数据传输对象
+message CompanyInfo {
+    int32 IdxNum = 1; // 序号
+    string Yhid = 2; // 用户组ID
+    string CompanyId = 3; // 机构ID
+    string PCompanyId = 4; // 上级机构ID
+    string CompanyType = 5; // 机构类型
+    string CompanyName = 6; // 机构名称
+    string CompanyCode = 7; // 机构代码
+    string OrganizationCode = 8; // 组织机构代码
+    int32 CompanyLeve = 9; // 机构级别
+    string CompanyLeveName = 10; // 机构级别名称
+    string AreaCode = 11; // 所在地行政区划代码
+    string AreaName = 12; // 所在地行政区划名称
+    string AreaNameExt = 13; // 所在地详细信息
+    string Location = 14; // 经纬度坐标
+    string PhoneNumber = 15; // 联系电话
+    string Contact = 16; // 联系人
+    int32 IsLock = 17; // 停用状态
+    string LockTime = 18; // 停用时间
+    string LockReason = 19; // 停用原因
+    string ReMarks = 20; // 备注信息
+}
+
+// 请求对象
+message CompanyRequest {
+    string Version = 1; // 版本号
+    string CompanyId = 2; // 默认机构ID
+    string Yhid = 3; // 用户ID
+}
+
+// 机构返回信息
+message CompanyResponse {
+    bool Code = 1; // 状态码
+    string Message = 2; // 消息内容
+    repeated CompanyItem CompanyItems = 3; // 机构清单
+}
+
+// 机构树请求对象
+message CompanyTreeRequest {
+    string CompanyName = 1; // 公司名称
+    string AreaCode = 2; // 所在地区
+    string CompanyCode = 3; // 公司代码
+}
+
+// 机构树返回对象
+message CompanyTreeResponse {
+    bool Code = 1; // 状态
+    string Message = 2; // 消息
+    repeated CompanyTreeItem Items = 3; // 树形机构项
+}
+
+// 机构清单请求对象
+message CompanySearchRequest {
+    string CompanyName = 1; // 公司名称
+    string AreaCode = 2; // 所在地区
+    string CompanyCode = 3; // 公司代码
+}
+
+// 机构清单返回对象
+message CompanySearchResponse {
+    bool Code = 1; // 状态
+    string Message = 2; // 消息
+    repeated CompanyInfo Items = 3; // 机构清单
+}
+
+message CompanyInfoRequest{
+    string CompanyId = 1; // 机构ID
+}
+
+// 机构信息返回对象
+message CompanyInfoResponse {
+    bool Code = 1; // 状态
+    string Message = 2; // 消息
+    CompanyInfo Item = 3; // 机构信息对象
+}
+
+// 机构提交请求对象
+message CompanySaveRequest {
+    CompanyInfo Item = 1; // 机构信息对象
+}
+
+// 机构提交返回对象
+message CompanySaveResponse {
+    bool Code = 1; // 状态
+    string Message = 2; // 消息
+    CompanyInfo Item = 3; // 机构信息对象
+}
+
+// 机构状态请求对象
+message CompanyStateRequest {
+    string Type = 1; // 类型
+    string CompanyId = 2; // 机构ID
+    string Reason=3; // 停用原因
+}
+
+// 机构状态返回对象
+message CompanyStateResponse {
+    bool Code = 1; // 状态
+    string Message = 2; // 消息
+    CompanyInfo Item = 3; // 机构信息对象
+}

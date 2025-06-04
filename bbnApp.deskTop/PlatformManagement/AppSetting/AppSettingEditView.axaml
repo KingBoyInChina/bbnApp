@@ -82,7 +82,7 @@
         
         <StackPanel Orientation="Horizontal">
           <TextBlock VerticalAlignment="Center" Classes="Caption">备注说明：</TextBlock>
-          <TextBox Watermark="备注说明" MaxLength="100" Width="300" Text="{Binding AppSettingItem.ReMarks}" Height="80" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
+          <TextBox Watermark="备注说明" MaxLength="100" Width="300" Text="{Binding AppSettingItem.ReMarks}"  AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
         </StackPanel>
 
         <StackPanel Orientation="Horizontal">

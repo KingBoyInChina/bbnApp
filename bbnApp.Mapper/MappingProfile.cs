@@ -2,6 +2,7 @@
 using bbnApp.Application.DTOs.LoginDto;
 using bbnApp.DTOs.BusinessDto;
 using bbnApp.DTOs.CodeDto;
+using bbnApp.DTOs.CommDto;
 using bbnApp.Protos;
 using Google.Protobuf;
 
@@ -22,9 +23,35 @@ namespace bbnApp.Service.GlobalService
             CreateMap<LoginRequestDto, LoginRequest>().ReverseMap();
             CreateMap<LoginResponseDto, LoginResponse>().ReverseMap();
             #region 机构映射
+            CreateMap<CompanyTreeItemDto, CompanyTreeItem>().ReverseMap();
             CreateMap<CompanyItemDto, CompanyItem>().ReverseMap();
+            CreateMap<CompanyInfoDto, CompanyInfo>().ReverseMap();
+            CreateMap<CompanyTreeRequestDto, CompanyTreeRequest>().ReverseMap();
+            CreateMap<CompanyTreeResponseDto, CompanyTreeResponse>().ReverseMap();
             CreateMap<CompanyRequestDto, CompanyRequest>().ReverseMap();
             CreateMap<CompanyResponseDto, CompanyResponse>().ReverseMap();
+            CreateMap<CompanySearchRequestDto, CompanySearchRequest>().ReverseMap();
+            CreateMap<CompanySearchResponseDto, CompanySearchResponse>().ReverseMap();
+            CreateMap<CompanyInfoRequestDto, CompanyInfoRequest>().ReverseMap();
+            CreateMap<CompanyInfoResponseDto, CompanyInfoResponse>().ReverseMap();
+            CreateMap<CompanySaveRequestDto, CompanySaveRequest>().ReverseMap();
+            CreateMap<CompanySaveResponseDto, CompanySaveResponse>().ReverseMap();
+            CreateMap<CompanyStateRequestDto, CompanyStateRequest>().ReverseMap();
+            CreateMap<CompanyStateResponseDto, CompanyStateResponse>().ReverseMap();
+            #endregion
+            #region 部门映射
+            CreateMap<DepartMentTreeItemDto, DepartMentTreeItem>().ReverseMap();
+            CreateMap<DepartMentInfoDto, DepartMentInfo>().ReverseMap();
+            CreateMap<DepartMentTreeRequestDto, DepartMentTreeRequest>().ReverseMap();
+            CreateMap<DepartMentTreeResponseDto, DepartMentTreeResponse>().ReverseMap();
+            CreateMap<DepartMentSearchRequestDto, DepartMentSearchRequest>().ReverseMap();
+            CreateMap<DepartMentSearchResponseDto, DepartMentSearchResponse>().ReverseMap();
+            CreateMap<DepartMentInfoRequestDto, DepartMentInfoRequest>().ReverseMap();
+            CreateMap<DepartMentInfoResponseDto, DepartMentInfoResponse>().ReverseMap();
+            CreateMap<DepartMentSaveRequestDto, DepartMentSaveRequest>().ReverseMap();
+            CreateMap<DepartMentSaveResponseDto, DepartMentSaveResponse>().ReverseMap();
+            CreateMap<DepartMentStateRequestDto, DepartMentStateRequest>().ReverseMap();
+            CreateMap<DepartMentStateResponseDto, DepartMentStateResponse>().ReverseMap();
             #endregion
             #region 地区映射
             CreateMap<AreaItemDto, AreaItem>().ReverseMap();
@@ -109,55 +136,35 @@ namespace bbnApp.Service.GlobalService
             CreateMap<MaterialsCodeStateResponseDto, MaterialsCodeStateResponse>().ReverseMap();
             #endregion
             #region 设备代码
-            // DeviceCodeTreeNodeDto <-> DeviceCodeTreeNode
             CreateMap<DeviceCodeTreeNodeDto, DeviceCodeTreeNode>().ReverseMap();
-            // DeviceCodeItemDto <-> DeviceCodeItem
             CreateMap<DeviceCodeItemDto, DeviceCodeItem>().ReverseMap();
-            
-            // DeviceStructItemDto <-> DeviceStructItem
-            CreateMap<DeviceStructItemDto, DeviceStructItem>()
-                .ReverseMap();
-
-            // DeviceCodeTreeRequestDto <-> DeviceCodeTreeRequest
-            CreateMap<DeviceCodeTreeRequestDto, DeviceCodeTreeRequest>()
-                .ReverseMap();
-
-            // DeviceCodeTreeResponseDto <-> DeviceCodeTreeResponse
-            CreateMap<DeviceCodeTreeResponseDto, DeviceCodeTreeResponse>()
-                .ReverseMap();
-
-            // DeviceCodePostRequestDto <-> DeviceCodePostRequest
-            CreateMap<DeviceCodePostRequestDto, DeviceCodePostRequest>()
-                .ReverseMap();
-
-            // DeviceCodePostResponseDto <-> DeviceCodePostResponse
-            CreateMap<DeviceCodePostResponseDto, DeviceCodePostResponse>()
-                .ReverseMap();
-
-            // DeviceCodeStateRequest <-> DeviceCodeStateRequest
-            CreateMap<DeviceCodeStateRequestDto, DeviceCodeStateRequest>()
-                .ReverseMap();
-
-            // DeviceCodeStateResponse <-> DeviceCodeStateResponse
-            CreateMap<DeviceCodeStateResponseDto, DeviceCodeStateResponse>()
-                .ReverseMap();
-
-            // DeviceStructStateRquest <-> DeviceStructStateRequest
-            CreateMap<DeviceStructStateRquestDto, DeviceStructStateRequest>()
-                .ReverseMap();
-
-            // DeviceStructStateResponse <-> DeviceStructStateResponse
-            CreateMap<DeviceStructStateResponse, DeviceStructStateResponse>()
-                .ReverseMap();
-            CreateMap<DeviceCodeSearchRequestDto, DeviceCodeSearchRequest>()
-                .ReverseMap();
-            CreateMap<DeviceCodeSearchResponseDto, DeviceCodeSearchResponse>()
-                .ReverseMap();
-            CreateMap<DeviceCodeInfoRequestDto, DeviceCodeInfoRequest>()
-                .ReverseMap();
-            CreateMap<DeviceCodeInfoResponseDto, DeviceCodeInfoResponse>()
-                .ReverseMap();
-            
+            CreateMap<DeviceStructItemDto, DeviceStructItem>().ReverseMap();
+            CreateMap<DeviceCodeTreeRequestDto, DeviceCodeTreeRequest>().ReverseMap();
+            CreateMap<DeviceCodeTreeResponseDto, DeviceCodeTreeResponse>().ReverseMap();
+            CreateMap<DeviceCodePostRequestDto, DeviceCodePostRequest>().ReverseMap();
+            CreateMap<DeviceCodePostResponseDto, DeviceCodePostResponse>().ReverseMap();
+            CreateMap<DeviceCodeStateRequestDto, DeviceCodeStateRequest>().ReverseMap();
+            CreateMap<DeviceCodeStateResponseDto, DeviceCodeStateResponse>().ReverseMap();
+            CreateMap<DeviceStructStateRquestDto, DeviceStructStateRequest>().ReverseMap();
+            CreateMap<DeviceStructStateResponse, DeviceStructStateResponse>().ReverseMap();
+            CreateMap<DeviceCodeSearchRequestDto, DeviceCodeSearchRequest>().ReverseMap();
+            CreateMap<DeviceCodeSearchResponseDto, DeviceCodeSearchResponse>().ReverseMap();
+            CreateMap<DeviceCodeInfoRequestDto, DeviceCodeInfoRequest>().ReverseMap();
+            CreateMap<DeviceCodeInfoResponseDto, DeviceCodeInfoResponse>().ReverseMap();
+            #endregion
+            #region 订阅代码
+            CreateMap<TopicCodesTreeNodeDto, TopicCodesTreeNode>().ReverseMap();
+            CreateMap<TopicCodesItemDto, TopicCodesItem>().ReverseMap();
+            CreateMap<TopicCodesTreeRequestDto, TopicCodesTreeRequest>().ReverseMap();
+            CreateMap<TopicCodesTreeResponseDto, TopicCodesTreeResponse>().ReverseMap();
+            CreateMap<TopicCodesPostRequestDto, TopicCodesPostRequest>().ReverseMap();
+            CreateMap<TopicCodesPostResponseDto, TopicCodesPostResponse>().ReverseMap();
+            CreateMap<TopicCodesStateRequestDto, TopicCodesStateRequest>().ReverseMap();
+            CreateMap<TopicCodesStateResponseDto, TopicCodesStateResponse>().ReverseMap();
+            CreateMap<TopicCodesSearchRequestDto, TopicCodesSearchRequest>().ReverseMap();
+            CreateMap<TopicCodesSearchResponseDto, TopicCodesSearchResponse>().ReverseMap();
+            CreateMap<TopicCodesInfoRequestDto, TopicCodesInfoRequest>().ReverseMap();
+            CreateMap<TopicCodesInfoResponseDto, TopicCodesInfoResponse>().ReverseMap();
             #endregion
             #region 文件上传
             CreateMap<FileItemsDto, FileItems>().ForMember(dest => dest.FileBytes, opt => opt.MapFrom(src => src.FileBytes)).ReverseMap();
@@ -169,7 +176,14 @@ namespace bbnApp.Service.GlobalService
             CreateMap<UploadFileStateResponseDto, UploadFileStateResponse>().ReverseMap();
             CreateMap<UploadFileReadRequestDto, UploadFileReadRequest>().ReverseMap();
             CreateMap<UploadFileReadResponseDto, UploadFileReadResponse>().ReverseMap();
-            
+
+            #endregion
+            #region 高德地图(这里是服务端映射)
+            CreateMap<GeocodeDto, Geocode>().ReverseMap();
+            CreateMap<GetLoactionRequestDto, GetLoactionRequest>().ReverseMap();
+            CreateMap<GetLoactionResponseDto, GetLoactionResponse>().ReverseMap();
+            CreateMap<GetDefaultLoactionRequestDto, GetDefaultLoactionRequest>().ReverseMap();
+            CreateMap<GetDefaultLoactionResponseDto, GetDefaultLoactionResponse>().ReverseMap();
             #endregion
         }
     }

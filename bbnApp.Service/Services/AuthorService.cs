@@ -23,44 +23,6 @@ namespace bbnApp.Service.Services
             _mapper = mapper;
         }
         /// <summary>
-        /// 初始化机构信息
-        /// </summary>
-        /// <param name="request"></param>
-        /// <param name="context"></param>
-        /// <returns></returns>
-        [AllowAnonymous]
-        public override async Task<CompanyResponse> GetCompanyItems(CompanyRequest request,ServerCallContext context)
-        {
-            CompanyResponse? response = null;
-            // 使用 AutoMapper 映射请求
-            var companyRequestDto = _mapper.Map<CompanyRequestDto>(request);
-            try
-            {
-                // 调用应用程序中的服务
-                var items = await _companyService.GetCompanyItems(companyRequestDto);
-                //使用 AutoMapper 映射响应 报错，不知道是不是因为对象复合嵌套问题
-                var companyItems = _mapper.Map<List<CompanyItem>>(items);
-                response = new CompanyResponse
-                { 
-                    Code=true,
-                    Message="机构信息初始化完成"
-                };
-                response.CompanyItems.AddRange(companyItems);
-
-
-            }
-            catch (Exception ex)
-            {
-                response = new CompanyResponse
-                {
-                    Code = false,
-                    Message = ex.Message
-                };
-            }
-
-            return response;
-        }
-        /// <summary>
         /// 用户登录
         /// </summary>
         /// <param name="request"></param>

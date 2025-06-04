@@ -1,0 +1,237 @@
+
+<UserControl x:Class="bbnApp.deskTop.OrganizationStructure.DepartMent.DepartMentView"
+         xmlns="https://github.com/avaloniaui"
+         xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         xmlns:suki="https://github.com/kikipoulet/SukiUI"
+         xmlns:converters="clr-namespace:bbnApp.deskTop.Converters"
+         xmlns:theme="clr-namespace:SukiUI.Theme;assembly=SukiUI"
+         xmlns:my="clr-namespace:bbnApp.deskTop.Controls"
+         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+         d:DesignHeight="1080"
+         d:DesignWidth="1920"
+         xmlns:department="clr-namespace:bbnApp.deskTop.OrganizationStructure.DepartMent"
+         x:DataType="department:DepartMentViewModel"
+         mc:Ignorable="d">
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="400"></ColumnDefinition>
+      <ColumnDefinition Width="*"></ColumnDefinition>
+    </Grid.ColumnDefinitions>
+
+    <suki:GlassCard Classes="HeaderCard" Margin="10" Grid.Column="0">
+      <suki:GroupBox>
+        <suki:GroupBox.Header>
+          <UniformGrid Rows="2">
+            
+            <UniformGrid Grid.Row="0" Columns="2">
+
+              <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Grid.Column="0">
+                <avalonia:MaterialIcon Kind="ListBox" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+                <TextBlock Foreground="{DynamicResource SukiText}">部门结构信息</TextBlock>
+              </StackPanel>
+
+              <my:Space HorizontalAlignment="Right" Orientation="Horizontal" VerticalAlignment="Center">
+
+                <Button Classes="Basic" Command="{Binding DepartMentTreeReloadCommand}">
+                  <StackPanel Orientation="Horizontal">
+                    <avalonia:MaterialIcon Kind="Refresh" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+                    <TextBlock Foreground="{DynamicResource SukiText}">重载</TextBlock>
+                  </StackPanel>
+                </Button>
+
+              </my:Space>
+
+            </UniformGrid>
+
+            <ComboBox Grid.Row="1" HorizontalAlignment="Stretch" ItemsSource="{Binding DepartMentList}" SelectedItem="{Binding PDepartMentSelected}">
+              <ComboBox.ItemTemplate>
+                <DataTemplate>
+                  <TextBlock Text="{Binding DepartMentName}"/>
+                </DataTemplate>
+              </ComboBox.ItemTemplate>
+            </ComboBox>
+          </UniformGrid>
+
+
+        </suki:GroupBox.Header>
+        <ScrollViewer>
+          <TreeView ItemsSource="{Binding DepartMentTreeSource}" SelectionChanged="TreeView_SelectionChanged">
+            <TreeView.ItemTemplate>
+              <TreeDataTemplate ItemsSource="{Binding SubItems}">
+                <StackPanel Orientation="Horizontal">
+                  <avalonia:MaterialIcon Kind="{Binding IsLeaf,Converter={x:Static converters:BoolToIconConverters.FileLeaf}}"></avalonia:MaterialIcon>
+                  <TextBlock Text="{Binding Name}" Foreground="{DynamicResource SukiText}">
+                    <avalonia:MaterialIcon Kind="Lock" IsVisible="{Binding IsLock}"></avalonia:MaterialIcon>
+                    <TextBlock.ContextMenu>
+                      <ContextMenu>
+                        <MenuItem Header="删除" Tag="IsDelete" Click="MenuItem_Click">
+                          <MenuItem.Icon>
+                            <avalonia:MaterialIcon Kind="Delete"></avalonia:MaterialIcon>
+                          </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="{Binding IsLock,Converter={x:Static converters:BoolToTextConverters.LockLg }}" Tag="IsLock" Click="MenuItem_Click">
+                          <MenuItem.Icon>
+                            <avalonia:MaterialIcon Kind="{Binding IsLock,Converter={x:Static converters:BoolToIconConverters.FileLock }}}"></avalonia:MaterialIcon>
+                          </MenuItem.Icon>
+                        </MenuItem>
+                      </ContextMenu>
+                    </TextBlock.ContextMenu>
+                  </TextBlock>
+
+                </StackPanel>
+              </TreeDataTemplate>
+            </TreeView.ItemTemplate>
+          </TreeView>
+        </ScrollViewer>
+      </suki:GroupBox>
+    </suki:GlassCard>
+
+    <suki:GlassCard Classes="HeaderCard" Margin="10" Grid.Column="1">
+      <suki:GroupBox>
+        <suki:GroupBox.Header>
+          <UniformGrid Columns="2">
+
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Grid.Column="0">
+              <avalonia:MaterialIcon Kind="File" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+
+              <TextBlock Foreground="{DynamicResource SukiText}" Text="{Binding DepartMentSelected.DepartMentName}"></TextBlock>
+              <TextBlock Text="("></TextBlock>
+              <TextBlock Text="{Binding DepartMentSelected.DepartMentCode}"></TextBlock>
+              <TextBlock Text=")"></TextBlock>
+              <TextBlock Foreground="{DynamicResource SukiText}">部门详情</TextBlock>
+
+              <avalonia:MaterialIcon Kind="{Binding DepartMentSelected.IsLock,Converter={x:Static converters:IntToIconConverters.FileLock}}" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+
+            </StackPanel>
+
+            <my:Space HorizontalAlignment="Right" Orientation="Horizontal" VerticalAlignment="Center" Grid.Column="1">
+
+              <Button Classes="Basic" Command="{Binding AddDepartMentCommand}">
+                <StackPanel Orientation="Horizontal">
+                  <avalonia:MaterialIcon Kind="Plus" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+                  <TextBlock Foreground="{DynamicResource SukiText}">新建</TextBlock>
+                </StackPanel>
+              </Button>
+
+              <Button Classes="Basic" Command="{Binding DepartMentSaveCommand}">
+                <StackPanel Orientation="Horizontal">
+                  <avalonia:MaterialIcon Kind="Post" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+                  <TextBlock Foreground="{DynamicResource SukiText}">保存</TextBlock>
+                </StackPanel>
+              </Button>
+
+            </my:Space>
+
+          </UniformGrid>
+
+
+        </suki:GroupBox.Header>
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"></ColumnDefinition>
+            <ColumnDefinition>*</ColumnDefinition>
+          </Grid.ColumnDefinitions>
+
+          <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="auto"></RowDefinition>
+              <RowDefinition Height="auto"></RowDefinition>
+              <RowDefinition Height="auto"></RowDefinition>
+              <RowDefinition Height="auto"></RowDefinition>
+              <RowDefinition Height="auto"></RowDefinition>
+              <RowDefinition Height="auto"></RowDefinition>
+              <RowDefinition Height="auto"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <UniformGrid Columns="3" Grid.Row="0">
+              <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Column="0">
+                <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">上级部门：</TextBlock>
+                <ComboBox Width="230" HorizontalAlignment="Stretch" ItemsSource="{Binding DepartMentList}" SelectedItem="{Binding PDepartMentSelected}">
+                  <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                      <TextBlock Text="{Binding DepartMentName}"/>
+                    </DataTemplate>
+                  </ComboBox.ItemTemplate>
+                </ComboBox>
+                <TextBlock VerticalAlignment="Center" Classes="NOTNULL">*</TextBlock>
+              </StackPanel>
+
+              <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Column="1">
+                <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">部门名称：</TextBlock>
+                <TextBox Width="230" Text="{Binding DepartMentSelected.DepartMentName}"/>
+                <TextBlock VerticalAlignment="Center" Classes="NOTNULL">*</TextBlock>
+              </StackPanel>
+
+              <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Column="2">
+                <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">优先序号：</TextBlock>
+                <NumericUpDown Width="130" Value="{Binding DepartMentSelected.DepartMentIndex}" Minimum="0" Increment="1"></NumericUpDown>
+                <TextBlock VerticalAlignment="Center" Classes="NOTNULL">*</TextBlock>
+              </StackPanel>
+
+            </UniformGrid>
+
+            <StackPanel Grid.Row="1" Classes="FormCell" Orientation="Horizontal">
+              <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">位置信息：</TextBlock>
+              <TextBox Width="855" AcceptsReturn="True" TextWrapping="Wrap" Text="{Binding DepartMentSelected.DepartMentLocation}"/>
+            </StackPanel>
+            <StackPanel Grid.Row="2" Classes="FormCell" Orientation="Horizontal">
+              <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">部门说明：</TextBlock>
+              <TextBox Width="855" AcceptsReturn="True" TextWrapping="Wrap" Text="{Binding DepartMentSelected.DepartMentDescription}"/>
+            </StackPanel>
+            <StackPanel Grid.Row="3" Classes="FormCell" Orientation="Horizontal">
+              <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">备注说明：</TextBlock>
+              <TextBox Width="855" AcceptsReturn="True" TextWrapping="Wrap" Text="{Binding DepartMentSelected.ReMarks}"/>
+            </StackPanel>
+
+          </Grid>
+          <StackPanel Grid.Column="1">
+            <suki:GlassCard Classes="HeaderCard" Margin="10">
+              <suki:GroupBox>
+                <suki:GroupBox.Header>
+
+                  <UniformGrid Columns="2">
+                    <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Grid.Column="0">
+                      <avalonia:MaterialIcon Kind="Image" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+                      <TextBlock Foreground="{DynamicResource SukiText}">部门图片</TextBlock>
+                    </StackPanel>
+                    <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                      <Button IsEnabled="{Binding ImageShow}" Command="{Binding FileSelecedCommand}" Classes="Basic">
+                        <StackPanel Orientation="Horizontal">
+                          <avalonia:MaterialIcon Kind="Filter" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+                          <TextBlock Foreground="{DynamicResource SukiText}">选择</TextBlock>
+                        </StackPanel>
+                      </Button>
+
+                      <Button IsEnabled="{Binding ImageShow}" Command="{Binding FileUploadCommand}" Classes="Basic">
+                        <StackPanel Orientation="Horizontal">
+                          <avalonia:MaterialIcon Kind="Upload" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+                          <TextBlock Foreground="{DynamicResource SukiText}">上传</TextBlock>
+                        </StackPanel>
+                      </Button>
+                    </StackPanel>
+                  </UniformGrid>
+                </suki:GroupBox.Header>
+                <suki:BusyArea Name="BusyImage"
+                             BusyText="图片加载中..."
+                             IsBusy="{Binding IsBusy}">
+                  <StackPanel Orientation="Vertical">
+                    <Image Source="{Binding DepartMentImage}" Width="270" Height="360" Stretch="Uniform"></Image>
+
+                    <Border Height="1" Background="WhiteSmoke" HorizontalAlignment="Stretch"></Border>
+                    <TextBlock HorizontalAlignment="Center" Foreground="Gray" VerticalAlignment="Center" >部门信息提交后再上传图片</TextBlock>
+                  </StackPanel>
+                </suki:BusyArea>
+              </suki:GroupBox>
+            </suki:GlassCard>
+          </StackPanel>
+
+        </Grid>
+
+      </suki:GroupBox>
+    </suki:GlassCard>
+
+
+  </Grid>
+</UserControl>

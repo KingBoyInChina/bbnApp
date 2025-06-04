@@ -163,6 +163,10 @@ namespace bbnApp.deskTop.ViewModels
         /// </summary>
         private Author.AuthorClient _client;
         /// <summary>
+        /// 
+        /// </summary>
+        private CompanyGrpcService.CompanyGrpcServiceClient _companyclient;
+        /// <summary>
         /// 地区代码服务
         /// </summary>
         private AreaGrpc.AreaGrpcClient _codeClient;
@@ -203,7 +207,7 @@ namespace bbnApp.deskTop.ViewModels
             _mapper = mapper;
             _ExceptionlessClient = exceptionlessClient;
             _grpcClientFactory = grpcClientFactory;
-
+            _companyclient= _grpcClientFactory.CreateClient<CompanyGrpcService.CompanyGrpcServiceClient>();
             _client = _grpcClientFactory.CreateClient<Author.AuthorClient>();
             _codeClient = _grpcClientFactory.CreateClient<AreaGrpc.AreaGrpcClient>();
             _appSettignClient = _grpcClientFactory.CreateClient<AppSettingGrpc.AppSettingGrpcClient>();
@@ -487,7 +491,7 @@ namespace bbnApp.deskTop.ViewModels
             Dispatcher.UIThread.InvokeAsync(() =>
             {
                 bool b = DialogManager.CreateDialog().ShowCardBackground(false)
-                .WithViewModel(window => new LoginWindowViewModel(window, _client, dialog,LoginCallBack, CompanyItems, _redisService,_mapper))
+                .WithViewModel(window => new LoginWindowViewModel(window, _client, _companyclient, dialog,LoginCallBack, CompanyItems, _redisService,_mapper))
                 .TryShow();
             }
             );
@@ -834,7 +838,7 @@ namespace bbnApp.deskTop.ViewModels
             {
                 dialog.ShowLoading("数据初始化中...", async (e) =>
                 {
-                    var (b,msg,data) = await BasicRequest.CompanyItemsLoad(_client, _mapper);
+                    var (b,msg,data) = await BasicRequest.CompanyItemsLoad(_companyclient, _mapper);
                     if (!b)
                     {
                         dialog.Error("提示",msg);

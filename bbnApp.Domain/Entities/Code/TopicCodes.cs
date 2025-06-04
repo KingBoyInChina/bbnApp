@@ -63,7 +63,7 @@ namespace bbnApp.Domain.Entities.Code
         [Description("设备分类代码")]
         [Comment("设备分类代码")]
         [Required]
-        public string DeviceType { get; set; }
+        public string? DeviceType { get; set; }
 
         [Column(TypeName = "varchar(200)")]
         [MaxLength(200)]
