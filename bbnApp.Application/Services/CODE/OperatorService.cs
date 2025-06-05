@@ -187,18 +187,18 @@ namespace bbnApp.Application.Services.CODE
         /// <param name="UserCode"></param>
         /// <param name="Password"></param>
         /// <returns></returns>
-        public async Task<LoginResponseDto>? OperatorLogin(LoginRequestDto loginRequest)
+        public async Task<(bool,string,LoginResponseDto?)> OperatorLogin(LoginRequestDto loginRequest)
         {
             try
             {
                 var operators = await _redisService.GetAsync("Operator");
                 if (string.IsNullOrEmpty(operators))
                 {
-                    return null;
+                    return (false,"平台操作员信息未初始化,请联系运维人员",new LoginResponseDto());
                 }
                 else if (string.IsNullOrEmpty(loginRequest.Yhid) || string.IsNullOrEmpty(loginRequest.UserName) || string.IsNullOrEmpty(loginRequest.PassWord))
                 {
-                    throw new Exception("无效的登录参数");
+                    return (false, "无效的登录参数",new LoginResponseDto());
                 }
                 JArray ArrOperators = JArray.Parse(operators);
                 var Operator = (from x in ArrOperators
@@ -211,11 +211,11 @@ namespace bbnApp.Application.Services.CODE
                               ).ToList();
                 if (Operator.Count == 0)
                 {
-                    throw new Exception("无效的身份信息");
+                    return (false, "无效的身份信息", new LoginResponseDto());
                 }
                 else if (Operator.Count > 1)
                 {
-                    throw new Exception("检测到重复的身份信息，请联系管理处理");
+                    return (false, "检测到重复的身份信息，请联系管理处理", new LoginResponseDto());
                 }
                 else
                 {
@@ -223,7 +223,7 @@ namespace bbnApp.Application.Services.CODE
                     var OperatorsPassWordCheck = Operator.Where(x => EncodeAndDecode.SM2Decrypt(x["PassWord"].ToString()) == loginRequest.PassWord).FirstOrDefault();
                     if (OperatorsPassWordCheck == null)
                     {
-                        throw new Exception("密码错误!");
+                        return (false, "密码错误", new LoginResponseDto());
                     }
                     else
                     {
@@ -257,7 +257,7 @@ namespace bbnApp.Application.Services.CODE
                             UserInfo = model,
                             TopMenus = menus
                         };
-                        return _loginResponse;
+                        return (true,"身份验证成功",_loginResponse);
                     }
                 }
             }
@@ -265,8 +265,8 @@ namespace bbnApp.Application.Services.CODE
             {
                 _logger.LogError($"获取操作员信息 操作员信息初始化到Redis异常：{ex.Message.ToString()}");
                 _exceptionlessClient.SubmitException(new Exception($"获取操作员信息 操作员信息初始化到Redis异常：{ex.Message.ToString()}"));
+                return (true, $"获取操作员信息 操作员信息初始化到Redis异常：{ex.Message.ToString()}", new LoginResponseDto());
             }
-            return null;
         }
         /// <summary>
         /// 登录信息记录

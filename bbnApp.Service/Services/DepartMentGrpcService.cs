@@ -3,6 +3,7 @@ using bbnApp.Application.IServices.ICODE;
 using bbnApp.Common.Models;
 using bbnApp.DTOs.CodeDto;
 using bbnApp.Protos;
+using Google.Protobuf;
 using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
 
@@ -37,12 +38,12 @@ namespace bbnApp.Service.Services
                     // 使用 AutoMapper 映射请求
                     var requestDto = _mapper.Map<DepartMentTreeRequestDto>(request);
                     // 调用应用程序中的服务
-                    var items = await _departMentService.GetDepartMentTree(requestDto, user);
+                    var (code,message,items) = await _departMentService.GetDepartMentTree(requestDto, user);
                     var companyItems = _mapper.Map<List<DepartMentTreeItem>>(items);
                     response = new DepartMentTreeResponse
                     {
-                        Code = true,
-                        Message = "部门信息初始化完成"
+                        Code = code,
+                        Message = message
                     };
                     response.Items.AddRange(companyItems);
                 }
@@ -201,5 +202,51 @@ namespace bbnApp.Service.Services
 
             return response;
         }
+        /// <summary>
+        /// 部门清单
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        [Authorize]
+        public override async Task<DepartMentSearchResponse> GetDepartMentList(DepartMentSearchRequest request, ServerCallContext context)
+        {
+            DepartMentSearchResponse? response = null;
+            try
+            {
+                if (context.UserState.TryGetValue("User", out var userObj) && userObj is UserModel user)
+                {
+                    // 使用 AutoMapper 映射请求
+                    var requestDto = _mapper.Map<DepartMentSearchRequestDto>(request);
+                    // 调用应用程序中的服务
+                    var (code,message,items) = await _departMentService.GetDepartMentItems(requestDto,user);
+                    response = new DepartMentSearchResponse
+                    {
+                        Code = code,
+                        Message = message,
+                    };
+                    response.Items.AddRange(_mapper.Map<List<DepartMentInfo>>(items));
+                }
+                else
+                {
+                    response = new DepartMentSearchResponse
+                    {
+                        Code = false,
+                        Message = "无效操作员身份信息"
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                response = new DepartMentSearchResponse
+                {
+                    Code = false,
+                    Message = ex.Message
+                };
+            }
+
+            return response;
+        }
+        
     }
 }

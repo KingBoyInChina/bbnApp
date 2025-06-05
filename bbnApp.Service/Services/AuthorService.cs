@@ -37,20 +37,30 @@ namespace bbnApp.Service.Services
             try
             {
                 // 调用应用程序中的服务
-                var loginResponseDto = await _operatorService.OperatorLogin(loginRequestDto);
-
-                LoginResponse u = _mapper.Map<LoginResponse>(loginResponseDto);
-                response = new LoginResponse
+                var (code,message,loginResponseDto) = await _operatorService.OperatorLogin(loginRequestDto);
+                if (code)
                 {
-                    Code = loginResponseDto.Code,
-                    Message = loginResponseDto.Message,
-                    UserInfo =JsonConvert.DeserializeObject<UserInfo>(JsonConvert.SerializeObject(loginResponseDto.UserInfo))
-                };
-                response.TopMenus.AddRange(JsonConvert.DeserializeObject<List<TopMenuItem>>(JsonConvert.SerializeObject(loginResponseDto.TopMenus)));
+                    LoginResponse u = _mapper.Map<LoginResponse>(loginResponseDto);
+                    response = new LoginResponse
+                    {
+                        Code = code,
+                        Message = message,
+                        UserInfo = JsonConvert.DeserializeObject<UserInfo>(JsonConvert.SerializeObject(loginResponseDto.UserInfo))
+                    };
+                    response.TopMenus.AddRange(JsonConvert.DeserializeObject<List<TopMenuItem>>(JsonConvert.SerializeObject(loginResponseDto.TopMenus)));
+                }
+                else
+                {
+                    response = new LoginResponse
+                    {
+                        Code = code,
+                        Message = message
+                    };
+                }
                 // 使用 AutoMapper 映射响应
                 //var response = _mapper.Map<LoginResponse>(loginResponseDto);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 response = new LoginResponse
                 {

@@ -32,7 +32,7 @@ namespace bbnApp.Application.IServices.ICODE
         /// <param name="UserCode"></param>
         /// <param name="Password"></param>
         /// <returns></returns>
-        Task<LoginResponseDto> OperatorLogin(LoginRequestDto loginRequest);
+        Task<(bool, string, LoginResponseDto?)> OperatorLogin(LoginRequestDto loginRequest);
         /// <summary>
         /// 获取操作员可以使用的顶部菜单
         /// </summary>

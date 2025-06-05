@@ -67,10 +67,10 @@ namespace bbnApp.Application.Services.CODE
         {
             try
             {
-                if (await operatorService.IsAccess(user.Yhid, user.DepartMentId, user.OperatorId, "departments", "browse"))
+                if (await operatorService.IsAccess(user.Yhid, user.CompanyId, user.OperatorId, "department", "browse"))
                 {
                     var list=dbContext.Set<DepartMents>()
-                        .Where(x => x.Isdelete == 0 && x.Yhid == user.Yhid && x.DepartMentId == user.DepartMentId).OrderBy(x=>x.DepartMentIndex).ToList();
+                        .Where(x => x.Isdelete == 0 && x.Yhid == user.Yhid && x.CompanyId == user.CompanyId).OrderBy(x=>x.DepartMentIndex).ToList();
                     return (true,"数据读取成功",ModelsToDto(list));
                 }
                 return (false, "无权进行操作", new List<DepartMentInfoDto>());
@@ -89,10 +89,10 @@ namespace bbnApp.Application.Services.CODE
         {
             try
             {
-                if (await operatorService.IsAccess(user.Yhid, user.DepartMentId, user.OperatorId, "departments", "browse"))
+                if (await operatorService.IsAccess(user.Yhid, user.CompanyId, user.OperatorId, "department", "browse"))
                 {
                     var list = dbContext.Set<DepartMents>()
-                        .Where(x => x.Isdelete == 0 && x.Yhid == user.Yhid && x.DepartMentId == user.DepartMentId).OrderBy(x => x.DepartMentIndex).ToList();
+                        .Where(x => x.Isdelete == 0 && x.Yhid == user.Yhid && x.CompanyId == user.CompanyId).OrderBy(x => x.DepartMentIndex).ToList();
                     return (true, "数据读取成功", BuildTree(list));
                 }
                 return (false, "无权进行操作", new List<DepartMentTreeItemDto>());
@@ -115,7 +115,8 @@ namespace bbnApp.Application.Services.CODE
                 PId = CommMethod.GetValueOrDefault(j.PDepartMentId, string.Empty),
                 Name = CommMethod.GetValueOrDefault(j.DepartMentName, string.Empty),
                 Tag = CommMethod.GetValueOrDefault(j.CompanyId, string.Empty),
-                IsLeaf = true
+                IsLeaf = true,
+                SubItems=new List<DepartMentTreeItemDto>()
             }).ToList();
 
             var rootNodes = nodes.Where(n => n.PId == "-1").ToList();
@@ -133,7 +134,7 @@ namespace bbnApp.Application.Services.CODE
         /// <param name="nodes"></param>
         private static void AddChildren(DepartMentTreeItemDto parent, List<DepartMentTreeItemDto> nodes)
         {
-            var children = nodes.Where(n => n.PId == parent.Id).ToList();
+            var children = nodes.Where(n => n.PId == parent.Id&&n.Tag==parent.Tag).ToList();
             foreach (var child in children)
             {
                 parent.SubItems.Add(child);
@@ -175,7 +176,7 @@ namespace bbnApp.Application.Services.CODE
         {
             try
             {
-                if (await operatorService.IsAccess(user.Yhid, user.DepartMentId, user.OperatorId, "departments", string.IsNullOrEmpty(model.DepartMentId) ? "add" : "edit"))
+                if (await operatorService.IsAccess(user.Yhid, user.CompanyId, user.OperatorId, "department", string.IsNullOrEmpty(model.DepartMentId) ? "add" : "edit"))
                 {
                     var EFObj = dbContext.Set<DepartMents>();
                     var departmentList = await EFObj.Where(x => x.Yhid == user.Yhid && x.Isdelete == 0).ToListAsync();
@@ -197,6 +198,7 @@ namespace bbnApp.Application.Services.CODE
                         }
                         department.Isdelete = 0;
                         department.IsLock = 0;
+                        department.CompanyId = model.CompanyId;
                         b = true;
                     }
                     #region 写数据
@@ -214,7 +216,7 @@ namespace bbnApp.Application.Services.CODE
                     #region 逻辑
                     if (department.CompanyId != user.CompanyId)
                     {
-                        error.AppendLine("无权编辑该机构信息");
+                        error.AppendLine("无权编辑该部门信息");
                     }
                     if (string.IsNullOrEmpty(department.DepartMentName))
                     {
@@ -259,7 +261,7 @@ namespace bbnApp.Application.Services.CODE
         {
             try
             {
-                if (await operatorService.IsAccess(user.Yhid, user.DepartMentId, user.OperatorId, "departments", Type == "IsDelete" ? "delete" : "edit"))
+                if (await operatorService.IsAccess(user.Yhid, user.CompanyId, user.OperatorId, "department", Type == "IsDelete" ? "delete" : "edit"))
                 {
                     var EFObj = dbContext.Set<DepartMents>();
                     var department = EFObj.FirstOrDefault(x => x.DepartMentId == DepartMentId && x.Yhid == user.Yhid&x.CompanyId==user.CompanyId && x.Isdelete == 0);
@@ -315,8 +317,9 @@ namespace bbnApp.Application.Services.CODE
                 DepartMentCode = model.DepartMentCode,
                 DepartMentName = model.DepartMentName,
                 DepartMentIndex = model.DepartMentIndex,
-                DepartMentDescription = model.DepartMentDescription,
+                DepartMentDescription = CommMethod.GetValueOrDefault(model.DepartMentDescription, ""),
                 DepartMentLocation = CommMethod.GetValueOrDefault(model.DepartMentLocation, ""),
+                CompanyId = model.CompanyId,
                 IsLock = model.IsLock,
                 LockReason = Share.CommMethod.GetValueOrDefault(model.LockReason, ""),
                 LockTime = Share.CommMethod.GetValueOrDefault(model.LockTime, ""),

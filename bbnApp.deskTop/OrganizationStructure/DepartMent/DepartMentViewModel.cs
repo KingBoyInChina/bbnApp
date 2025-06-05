@@ -1,6 +1,7 @@
 using AutoMapper;
 using Avalonia.Controls;
 using Avalonia.Media.Imaging;
+using bbnApp.Common.Models;
 using bbnApp.deskTop.Common;
 using bbnApp.deskTop.Features;
 using bbnApp.deskTop.Services;
@@ -8,13 +9,16 @@ using bbnApp.DTOs.BusinessDto;
 using bbnApp.DTOs.CodeDto;
 using bbnApp.GrpcClients;
 using bbnApp.Protos;
+using bbnApp.Share;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Material.Icons;
+using Org.BouncyCastle.Utilities;
 using SukiUI.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -65,21 +69,22 @@ namespace bbnApp.deskTop.OrganizationStructure.DepartMent
         /// <summary>
         /// 父级公司代码
         /// </summary>
-        [ObservableProperty] private ObservableCollection<CompanyItemDto> _companyListSource = new ObservableCollection<CompanyItemDto>();
+        [ObservableProperty] private ObservableCollection<ComboboxItem> _companyListSource = new ObservableCollection<ComboboxItem>();
         /// <summary>
         /// 选中的公司代码
         /// </summary>
-        [ObservableProperty] private CompanyItemDto _companySelected = new CompanyItemDto {  };
+        [ObservableProperty] private ComboboxItem _companySelected = new ComboboxItem("","","");
 
 
         /// <summary>
         /// 自动生成的局部方法，会在属性值变更时被调用
         /// </summary>
         /// <param name="value"></param>
-        partial void OnCompanySelectedChanged(CompanyItemDto item)
+        partial void OnCompanySelectedChanged(ComboboxItem item)
         {
             if (item != null)
             {
+                DepartMentTreeLoad();
                 _=GeDepartMentItems();
             }
         }
@@ -94,18 +99,18 @@ namespace bbnApp.deskTop.OrganizationStructure.DepartMent
         /// <summary>
         /// 部门清单
         /// </summary>
-        [ObservableProperty] private ObservableCollection<DepartMentInfoDto> _departMentList = new ObservableCollection<DepartMentInfoDto>();
+        [ObservableProperty] private ObservableCollection<ComboboxItem> _departMentList = new ObservableCollection<ComboboxItem>();
         /// <summary>
         /// 表单，部门所属上级部门
         /// </summary>
-        [ObservableProperty] private DepartMentInfoDto _pDepartMentSelected = new DepartMentInfoDto();
+        [ObservableProperty] private ComboboxItem _pDepartMentSelected = new ComboboxItem("","","");
         /// <summary>
         /// 
         /// </summary>
         /// <param name="ToastManager"></param>
         /// <param name="DialogManager"></param>
         /// <param name="nav"></param>
-        public DepartMentViewModel(ISukiDialogManager DialogManager, PageNavigationService nav, IGrpcClientFactory grpcClientFactory, IMapper mapper, IDialog dialog) : base("OrganizationStructure", "部门信息", MaterialIconKind.OfficeBuilding, "", 1)
+        public DepartMentViewModel(ISukiDialogManager DialogManager, PageNavigationService nav, IGrpcClientFactory grpcClientFactory, IMapper mapper, IDialog dialog) : base("OrganizationStructure", "部门信息", MaterialIconKind.OfficeBuilding, "", 2)
         {
             this.dialogManager = DialogManager;
             this.nav = nav;
@@ -123,8 +128,9 @@ namespace bbnApp.deskTop.OrganizationStructure.DepartMent
         {
             NowControl = uc;//当前控件
             await GetCompanyItems();
-            CompanySelected = new CompanyItemDto { Id= UserContext.CurrentUser.CompanyId,Name=UserContext.CurrentUser.CompanyName,Tag=UserContext.CurrentUser.AreaCode};
-            DepartMentTreeLoad();
+            await Task.Delay(200);
+
+            CompanySelected = CommAction.SetSelectedItem(CompanyListSource, UserContext.CurrentUser.CompanyId);
         }
         /// <summary>
         /// 公司清单加载
@@ -143,7 +149,13 @@ namespace bbnApp.deskTop.OrganizationStructure.DepartMent
                 if (data.Code)
                 {
                     var list = _mapper.Map<List<CompanyItemDto>>(data.CompanyItems);
-                    CompanyListSource = new ObservableCollection<CompanyItemDto>(list);
+                    var items = list.Select(j => new ComboboxItem
+                    (
+                        CommMethod.GetValueOrDefault(j.Id, string.Empty),
+                        CommMethod.GetValueOrDefault(j.Name, string.Empty),
+                        CommMethod.GetValueOrDefault(j.Tag, string.Empty)
+                    )).ToList();
+                    CompanyListSource = new ObservableCollection<ComboboxItem>(items);
                 }
                 else
                 {
@@ -172,8 +184,9 @@ namespace bbnApp.deskTop.OrganizationStructure.DepartMent
                 if (data.Code)
                 {
                     var list = _mapper.Map<List<DepartMentInfoDto>>(data.Items);
-                    list.Add(new DepartMentInfoDto { DepartMentId="-1",DepartMentName="无"});
-                    DepartMentList = new ObservableCollection<DepartMentInfoDto>(list);
+                    list.Add(new DepartMentInfoDto { DepartMentId="-1",DepartMentName="无",CompanyId=UserContext.CurrentUser.CompanyId});
+                    List<ComboboxItem> items = list.Select(x => new ComboboxItem (x.DepartMentId, x.DepartMentName, x.CompanyId )).ToList();
+                    DepartMentList = new ObservableCollection<ComboboxItem>(items);
                 }
                 else
                 {
@@ -240,6 +253,7 @@ namespace bbnApp.deskTop.OrganizationStructure.DepartMent
                 {
                     if (DepartMentSelected == null || DepartMentSelected?.DepartMentId != node.Id)
                     {
+                        ImageClear();
                         NodeInfoLoad(node);
                     }
                 }
@@ -262,7 +276,7 @@ namespace bbnApp.deskTop.OrganizationStructure.DepartMent
                 if (data.Code)
                 {
                     DepartMentSelected = _mapper.Map<DepartMentInfoDto>(data.Item);
-
+                    SetItemSelected();
                     if (!string.IsNullOrEmpty(DepartMentSelected.DepartMentId))
                     {
                         await FileRead(DepartMentSelected.DepartMentId);
@@ -274,6 +288,13 @@ namespace bbnApp.deskTop.OrganizationStructure.DepartMent
                 }
             });
 
+        }
+        /// <summary>
+        /// 设置选中项目
+        /// </summary>
+        private void SetItemSelected()
+        {
+            PDepartMentSelected = CommAction.SetSelectedItem(DepartMentList, DepartMentSelected.PDepartMentId);
         }
         /// <summary>
         /// 显示图片
@@ -455,7 +476,7 @@ namespace bbnApp.deskTop.OrganizationStructure.DepartMent
             try
             {
                 StringBuilder _error = new StringBuilder();
-                DepartMentSelected.PDepartMentId = PDepartMentSelected?.DepartMentId;
+                DepartMentSelected.PDepartMentId = PDepartMentSelected?.Id;
                 if (string.IsNullOrEmpty(DepartMentSelected.DepartMentName))
                 {
                     _error.AppendLine($"部门名称不能为空");
@@ -469,6 +490,11 @@ namespace bbnApp.deskTop.OrganizationStructure.DepartMent
                 dialog.ShowLoading("数据提交中...", async e => {
                     try
                     {
+                        bool b = false;
+                        if (string.IsNullOrEmpty(DepartMentSelected.DepartMentId))
+                        {
+                            b = true ;
+                        }
                         DepartMentSaveRequestDto request = new DepartMentSaveRequestDto
                         {
                             Item = DepartMentSelected
@@ -482,7 +508,10 @@ namespace bbnApp.deskTop.OrganizationStructure.DepartMent
 
                             DepartMentSelected = _mapper.Map<DepartMentInfoDto>(data.Item);
                             ImageShow = true;
-                            DepartMentTreeLoad();
+                            if (b)
+                            {
+                                DepartMentTreeLoad();
+                            }
                         }
                         else
                         {

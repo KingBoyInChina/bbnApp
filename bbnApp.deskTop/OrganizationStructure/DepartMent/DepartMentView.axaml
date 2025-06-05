@@ -45,10 +45,10 @@
 
             </UniformGrid>
 
-            <ComboBox Grid.Row="1" HorizontalAlignment="Stretch" ItemsSource="{Binding DepartMentList}" SelectedItem="{Binding PDepartMentSelected}">
+            <ComboBox Grid.Row="1" HorizontalAlignment="Stretch" ItemsSource="{Binding CompanyListSource}" SelectedItem="{Binding CompanySelected}">
               <ComboBox.ItemTemplate>
                 <DataTemplate>
-                  <TextBlock Text="{Binding DepartMentName}"/>
+                  <TextBlock Text="{Binding Name}"/>
                 </DataTemplate>
               </ComboBox.ItemTemplate>
             </ComboBox>
@@ -151,7 +151,7 @@
                 <ComboBox Width="230" HorizontalAlignment="Stretch" ItemsSource="{Binding DepartMentList}" SelectedItem="{Binding PDepartMentSelected}">
                   <ComboBox.ItemTemplate>
                     <DataTemplate>
-                      <TextBlock Text="{Binding DepartMentName}"/>
+                      <TextBlock Text="{Binding Name}"/>
                     </DataTemplate>
                   </ComboBox.ItemTemplate>
                 </ComboBox>
@@ -160,7 +160,7 @@
 
               <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Column="1">
                 <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">部门名称：</TextBlock>
-                <TextBox Width="230" Text="{Binding DepartMentSelected.DepartMentName}"/>
+                <TextBox VerticalAlignment="Center" Width="230" Text="{Binding DepartMentSelected.DepartMentName}"/>
                 <TextBlock VerticalAlignment="Center" Classes="NOTNULL">*</TextBlock>
               </StackPanel>
 
