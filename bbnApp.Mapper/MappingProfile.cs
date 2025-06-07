@@ -53,6 +53,22 @@ namespace bbnApp.Service.GlobalService
             CreateMap<DepartMentStateRequestDto, DepartMentStateRequest>().ReverseMap();
             CreateMap<DepartMentStateResponseDto, DepartMentStateResponse>().ReverseMap();
             #endregion
+            #region 人员映射
+            CreateMap<EmployeeTreeItemDto, EmployeeTreeItem>().ReverseMap();
+            CreateMap<EmployeeItemDto, EmployeeItem>().ReverseMap();
+            CreateMap<EmployeeTreeRequestDto, EmployeeTreeRequest>().ReverseMap();
+            CreateMap<EmployeeTreeResponseDto, EmployeeTreeResponse>().ReverseMap();
+            CreateMap<EmployeeSearchRequestDto, EmployeeSearchRequest>().ReverseMap();
+            CreateMap<EmployeeSearchResponseDto, EmployeeSearchResponse>().ReverseMap();
+            CreateMap<EmployeeItemsRequestDto, EmployeeItemsRequest>().ReverseMap();
+            CreateMap<EmployeeItemsResponseDto, EmployeeItemsResponse>().ReverseMap();
+            CreateMap<EmployeeInfoRequestDto, EmployeeInfoRequest>().ReverseMap();
+            CreateMap<EmployeeInfoResponseDto, EmployeeInfoResponse>().ReverseMap();
+            CreateMap<EmployeeSaveRequestDto, EmployeeSaveRequest>().ReverseMap();
+            CreateMap<EmployeeSaveResponseDto, EmployeeSaveResponse>().ReverseMap();
+            CreateMap<EmployeeStateRequestDto, EmployeeStateRequest>().ReverseMap();
+            CreateMap<EmployeeStateResponseDto, EmployeeStateResponse>().ReverseMap();
+            #endregion
             #region 地区映射
             CreateMap<AreaItemDto, AreaItem>().ReverseMap();
             CreateMap<AreaResponseDto, AreaGridResponse>().ReverseMap();

@@ -19,14 +19,9 @@ namespace bbnApp.Application.Services.CODE
     public class DepartMentService: IDepartMentService
     {
         /// <summary>
-        /// redis服务
-        /// </summary>
-        private readonly IRedisService redisService;
-        /// <summary>
         /// 
         /// </summary>
         private readonly IApplicationDbContext dbContext;
-
         /// <summary>
         /// 
         /// </summary>
@@ -45,14 +40,12 @@ namespace bbnApp.Application.Services.CODE
         /// <param name="redisService"></param>
         /// <param name="dbContext"></param>
         public DepartMentService(
-            IRedisService redisService,
             IApplicationDbContext dbContext,
             IApplicationDbCodeContext dbCodeContext,
             ILogger<OperatorService> logger,
             ExceptionlessClient exceptionlessClient,
             IOperatorService operatorService = null)
         {
-            this.redisService = redisService;
             this.dbContext = dbContext;
             _logger = logger;
             _exceptionlessClient = exceptionlessClient;

@@ -221,6 +221,8 @@ public static class DependencyInjection
         services.AddScoped<ICompanyService, CompanyService>();
         // 注册部门服务
         services.AddScoped<IDepartMentService, DepartMentService>();
+        //文件人员服务
+        services.AddScoped<IEmployeeService, EmployeeService>();
         // 注册系统配置服务
         services.AddScoped<IAppSettingService, AppSettingService>();
         //注册字典服务

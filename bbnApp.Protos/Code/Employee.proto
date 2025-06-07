@@ -1,0 +1,149 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "bbnApp.Protos";
+
+package EmployeeGrpc;
+
+
+/********定义EmployeeGrpc服务********/
+service EmployeeGrpc {
+    //人员树加载
+    rpc EmployeeTreeLoad (EmployeeTreeRequest) returns (EmployeeTreeResponse);
+    //人员清单查询
+    rpc EmployeeSearchLoad (EmployeeSearchRequest) returns (EmployeeSearchResponse);
+    //人员信息查询
+    rpc EmployeeListLoad (EmployeeItemsRequest) returns (EmployeeItemsResponse);
+    //人员信息加载
+    rpc EmployeeInfoLoad (EmployeeInfoRequest) returns (EmployeeInfoResponse);
+	//人员信息提交
+    rpc EmployeePost (EmployeeSaveRequest) returns (EmployeeSaveResponse);
+    //人员状态变更
+    rpc EmployeeState (EmployeeStateRequest) returns (EmployeeStateResponse);
+}
+
+// 树形对象
+message EmployeeTreeItem {
+    string Id = 1; // ID
+    string PId = 2; // 上级ID
+    string Name = 3; // 名称
+    string Tag = 4; // Tag
+    bool IsLeaf = 5; // 是否为叶子节点
+    bool IsLock = 6; // 锁定状态
+    repeated EmployeeTreeItem SubItems = 7; // 子节点
+    bool DepartMentMaster=8;// 部门最高管理
+}
+
+// 员工对象
+message EmployeeItem {
+    int32 IdxNum = 1; // 序号
+    string Yhid = 2; // 用户组ID
+    string EmployeeId = 3; // 员工ID
+    string EmployeeName = 4; // 员工姓名
+    string Employee = 5; // 员工代码
+    string EmployeeNum = 6; // 员工工号
+    string DepartMentId = 7; // 所在部门ID
+    string DepartMentName = 8; // 所在部门名称
+    int32 PositionLeve = 9; // 职务等级
+    string Position = 10; // 职务名称
+    string Gender = 11; // 员工性别
+    string BirthDate = 12; // 出生日期
+    string IDCardNumber = 13; // 员工证件号码
+    string PhoneNum = 14; // 员工联系电话
+    string EmailNum = 15; // 员工邮箱
+    string CommunicationAddress = 16; // 员工通信地址
+    string DateOfEmployment = 17; // 入职时间
+    int32 IsLock = 18; // 停用状态
+    string LockTime = 19; // 停用时间
+    string LockReason = 20; // 停用原因
+    string CompanyId = 21; // 机构ID
+    string ReMarks = 22; // 备注信息
+    string CompanyName = 23; // 机构名称
+    string PEmployeeId = 24; // 上级管理人员
+    bool DepartMentMaster = 25; // 部门最高管理
+}
+
+// 人员树请求对象
+message EmployeeTreeRequest {
+    string CompanyId = 1; // 机构ID
+    string DepartMentId = 2; // 部门ID
+    string EmployeeName = 3; // 员工ID
+}
+
+// 人员树响应对象
+message EmployeeTreeResponse {
+    bool  Code= 1; // 状态码
+    string Message = 2; // 消息内容
+    repeated EmployeeTreeItem Items = 3; // 员工树
+}
+
+// 人员清单分页查询请求对象
+message EmployeeSearchRequest {
+    string CompanyId = 1; // 机构ID
+    string DepartMentId = 2; // 部门ID
+    string EmployeeName = 3; // 员工ID
+    int32 PageSize = 4; // 单页条数
+    int32 PageIndex = 5; // 分页序号
+    string CompanyName = 6; // 机构ID
+}
+
+// 人员清单分页查询响应对象
+message EmployeeSearchResponse {
+    bool  Code = 1; // 状态码
+    string Message = 2; // 消息内容
+    int32 Total = 3; // 总数
+    repeated EmployeeItem Items = 4; // 员工列表
+}
+
+// 人员清单请求对象
+message EmployeeItemsRequest {
+    string CompanyId = 1; // 机构ID
+    string DepartMentId = 2; // 部门ID
+    string EmployeeName = 3; // 员工ID
+    string CompanyName = 4; // 机构ID
+}
+
+// 人员清单响应对象
+message EmployeeItemsResponse {
+    bool  Code = 1; // 状态码
+    string Message = 2; // 消息内容
+    repeated EmployeeItem Items = 3; // 员工列表
+}
+
+// 人员提交请求对象
+message EmployeeSaveRequest {
+    EmployeeItem Item = 1; // 人员对象
+}
+
+// 人员提交响应对象
+message EmployeeSaveResponse {
+    bool  Code = 1; // 状态码
+    string Message = 2; // 消息内容
+    EmployeeItem Item = 3; // 员工列表
+}
+
+// 人员状态请求对象
+message EmployeeStateRequest {
+    string Type = 1; // 类型
+    string EmployeeId = 2; // 员工ID
+    string Reason = 3; // 原因说明
+}
+
+// 人员状态响应对象
+message EmployeeStateResponse {
+    bool  Code = 1; // 状态码
+    string Message = 2; // 消息内容
+    EmployeeItem Item = 3; // 员工列表
+}
+// 人员信息请求对象
+message EmployeeInfoRequest {
+    string EmployeeId = 1; // 员工ID
+    string CompanyId = 2; // 公司ID
+    string CompanyName = 3; // 公司名称
+}
+
+// 人员状态响应对象
+message EmployeeInfoResponse {
+    bool  Code = 1; // 状态码
+    string Message = 2; // 消息内容
+    EmployeeItem Item = 3; // 员工列表
+}

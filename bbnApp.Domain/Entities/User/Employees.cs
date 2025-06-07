@@ -28,6 +28,13 @@ namespace bbnApp.Domain.Entities.User
 
         [Column(TypeName = "varchar(40)")]
         [MaxLength(40)]
+        [Description("分管领导ID")]
+        [Comment("分管领导ID")]
+        [Required]
+        public string PEmployeeId { get; set; }
+
+        [Column(TypeName = "varchar(40)")]
+        [MaxLength(40)]
         [Description("员工姓名")]
         [Comment("员工姓名")]
         [Required]
@@ -74,6 +81,12 @@ namespace bbnApp.Domain.Entities.User
         [Comment("职务名称")]
         [Required]
         public string Position { get; set; }
+
+        [Column( TypeName = "bool")]
+        [Description("部门最高管理人")]
+        [Comment("部门最高管理人")]
+        [Required]
+        public bool DepartMentMaster { get; set; }
 
         [Column(TypeName = "varchar(2)")]
         [MaxLength(2)]

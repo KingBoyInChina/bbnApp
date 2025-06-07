@@ -42,6 +42,7 @@ using bbnApp.deskTop.PlatformManagement.DeviceCode;
 using bbnApp.deskTop.PlatformManagement.TopicCode;
 using bbnApp.deskTop.OrganizationStructure.Company;
 using bbnApp.deskTop.OrganizationStructure.DepartMent;
+using bbnApp.deskTop.OrganizationStructure.Employee;
 
 namespace bbnApp.deskTop;
 
@@ -155,6 +156,7 @@ public partial class App :Avalonia.Application
             .AddView<TopicCodeView, TopicCodeViewModel>(services)
             .AddView<CompanyView, CompanyViewModel>(services)
             .AddView<DepartMentView, DepartMentViewModel>(services)
+            .AddView<EmployeeView, EmployeeViewModel>(services)
 
             .AddView<InputPrompt, InputPromptViewModel>(services);
     }

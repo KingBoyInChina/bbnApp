@@ -184,7 +184,7 @@ namespace bbnApp.deskTop.OrganizationStructure.DepartMent
                 if (data.Code)
                 {
                     var list = _mapper.Map<List<DepartMentInfoDto>>(data.Items);
-                    list.Add(new DepartMentInfoDto { DepartMentId="-1",DepartMentName="нч",CompanyId=UserContext.CurrentUser.CompanyId});
+                    list.Add(new DepartMentInfoDto { DepartMentId="-1",DepartMentName="нч",CompanyId= CompanySelected.Id});
                     List<ComboboxItem> items = list.Select(x => new ComboboxItem (x.DepartMentId, x.DepartMentName, x.CompanyId )).ToList();
                     DepartMentList = new ObservableCollection<ComboboxItem>(items);
                 }

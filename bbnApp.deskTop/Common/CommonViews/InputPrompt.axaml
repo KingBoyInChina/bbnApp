@@ -30,7 +30,7 @@
         </StackPanel>
 
         <Button Classes="Basic" HorizontalAlignment="Center" Grid.Column="1" Command="{Binding CloseCommand}">
-          <avalonia:MaterialIcon Kind="CloseCircle" Margin="0,0,5,0" ToolTip.Tip="点击关闭" ></avalonia:MaterialIcon>
+          <avalonia:MaterialIcon Width="25" Height="25" Kind="CloseCircle" Margin="0,0,5,0" ToolTip.Tip="点击关闭" ></avalonia:MaterialIcon>
         </Button>
         
       </Grid>

@@ -77,7 +77,7 @@
 
         <StackPanel Orientation="Horizontal">
           <TextBlock VerticalAlignment="Center" Classes="Caption">参数说明：</TextBlock>
-          <TextBox Watermark="参数说明" MaxLength="100" Width="300" Text="{Binding AppSettingItem.SettingDesc}" Height="80" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
+          <TextBox Watermark="参数说明" MaxLength="100" Width="300" Text="{Binding AppSettingItem.SettingDesc}" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
         </StackPanel>
         
         <StackPanel Orientation="Horizontal">
