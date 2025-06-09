@@ -81,7 +81,7 @@ namespace bbnApp.deskTop.PlatformManagement.OperationCode
             this.dialogManager = DialogManager;
             this.nav = nav;
             this.dialog = dialog;
-            _client = grpcClientFactory.CreateClient<OperationObjectCodeGrpc.OperationObjectCodeGrpcClient>();
+            _client = grpcClientFactory.CreateClient<OperationObjectCodeGrpc.OperationObjectCodeGrpcClient>().GetAwaiter().GetResult();
             _mapper = mapper;
             this.dialog = dialog;
         }

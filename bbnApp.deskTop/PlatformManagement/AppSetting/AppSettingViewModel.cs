@@ -98,7 +98,7 @@ namespace bbnApp.deskTop.PlatformManagement.AppSetting
             this.dialogManager = DialogManager;
             this.nav = nav;
             this.dialog = dialog;
-            _client = grpcClientFactory.CreateClient<AppSettingGrpc.AppSettingGrpcClient>();
+            _client = grpcClientFactory.CreateClient<AppSettingGrpc.AppSettingGrpcClient>().GetAwaiter().GetResult();
             _mapper = mapper;
             this.dialog = dialog;
         }

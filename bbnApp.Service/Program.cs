@@ -2,6 +2,7 @@ using bbnApp.Application.IServices.ICODE;
 using bbnApp.Application.IServices.IINIT;
 using bbnApp.Infrastructure.Data;
 using bbnApp.Protos;
+using bbnApp.Service.GlobalService;
 using bbnApp.Service.Services;
 using Exceptionless;
 using Grpc.Core;
@@ -16,7 +17,8 @@ builder.Services
     .AddRedisCacheServices(builder.Configuration)
     .AddJwtAuthentication(builder.Configuration)
     .AddLoggingServices(builder.Configuration)
-    .AddGrpcServices()
+    .AddConsulServiceDiscovery(builder.Configuration)
+    .AddGrpcServices(builder.Configuration)
     .AddApplicationServices();
 
 // 配置 HTTP 请求管道
@@ -100,6 +102,7 @@ using (var scope = app.Services.CreateScope())
 //}
 
 // 配置 gRPC 服务
+app.MapGrpcService<HealthCheckService>();
 app.MapGrpcService<AuthorService>();
 app.MapGrpcService<CompanyInfoGrpcService>();
 app.MapGrpcService<AreaGrpcService>();
@@ -113,7 +116,7 @@ app.MapGrpcService<FileUploadGrpcService>();
 app.MapGrpcService<GuideGrpcService>();
 app.MapGrpcService<DepartMentGrpcService>();
 app.MapGrpcService<EmployeeGrpcServcie>();
-
+//app.MapGet("/health", () => Results.Ok("Healthy")); // 最简单的方式
 app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
 
 app.Run();

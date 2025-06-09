@@ -219,15 +219,21 @@ namespace bbnApp.deskTop.OrganizationStructure.Employee
         /// <param name="nav"></param>
         public EmployeeViewModel(ISukiDialogManager DialogManager, PageNavigationService nav, IGrpcClientFactory grpcClientFactory, IMapper mapper, IDialog dialog) : base("OrganizationStructure", "员工信息", MaterialIconKind.Worker, "", 3)
         {
+            _ = ClientInit(grpcClientFactory);
             this.dialogManager = DialogManager;
             this.nav = nav;
             this.dialog = dialog;
-            _client = grpcClientFactory.CreateClient<EmployeeGrpc.EmployeeGrpcClient>();
-            _departMentClient = grpcClientFactory.CreateClient<DepartMentGrpc.DepartMentGrpcClient>();
-            _companyClient = grpcClientFactory.CreateClient<CompanyGrpcService.CompanyGrpcServiceClient>();
-            _uploadClient = grpcClientFactory.CreateClient<UploadFileGrpc.UploadFileGrpcClient>();
+            
             _mapper = mapper;
             this.dialog = dialog;
+        }
+
+        private async Task ClientInit(IGrpcClientFactory grpcClientFactory)
+        {
+            _client =await grpcClientFactory.CreateClient<EmployeeGrpc.EmployeeGrpcClient>();
+            _departMentClient = await grpcClientFactory.CreateClient<DepartMentGrpc.DepartMentGrpcClient>();
+            _companyClient = await grpcClientFactory.CreateClient<CompanyGrpcService.CompanyGrpcServiceClient>();
+            _uploadClient = await grpcClientFactory.CreateClient<UploadFileGrpc.UploadFileGrpcClient>();
         }
         /// <summary>
         /// 初始化字典

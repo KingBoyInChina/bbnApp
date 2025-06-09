@@ -78,6 +78,15 @@ namespace bbnApp.Service.GlobalService
         {
             try
             {
+                // 获取当前 gRPC 方法名（如 "grpc.health.v1.Health/Check"）
+                string methodName = context.Method;
+
+                // 如果是健康检查请求，直接放行
+                if (methodName == "/grpc.health.v1.Health/Check")
+                {
+                    return await continuation(request, context);
+                }
+
                 // 获取客户端 IP 地址
                 var ipAddress = context.GetHttpContext().Connection.RemoteIpAddress?.ToString();
                 if (string.IsNullOrEmpty(ipAddress))

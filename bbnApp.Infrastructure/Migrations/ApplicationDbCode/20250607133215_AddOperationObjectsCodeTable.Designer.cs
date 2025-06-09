@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using bbnApp.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using bbnApp.Infrastructure.Data;
 namespace bbnApp.Infrastructure.Migrations.ApplicationDbCode
 {
     [DbContext(typeof(ApplicationDbCodeContext))]
-    partial class ApplicationDbCodeContextModelSnapshot : ModelSnapshot
+    [Migration("20250607133215_AddOperationObjectsCodeTable")]
+    partial class AddOperationObjectsCodeTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

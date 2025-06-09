@@ -88,7 +88,7 @@ namespace bbnApp.deskTop.PlatformManagement.DictionaryCode
             this.dialogManager = DialogManager;
             this.nav = nav;
             this.dialog = dialog;
-            _client = grpcClientFactory.CreateClient<DataDictionaryGrpc.DataDictionaryGrpcClient>();
+            _client = grpcClientFactory.CreateClient<DataDictionaryGrpc.DataDictionaryGrpcClient>().GetAwaiter().GetResult();
             _mapper = mapper;
             this.dialog = dialog;
         }

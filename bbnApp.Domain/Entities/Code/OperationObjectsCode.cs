@@ -37,6 +37,13 @@ namespace bbnApp.Domain.Entities.Code
         [Comment("操作对象说明")]
         public string? ObjDescription { get; set; }
 
+        [Column(TypeName = "varchar(40)")]
+        [MaxLength(40)]
+        [Description("所属应用")]
+        [Comment("所属应用")]
+        [Required]
+        public string? AppId { get; set; }
+
         [MaxLength(1)]
         [Column(TypeName = "tinyint")]
         [Description("停用,0/1")]

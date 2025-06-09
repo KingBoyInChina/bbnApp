@@ -153,11 +153,11 @@ namespace bbnApp.deskTop.ViewModels
         /// <summary>
         /// 
         /// </summary>
-        private ILogger _ILogger;
+        private ILogger? _ILogger;
         /// <summary>
         /// 
         /// </summary>
-        private ExceptionlessClient _ExceptionlessClient;
+        private ExceptionlessClient? _ExceptionlessClient;
         /// <summary>
         /// 
         /// </summary>
@@ -189,7 +189,7 @@ namespace bbnApp.deskTop.ViewModels
         /// <summary>
         /// 映射
         /// </summary>
-        private readonly IMapper _mapper;
+        private readonly IMapper? _mapper;
         /// <summary>
         /// 
         /// </summary>
@@ -207,13 +207,7 @@ namespace bbnApp.deskTop.ViewModels
             _mapper = mapper;
             _ExceptionlessClient = exceptionlessClient;
             _grpcClientFactory = grpcClientFactory;
-            _companyclient= _grpcClientFactory.CreateClient<CompanyGrpcService.CompanyGrpcServiceClient>();
-            _client = _grpcClientFactory.CreateClient<Author.AuthorClient>();
-            _codeClient = _grpcClientFactory.CreateClient<AreaGrpc.AreaGrpcClient>();
-            _appSettignClient = _grpcClientFactory.CreateClient<AppSettingGrpc.AppSettingGrpcClient>();
-            _dictionaryClient = _grpcClientFactory.CreateClient<DataDictionaryGrpc.DataDictionaryGrpcClient>();
-
-
+            _=ClientInit();
             this.dialog = dialog;
             DialogManager = dialogManager;
             ToastManager = toast;
@@ -258,6 +252,17 @@ namespace bbnApp.deskTop.ViewModels
             _theme.OnColorThemeChanged += theme => { };
 
             AppExitCommand = ReactiveCommand.Create(AppExitViewFunction);
+        }
+        /// <summary>
+        /// Client 初始化
+        /// </summary>
+        private async Task ClientInit()
+        {
+            _companyclient = await _grpcClientFactory.CreateClient<CompanyGrpcService.CompanyGrpcServiceClient>();
+            _client = await _grpcClientFactory.CreateClient<Author.AuthorClient>();
+            _codeClient = await _grpcClientFactory.CreateClient<AreaGrpc.AreaGrpcClient>();
+            _appSettignClient = await _grpcClientFactory.CreateClient<AppSettingGrpc.AppSettingGrpcClient>();
+            _dictionaryClient =await _grpcClientFactory.CreateClient<DataDictionaryGrpc.DataDictionaryGrpcClient>();
         }
         /// <summary>
         /// 主题变更

@@ -113,9 +113,9 @@ namespace bbnApp.deskTop.PlatformManagement.DeviceCode
             this.dialogManager = DialogManager;
             this.nav = nav;
             this.dialog = dialog;
-            _materialClient = grpcClientFactory.CreateClient<MaterialsCodeGrpc.MaterialsCodeGrpcClient>();
-            _client = grpcClientFactory.CreateClient<DeviceCodeGrpc.DeviceCodeGrpcClient>();
-            _uploadClient = grpcClientFactory.CreateClient<UploadFileGrpc.UploadFileGrpcClient>();
+            _materialClient = grpcClientFactory.CreateClient<MaterialsCodeGrpc.MaterialsCodeGrpcClient>().GetAwaiter().GetResult();
+            _client = grpcClientFactory.CreateClient<DeviceCodeGrpc.DeviceCodeGrpcClient>().GetAwaiter().GetResult();
+            _uploadClient = grpcClientFactory.CreateClient<UploadFileGrpc.UploadFileGrpcClient>().GetAwaiter().GetResult();
             _mapper = mapper;
             this.dialog = dialog;
         }

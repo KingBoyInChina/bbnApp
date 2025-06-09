@@ -1,48 +1,49 @@
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
-using System.Linq;
 using Avalonia.Markup.Xaml;
-using bbnApp.deskTop.ViewModels;
-using bbnApp.deskTop.Views;
-using Avalonia.Controls;
+using Avalonia.Threading;
+using bbnApp.Core;
+using bbnApp.deskTop.AssistiveTools.AES;
+using bbnApp.deskTop.AssistiveTools.AESMix;
+using bbnApp.deskTop.AssistiveTools.Base64;
+using bbnApp.deskTop.AssistiveTools.MD5;
+using bbnApp.deskTop.AssistiveTools.RSA;
+using bbnApp.deskTop.AssistiveTools.SM2;
+using bbnApp.deskTop.AssistiveTools.WaterMark;
+using bbnApp.deskTop.Common;
+using bbnApp.deskTop.Common.CommonViews;
 using bbnApp.deskTop.Features.CustomTheme;
 using bbnApp.deskTop.Features.Splash;
 using bbnApp.deskTop.Features.Theming;
-using bbnApp.deskTop.Services;
-using Microsoft.Extensions.DependencyInjection;
-using SukiUI.Dialogs;
-using SukiUI.Toasts;
-using bbnApp.deskTop.Common;
-using Avalonia.Threading;
-using System;
-using System.Threading.Tasks;
-using Exceptionless;
-using Serilog;
-using Microsoft.Extensions.Configuration;
-using Grpc.Net.Client;
-using System.Net.Http;
-using bbnApp.Core;
-using bbnApp.deskTop.AssistiveTools.AESMix;
-using bbnApp.deskTop.AssistiveTools.SM2;
-using bbnApp.deskTop.AssistiveTools.RSA;
-using bbnApp.deskTop.AssistiveTools.AES;
-using bbnApp.deskTop.AssistiveTools.Base64;
-using bbnApp.deskTop.AssistiveTools.MD5;
-using bbnApp.deskTop.AssistiveTools.WaterMark;
-using bbnApp.deskTop.PlatformManagement.AreaCode;
-using bbnApp.GrpcClients;
-using bbnApp.Service.GlobalService;
-using bbnApp.deskTop.Common.CommonViews;
-using bbnApp.deskTop.PlatformManagement.AppSetting;
-using bbnApp.deskTop.PlatformManagement.DictionaryCode;
-using bbnApp.deskTop.PlatformManagement.OperationCode;
-using bbnApp.deskTop.PlatformManagement.MaterialsCode;
-using bbnApp.Domain.Entities.Code;
-using bbnApp.deskTop.PlatformManagement.DeviceCode;
-using bbnApp.deskTop.PlatformManagement.TopicCode;
 using bbnApp.deskTop.OrganizationStructure.Company;
 using bbnApp.deskTop.OrganizationStructure.DepartMent;
 using bbnApp.deskTop.OrganizationStructure.Employee;
+using bbnApp.deskTop.PlatformManagement.AppSetting;
+using bbnApp.deskTop.PlatformManagement.AreaCode;
+using bbnApp.deskTop.PlatformManagement.DeviceCode;
+using bbnApp.deskTop.PlatformManagement.DictionaryCode;
+using bbnApp.deskTop.PlatformManagement.MaterialsCode;
+using bbnApp.deskTop.PlatformManagement.OperationCode;
+using bbnApp.deskTop.PlatformManagement.TopicCode;
+using bbnApp.deskTop.Services;
+using bbnApp.deskTop.ViewModels;
+using bbnApp.deskTop.Views;
+using bbnApp.Domain.Entities.Code;
+using bbnApp.GrpcClients;
+using bbnApp.Service.GlobalService;
+using Consul;
+using Exceptionless;
+using Grpc.Net.Client;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Serilog;
+using SukiUI.Dialogs;
+using SukiUI.Toasts;
+using System;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace bbnApp.deskTop;
 
@@ -163,6 +164,7 @@ public partial class App :Avalonia.Application
 
     private static ServiceProvider ConfigureServices(IConfiguration configuration, ServiceCollection services)
     {
+        services.AddSingleton(Log.Logger); // 注册 ILogger
         // 注册 AutoMapper
         services.AddAutoMapper(typeof(MappingProfile));
         #region exceptionless 配置
@@ -171,29 +173,36 @@ public partial class App :Avalonia.Application
         exceptionlessClient.Configuration.ServerUrl = configuration.GetSection("Exceptionless:ServerUrl").Value.ToString();
         #endregion
         #region grpc 注入
-        services.AddSingleton(provider =>
-        {
-            var configuration = provider.GetRequiredService<IConfiguration>();
-            var grpcUrl = configuration.GetSection("Grpc:Url").Value;
-
-            if (string.IsNullOrEmpty(grpcUrl))
+        // 在客户端服务注册中添加
+        services.AddSingleton<IConsulClient>(sp =>
+            new ConsulClient(config =>
             {
-                throw new InvalidOperationException("gRPC URL is not configured.");
-            }
+                config.Address = new Uri(configuration["Consul:Address"] ?? "http://localhost:5003");
+            }));
+        //微服务，不需要固定的配置GRPC地址
+        //services.AddSingleton(provider =>
+        //{
+        //    var configuration = provider.GetRequiredService<IConfiguration>();
+        //    var grpcUrl = configuration.GetSection("Grpc:Url").Value;
 
-            var httpClientHandler = new HttpClientHandler
-            {
-                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-            };
+        //    if (string.IsNullOrEmpty(grpcUrl))
+        //    {
+        //        throw new InvalidOperationException("gRPC URL is not configured.");
+        //    }
+
+        //    var httpClientHandler = new HttpClientHandler
+        //    {
+        //        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+        //    };
 
 
-            return GrpcChannel.ForAddress(
-                grpcUrl,
-                new GrpcChannelOptions { HttpHandler = httpClientHandler }
-            );
+        //    return GrpcChannel.ForAddress(
+        //        grpcUrl,
+        //        new GrpcChannelOptions { HttpHandler = httpClientHandler }
+        //    );
 
-            //return new Author.AuthorClient(channel);
-        });
+        //    //return new Author.AuthorClient(channel);
+        //});
         //注册工厂
         services.AddSingleton<IGrpcClientFactory, BbnGrpcClientFactory>();
         #endregion
@@ -212,7 +221,6 @@ public partial class App :Avalonia.Application
         services.AddSingleton<ISukiDialogManager, SukiDialogManager>();
         services.AddSingleton<IDialog, Dialog>();
         services.AddSingleton(exceptionlessClient);//注册exceptionless
-        services.AddSingleton(Log.Logger); // 注册 ILogger
         services.AddSingleton<ExceptionService>();//注册全局异常处理服务
         return services.BuildServiceProvider();
     }

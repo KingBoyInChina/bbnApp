@@ -85,8 +85,8 @@ namespace bbnApp.deskTop.PlatformManagement.MaterialsCode
             this.dialogManager = DialogManager;
             this.nav = nav;
             this.dialog = dialog;
-            _client = grpcClientFactory.CreateClient<MaterialsCodeGrpc.MaterialsCodeGrpcClient>();
-            _uploadClient = grpcClientFactory.CreateClient<UploadFileGrpc.UploadFileGrpcClient>();
+            _client = grpcClientFactory.CreateClient<MaterialsCodeGrpc.MaterialsCodeGrpcClient>().GetAwaiter().GetResult();
+            _uploadClient = grpcClientFactory.CreateClient<UploadFileGrpc.UploadFileGrpcClient>().GetAwaiter().GetResult();
             _mapper = mapper;
             this.dialog = dialog;
         }

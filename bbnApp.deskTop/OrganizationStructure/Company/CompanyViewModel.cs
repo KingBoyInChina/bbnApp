@@ -13,6 +13,7 @@ using bbnApp.Protos;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Google.Protobuf.WellKnownTypes;
+using Grpc.Net.ClientFactory;
 using Material.Icons;
 using SukiUI.Dialogs;
 using System;
@@ -111,14 +112,20 @@ namespace bbnApp.deskTop.OrganizationStructure.Company
         /// <param name="nav"></param>
         public CompanyViewModel(ISukiDialogManager DialogManager, PageNavigationService nav, IGrpcClientFactory grpcClientFactory, IMapper mapper, IDialog dialog) : base("OrganizationStructure", "公司信息", MaterialIconKind.Company, "",1)
         {
+            _=ClientInit(grpcClientFactory);
             this.dialogManager = DialogManager;
+
             this.nav = nav;
             this.dialog = dialog;
-            _client = grpcClientFactory.CreateClient<CompanyGrpcService.CompanyGrpcServiceClient>();
-            _mapClient = grpcClientFactory.CreateClient<GuideGrpc.GuideGrpcClient>();
-            _uploadClient = grpcClientFactory.CreateClient<UploadFileGrpc.UploadFileGrpcClient>();
             _mapper = mapper;
             this.dialog = dialog;
+        }
+
+        private async Task ClientInit(IGrpcClientFactory grpcClientFactory)
+        {
+            _client = await grpcClientFactory.CreateClient<CompanyGrpcService.CompanyGrpcServiceClient>();
+            _mapClient = await grpcClientFactory.CreateClient<GuideGrpc.GuideGrpcClient>();
+            _uploadClient = await grpcClientFactory.CreateClient<UploadFileGrpc.UploadFileGrpcClient>();
         }
         /// <summary>
         /// 初始化字典

@@ -12,6 +12,7 @@ using bbnApp.Protos;
 using bbnApp.Share;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Grpc.Net.ClientFactory;
 using Material.Icons;
 using Org.BouncyCastle.Utilities;
 using SukiUI.Dialogs;
@@ -112,14 +113,19 @@ namespace bbnApp.deskTop.OrganizationStructure.DepartMent
         /// <param name="nav"></param>
         public DepartMentViewModel(ISukiDialogManager DialogManager, PageNavigationService nav, IGrpcClientFactory grpcClientFactory, IMapper mapper, IDialog dialog) : base("OrganizationStructure", "部门信息", MaterialIconKind.OfficeBuilding, "", 2)
         {
+            _ = ClientInit(grpcClientFactory);
             this.dialogManager = DialogManager;
             this.nav = nav;
             this.dialog = dialog;
-            _client = grpcClientFactory.CreateClient<DepartMentGrpc.DepartMentGrpcClient>();
-            _companyClient = grpcClientFactory.CreateClient<CompanyGrpcService.CompanyGrpcServiceClient>();
-            _uploadClient = grpcClientFactory.CreateClient<UploadFileGrpc.UploadFileGrpcClient>();
             _mapper = mapper;
             this.dialog = dialog;
+        }
+
+        private async Task ClientInit(IGrpcClientFactory grpcClientFactory)
+        {
+            _client =await grpcClientFactory.CreateClient<DepartMentGrpc.DepartMentGrpcClient>();
+            _companyClient = await grpcClientFactory.CreateClient<CompanyGrpcService.CompanyGrpcServiceClient>();
+            _uploadClient = await grpcClientFactory.CreateClient<UploadFileGrpc.UploadFileGrpcClient>();
         }
         /// <summary>
         /// 初始化字典

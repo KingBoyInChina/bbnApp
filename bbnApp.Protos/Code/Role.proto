@@ -1,0 +1,52 @@
+﻿
+syntax = "proto3";
+
+option csharp_namespace = "bbnApp.Protos";
+
+package RoleGrpc;
+
+
+/********定义角色对象服务********/
+service RoleGrpc {
+ 
+}
+
+// 角色管理
+message RoleItem {
+    string Yhid = 1; // 用户组ID
+    string RoleId = 2; // 角色ID
+    string RoleName = 3; // 角色名称
+    string RoleCode = 4; // 角色代码
+    int32 RoleLeve = 5; // 角色级别
+    string RoleDescription = 6; // 角色介绍
+    int32 IsLock = 7; // 停用状态
+    string LockTime = 8; // 停用时间
+    string LockReason = 9; // 停用原因
+    string CompanyId = 10; // 机构ID
+    int32 IdxNum = 11; // 序号
+}
+// 角色操作权限分配
+message RolePermission {
+    string Yhid = 1; // 用户组ID
+    string RoleId = 2; // 角色ID
+    string ObjCode = 3; // 对象代码
+    string PermissionCode = 4; // 操作代码
+    int32 IsLock = 5; // 停用状态
+    string LockTime = 6; // 停用时间
+    string LockReason = 7; // 停用原因
+    string ReMarks = 8; // 备注信息
+    string CompanyId = 9; // 机构ID
+    int32 IdxNum = 10; // 序号
+}
+// 角色可以使用的应用
+message RoleApps {
+    string Yhid = 1; // 用户组ID
+    string RoleId = 2; // 角色ID
+    string AppId = 3; // 应用ID
+    int32 IsLock = 4; // 停用状态
+    string LockTime = 5; // 停用时间
+    string LockReason = 6; // 停用原因
+    string ReMarks = 7; // 备注信息
+    string CompanyId = 8; // 机构ID
+    int32 IdxNum = 9; // 序号
+}

@@ -116,8 +116,8 @@ namespace bbnApp.deskTop.PlatformManagement.TopicCode
             this.dialogManager = DialogManager;
             this.nav = nav;
             this.dialog = dialog;
-            _client = grpcClientFactory.CreateClient<TopicCodesGrpc.TopicCodesGrpcClient>();
-            _deviceClient = grpcClientFactory.CreateClient<DeviceCodeGrpc.DeviceCodeGrpcClient>();
+            _client = grpcClientFactory.CreateClient<TopicCodesGrpc.TopicCodesGrpcClient>().GetAwaiter().GetResult();
+            _deviceClient = grpcClientFactory.CreateClient<DeviceCodeGrpc.DeviceCodeGrpcClient>().GetAwaiter().GetResult();
             _mapper = mapper;
             this.dialog = dialog;
         }

@@ -116,7 +116,7 @@ namespace bbnApp.deskTop.PlatformManagement.AreaCode
             this.dialogManager = DialogManager;
             this.nav = nav;
             _grpcClientFactory = grpcClientFactory;
-            _client = _grpcClientFactory.CreateClient<AreaGrpc.AreaGrpcClient>();
+            _client = _grpcClientFactory.CreateClient<AreaGrpc.AreaGrpcClient>().GetAwaiter().GetResult();
             _mapper = mapper;
         }
         /// <summary>
