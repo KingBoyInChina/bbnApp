@@ -19,6 +19,7 @@ using bbnApp.deskTop.Features.Theming;
 using bbnApp.deskTop.OrganizationStructure.Company;
 using bbnApp.deskTop.OrganizationStructure.DepartMent;
 using bbnApp.deskTop.OrganizationStructure.Employee;
+using bbnApp.deskTop.OrganizationStructure.Role;
 using bbnApp.deskTop.PlatformManagement.AppSetting;
 using bbnApp.deskTop.PlatformManagement.AreaCode;
 using bbnApp.deskTop.PlatformManagement.DeviceCode;
@@ -158,6 +159,7 @@ public partial class App :Avalonia.Application
             .AddView<CompanyView, CompanyViewModel>(services)
             .AddView<DepartMentView, DepartMentViewModel>(services)
             .AddView<EmployeeView, EmployeeViewModel>(services)
+            .AddView<RoleView, RoleViewModel>(services)
 
             .AddView<InputPrompt, InputPromptViewModel>(services);
     }
@@ -204,6 +206,8 @@ public partial class App :Avalonia.Application
         //    //return new Author.AuthorClient(channel);
         //});
         //注册工厂
+        //debug调试模式下延迟一会儿，不然服务还没注册就开始调用了
+        Task.Delay(20000).GetAwaiter().GetResult();
         services.AddSingleton<IGrpcClientFactory, BbnGrpcClientFactory>();
         #endregion
         #region redis注入

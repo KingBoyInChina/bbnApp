@@ -69,6 +69,22 @@ namespace bbnApp.Service.GlobalService
             CreateMap<EmployeeStateRequestDto, EmployeeStateRequest>().ReverseMap();
             CreateMap<EmployeeStateResponseDto, EmployeeStateResponse>().ReverseMap();
             #endregion
+            #region 角色映射
+            CreateMap<RoleItemDto, RoleItem>().ReverseMap();
+            CreateMap<RoleAppsDto, RoleApps>().ReverseMap();
+            CreateMap<RolePermissionItemDto, RolePermissionItem>().ReverseMap();
+            CreateMap<PermissionCodeItemDto, PermissionCodeItem>().ReverseMap();
+            CreateMap<RoleListRequestDto, RoleListRequest>().ReverseMap();
+            CreateMap<RoleListResponseDto, RoleListResponse>().ReverseMap();
+            CreateMap<RoleAppListRequestDto, RoleAppListRequest>().ReverseMap();
+            CreateMap<RoleAppListResponseDto, RoleAppListResponse>().ReverseMap();
+            CreateMap<RoleInfoRequestDto, RoleInfoRequest>().ReverseMap();
+            CreateMap<RoleInfoResponseDto, RoleInfoResponse>().ReverseMap();
+            CreateMap<RoleSaveRequestDto, RoleSaveRequest>().ReverseMap();
+            CreateMap<RoleSaveResponseDto, RoleSaveResponse>().ReverseMap();
+            CreateMap<RoleStateRequestDto, RoleStateRequest>().ReverseMap();
+            CreateMap<RoleStateResponseDto, RoleStateResponse>().ReverseMap();
+            #endregion
             #region 地区映射
             CreateMap<AreaItemDto, AreaItem>().ReverseMap();
             CreateMap<AreaResponseDto, AreaGridResponse>().ReverseMap();

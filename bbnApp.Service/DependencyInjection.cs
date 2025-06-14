@@ -237,10 +237,8 @@ public static class DependencyInjection
     {
         // 注册 IHttpContextAccessor
         services.AddHttpContextAccessor();
-
         // 注册 AutoMapper
         services.AddAutoMapper(typeof(MappingProfile));
-
         // 注册 DapperRepository
         services.AddScoped<IDapperRepository, DapperRepository>();
         //注册高德地图服务
@@ -271,6 +269,8 @@ public static class DependencyInjection
         services.AddScoped<ITopicCodesService, TopicCodesService>();
         //文件上传服务
         services.AddScoped<IFileUploadService, FileUploadService>();
+        //角色服务
+        services.AddScoped<IRoleService, RoleService>();
 
 
         return services;

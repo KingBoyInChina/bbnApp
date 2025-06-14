@@ -43,10 +43,6 @@ namespace bbnApp.deskTop.OrganizationStructure.Employee
         /// </summary>
         private readonly PageNavigationService nav;
         /// <summary>
-        /// 图片加载状态
-        /// </summary>
-        [ObservableProperty] private bool _isBusy = false;
-        /// <summary>
         /// 人员代码服务
         /// </summary>
         private EmployeeGrpc.EmployeeGrpcClient _client;
@@ -66,6 +62,10 @@ namespace bbnApp.deskTop.OrganizationStructure.Employee
         /// 
         /// </summary>
         private readonly IMapper _mapper;
+        /// <summary>
+        /// 忙碌状态
+        /// </summary>
+        [ObservableProperty] private bool _isBusy = false;
         /// <summary>
         /// 人员树数据源
         /// </summary>

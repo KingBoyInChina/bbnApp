@@ -237,7 +237,6 @@ namespace bbnApp.Application.Services.CODE
                     {
                         return (false, "员工信息不存在", new EmployeeItemDto());
                     }
-                    return (false,"未找到有效的员工数据",new EmployeeItemDto());
                 }
                 return (false,"无权进行操作",new EmployeeItemDto());
             }

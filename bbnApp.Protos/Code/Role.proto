@@ -8,45 +8,131 @@ package RoleGrpc;
 
 /********定义角色对象服务********/
 service RoleGrpc {
- 
+    //角色清单查询
+    rpc RoleListLoad (RoleListRequest) returns (RoleListResponse);
+    //角色应用加载查询
+    rpc RoleAppListLoad (RoleAppListRequest) returns (RoleAppListResponse);
+	//角色信息读取
+    rpc RoleInfo (RoleInfoRequest) returns (RoleInfoResponse);
+	//角色信息提交
+    rpc RolePost (RoleSaveRequest) returns (RoleSaveResponse);
+    //角色状态变更
+    rpc RoleState (RoleStateRequest) returns (RoleStateResponse);
+}
+// 角色对象
+message RoleItem {
+  int32 IdxNum = 1;
+  string Yhid = 2;
+  string RoleId = 3;
+  string RoleName = 4;
+  string RoleCode = 5;
+  uint32 RoleLeve = 6;
+  string RoleDescription = 7;
+  uint32 IsLock = 8;
+  string LockTime = 9;
+  string LockReason = 10;
+  string CompanyId = 11;
+  string ReMarks = 12;
 }
 
-// 角色管理
-message RoleItem {
-    string Yhid = 1; // 用户组ID
-    string RoleId = 2; // 角色ID
-    string RoleName = 3; // 角色名称
-    string RoleCode = 4; // 角色代码
-    int32 RoleLeve = 5; // 角色级别
-    string RoleDescription = 6; // 角色介绍
-    int32 IsLock = 7; // 停用状态
-    string LockTime = 8; // 停用时间
-    string LockReason = 9; // 停用原因
-    string CompanyId = 10; // 机构ID
-    int32 IdxNum = 11; // 序号
+// 角色操作权限对象
+message RolePermissionItem {
+  int32 IdxNum = 1;
+  string Yhid = 2;
+  string RoleId = 3;
+  string ObjCode = 4;
+  string ObjName = 5;
+  string ObjDescription = 6;
+  string CompanyId = 7;
+  bool IsChecked = 8;
+  repeated PermissionCodeItem Codes = 9;
 }
-// 角色操作权限分配
-message RolePermission {
-    string Yhid = 1; // 用户组ID
-    string RoleId = 2; // 角色ID
-    string ObjCode = 3; // 对象代码
-    string PermissionCode = 4; // 操作代码
-    int32 IsLock = 5; // 停用状态
-    string LockTime = 6; // 停用时间
-    string LockReason = 7; // 停用原因
-    string ReMarks = 8; // 备注信息
-    string CompanyId = 9; // 机构ID
-    int32 IdxNum = 10; // 序号
+
+// 角色操作代码对象
+message PermissionCodeItem {
+  int32 IdxNum = 1;
+  string RoleId = 2;
+  string ObjCode = 3;
+  string ObjName = 4;
+  string PermissionCode = 5;
+  string PermissionName = 6;
+  bool IsChecked = 7;
 }
-// 角色可以使用的应用
+
+// 角色应用对象
 message RoleApps {
-    string Yhid = 1; // 用户组ID
-    string RoleId = 2; // 角色ID
-    string AppId = 3; // 应用ID
-    int32 IsLock = 4; // 停用状态
-    string LockTime = 5; // 停用时间
-    string LockReason = 6; // 停用原因
-    string ReMarks = 7; // 备注信息
-    string CompanyId = 8; // 机构ID
-    int32 IdxNum = 9; // 序号
+  uint32 IdxNum = 1;
+  string Yhid = 2;
+  string RoleId = 3;
+  string AppId = 4;
+  string AppName = 5;
+  string AppCode = 6;
+  bool IsChecked = 7;
+  string CompanyId = 8;
+  repeated RolePermissionItem Items = 9;
+}
+
+// 角色列表请求对象
+message RoleListRequest {
+  uint32 RoleLeve = 1;
+}
+
+// 角色列表响应对象
+message RoleListResponse {
+  bool Code = 1;
+  string Message = 2;
+  repeated RoleItem Data = 3;
+}
+
+// 角色应用请求对象
+message RoleAppListRequest {
+  string CompanyId = 1;
+  string RoleId = 2;
+}
+
+// 角色应用响应对象
+message RoleAppListResponse {
+  bool Code = 1;
+  string Message = 2;
+  repeated RoleApps Data = 3;
+}
+
+// 角色信息请求对象
+message RoleInfoRequest {
+  string RoleId = 1;
+}
+
+// 角色信息响应对象
+message RoleInfoResponse {
+  bool Code = 1;
+  string Message = 2;
+  RoleItem Role = 3;
+  repeated RoleApps RoleApps = 4;
+}
+
+// 角色保存请求对象
+message RoleSaveRequest {
+  RoleItem Role = 1;
+  repeated RoleApps RoleApps = 2;
+}
+
+// 角色保存响应对象
+message RoleSaveResponse {
+  bool Code = 1;
+  string Message = 2;
+  RoleItem Role = 3;
+}
+
+// 角色状态请求对象
+message RoleStateRequest {
+  string RoleId = 1;
+  string Type = 2;
+  string Reason = 3;
+}
+
+// 角色状态响应对象
+message RoleStateResponse {
+  bool Code = 1;
+  string Message = 2;
+  RoleItem Data = 3;
 }
