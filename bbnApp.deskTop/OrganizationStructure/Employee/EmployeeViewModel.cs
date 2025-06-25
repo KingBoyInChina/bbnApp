@@ -415,10 +415,10 @@ namespace bbnApp.deskTop.OrganizationStructure.Employee
         {
             try
             {
-                DepartMentSelected = node;
-                if ((bool)node.IsLeaf)
+                if (DepartMentSelected == null || DepartMentSelected?.Id != node.Id)
                 {
-                    if (DepartMentSelected == null || DepartMentSelected?.Id != node.Id)
+                    DepartMentSelected = node;
+                    if ((bool)node.IsLeaf)
                     {
                         ImageClear();
                         EmployeeTreeLoad();

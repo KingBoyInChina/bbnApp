@@ -1,10 +1,16 @@
 {
+  "MQTT": {
+    "Host": "mqtt.wushitc.cn",
+    "Port": 1883
+  },
+  "API": {
+    "Url": "https://mqttapi.wushitc.cn/api/v1/"
+  },
   "Consul": {
     "Address": "http://localhost:8500"
   },
-  "Grpc": {
-    "Url": "http://localhost:5001",
-    "Protocols": "Http2"
+  "Redis": {
+    "ConnectionString": "127.0.0.1:6379" // 默认的 Redis 服务主机名和端口
   },
   "Exceptionless": {
     "ApiKey": "UpjX6XUp7RdMZa064jMDcBasKrg77w0HRIX2gVBY",
@@ -21,9 +27,6 @@
       "Version": "1.0.0"
     }
   },
-  "Redis": {
-    "ConnectionString": "127.0.0.1:6379" // 默认的 Redis 服务主机名和端口
-  },
   "Serilog": {
     "Using": [ "Serilog.Sinks.Console", "Serilog.Sinks.File" ],
     "MinimumLevel": "Information",
@@ -32,15 +35,11 @@
       {
         "Name": "File",
         "Args": {
-          "path": "logs/bbn_desktop.log",
+          "path": "logs/bbn_mqtt_service.log",
           "rollingInterval": "Day",
           "outputTemplate": "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}"
         }
       }
     ]
-  },
-  "MQTT": {
-    "IP": "192.168.3.227",
-    "Port": 1883
   }
 }

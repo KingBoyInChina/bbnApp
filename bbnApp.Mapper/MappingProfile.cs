@@ -85,6 +85,61 @@ namespace bbnApp.Service.GlobalService
             CreateMap<RoleStateRequestDto, RoleStateRequest>().ReverseMap();
             CreateMap<RoleStateResponseDto, RoleStateResponse>().ReverseMap();
             #endregion
+            #region 操作员
+            // 树形对象
+            // 操作员对象
+            CreateMap<OperatorItemDto, OperatorItem>().ReverseMap();
+            // 操作员角色
+            CreateMap<OperatorRoleDto, OperatorRole>().ReverseMap();
+            // 操作员树查询请求对象
+            CreateMap<OperatorListRequestDto, OperatorListRequest>().ReverseMap();
+            // 操作员树响应对象
+            CreateMap<OperatorListResponseDto, OperatorListResponse>().ReverseMap();
+            // 操作员信息请求对象
+            CreateMap<OperatorInfoRequestDto, OperatorInfoRequest>().ReverseMap();
+            // 操作员信息响应对象
+            CreateMap<OperatorInfoResponseDto, OperatorInfoResponse>().ReverseMap();
+            // 操作员保存请求对象
+            CreateMap<OperatorSaveRequestDto, OperatorSaveRequest>().ReverseMap();
+            // 操作员保存响应对象
+            CreateMap<OperatorSaveResponseDto, OperatorSaveResponse>().ReverseMap();
+            // 操作员状态请求对象
+            CreateMap<OperatorStateRequestDto, OperatorStateRequest>().ReverseMap();
+            // 操作员状态响应对象
+            CreateMap<OperatorStateResponseDto, OperatorStateResponse>().ReverseMap();
+            #endregion
+            #region 平台服务密钥生成
+            CreateMap<AuthorReginsterKeyClientDto, AuthorReginsterKeyClient>().ReverseMap();
+            // 注册密钥对象
+            CreateMap<CompanyAuthorRegistrKeyItemDto, CompanyAuthorRegistrKeyItem>().ReverseMap();
+            //  注册密钥查询响应请求对象
+            CreateMap<CompanyAuthorRegistrKeySearchRequestDto, CompanyAuthorRegistrKeySearchRequest>().ReverseMap();
+            // 注册密钥查询响应对象
+            CreateMap<CompanyAuthorRegistrKeySearchResponseDto, CompanyAuthorRegistrKeySearchResponse>().ReverseMap();
+            // 注册密钥对象
+            CreateMap<AuthorRegisterKeyItemDto, AuthorRegisterKeyItem>().ReverseMap();
+            // 注册密钥查询请求对象
+            CreateMap<AuthorRegisterKeySearchRequestDto, AuthorRegisterKeySearchRequest>().ReverseMap();
+            // 注册密钥查询响应对象
+            CreateMap<AuthorRegisterKeySearchResponseDto, AuthorRegisterKeySearchResponse>().ReverseMap();
+            // 注册密钥清单请求对象-不分页
+            CreateMap<AuthorRegisterKeyListRequestDto, AuthorRegisterKeyListRequest>().ReverseMap();
+            // 注册密钥清单响应对象-不分页
+            CreateMap<AuthorRegisterKeyListResponseDto, AuthorRegisterKeyListResponse>().ReverseMap();
+            // 注册密钥添加请求对象
+            CreateMap<AuthorRegisterKeyAddRequestDto, AuthorRegisterKeyAddRequest>().ReverseMap();
+            // 注册密钥添加响应对象
+            CreateMap<AuthorRegisterKeyAddResponseDto, AuthorRegisterKeyAddResponse>().ReverseMap();
+            // 注册密钥状态请求对象
+            CreateMap<AuthorRegisterKeyStateRequestDto, AuthorRegisterKeyStateRequest>().ReverseMap();
+            // 注册密钥状态响应对象
+            CreateMap<AuthorRegisterKeyStateResponseDto, AuthorRegisterKeyStateResponse>().ReverseMap();
+            CreateMap<AuthorReginsterKeyClientListRequestDto, AuthorReginsterKeyClientListRequest>().ReverseMap();
+            CreateMap<AuthorReginsterKeyClientListResponseDto, AuthorReginsterKeyClientListResponse>().ReverseMap();
+            CreateMap<AuthorReginsterKeyInfoRequestDto, AuthorReginsterKeyInfoRequest>().ReverseMap();
+            CreateMap<AuthorReginsterKeyInfoResponseDto, AuthorReginsterKeyInfoResponse>().ReverseMap();
+            
+            #endregion
             #region 地区映射
             CreateMap<AreaItemDto, AreaItem>().ReverseMap();
             CreateMap<AreaResponseDto, AreaGridResponse>().ReverseMap();

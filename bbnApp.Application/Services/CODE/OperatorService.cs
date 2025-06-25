@@ -1,20 +1,25 @@
-﻿using bbnApp.Application.IServices.ICODE;
+﻿using bbnApp.Application.DTOs.LoginDto;
+using bbnApp.Application.IServices.ICODE;
+using bbnApp.Application.IServices.IJWT;
 using bbnApp.Common.Models;
 using bbnApp.Core;
+using bbnApp.Domain.Entities.Code;
+using bbnApp.Domain.Entities.User;
+using bbnApp.Domain.Entities.UserLogin;
+using bbnApp.DTOs.CodeDto;
+using bbnApp.Infrastructure.Data;
+using bbnApp.Share;
+using Dapper;
+using Exceptionless;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using bbnApp.Domain.Entities.User;
-using bbnApp.Share;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
-using bbnApp.Application.DTOs.LoginDto;
-using Exceptionless;
-using bbnApp.Application.IServices.IJWT;
-using bbnApp.Domain.Entities.Code;
-using bbnApp.Domain.Entities.UserLogin;
 using Microsoft.Extensions.Logging;
-using bbnApp.Infrastructure.Data;
-using bbnApp.DTOs.CodeDto;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Org.BouncyCastle.Asn1.Ocsp;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace bbnApp.Application.Services.CODE
 {
@@ -35,7 +40,11 @@ namespace bbnApp.Application.Services.CODE
         /// <summary>
         /// 
         /// </summary>
-        private readonly IApplicationDbContext _codeContext;
+        private readonly IApplicationDbContext dbContext;
+        /// <summary>
+        /// 
+        /// </summary>
+        private readonly IApplicationDbCodeContext dbCodeContext;
         /// <summary>
         /// 
         /// </summary>
@@ -55,7 +64,8 @@ namespace bbnApp.Application.Services.CODE
             IDapperRepository dapperRepository,
             IRedisService redisService,
             IJwtService jwtService,
-            IApplicationDbContext codeContext,
+            IApplicationDbContext dbContext,
+            IApplicationDbCodeContext codeContext,
             ILogger<OperatorService> logger,
             ExceptionlessClient exceptionlessClient
             ) 
@@ -63,7 +73,8 @@ namespace bbnApp.Application.Services.CODE
             _dapperRepository = dapperRepository;
             _redisService = redisService;
             _jwtService = jwtService;
-            _codeContext = codeContext;
+            this.dbContext = dbContext;
+            dbCodeContext = codeContext;
             _logger = logger;
             _exceptionlessClient = exceptionlessClient;
         }
@@ -231,7 +242,7 @@ namespace bbnApp.Application.Services.CODE
                         ObjOperator?.Remove("PassWord");
                         UserInfoDto? model = ObjOperator?.ToObject<UserInfoDto>();// JsonConvert.DeserializeObject<UserModel>(ObjOperator.ToString());
                         //校验是否已有有效的登录数据
-                        var loginInfoList= _codeContext.Set<LoginInfo>();
+                        var loginInfoList= dbContext.Set<LoginInfo>();
                         LoginInfo? loginInfo = loginInfoList.Where(x => x.Yhid == model.Yhid && x.CompanyId == model.CompanyId && x.EmployeeId == model.EmployeeId && x.Exptime > DateTime.Now.AddHours(2)).FirstOrDefault();
 
                         //获取操作员可以使用的应用
@@ -280,7 +291,7 @@ namespace bbnApp.Application.Services.CODE
             {
                 #region 记录登录信息
                 #region 登录信息
-                var logininfo = _codeContext.Set<LoginInfo>();
+                var logininfo = dbContext.Set<LoginInfo>();
                 LoginInfo _logininfo = logininfo.FirstOrDefault(x => x.EmployeeId == model.EmployeeId);
 
                 if (_logininfo == null)
@@ -311,7 +322,7 @@ namespace bbnApp.Application.Services.CODE
 
                 #endregion
                 #region 登录记录
-                var loginrecored = _codeContext.Set<LoginRecord>();
+                var loginrecored = dbContext.Set<LoginRecord>();
                 LoginRecord _record = new LoginRecord
                 {
                     Yhid = model.Yhid,
@@ -330,7 +341,7 @@ namespace bbnApp.Application.Services.CODE
                 };
                 await loginrecored.AddAsync(_record);
                 #endregion
-                await _codeContext.SaveChangesAsync();
+                await dbContext.SaveChangesAsync();
                 #endregion
             }
             catch(Exception ex)
@@ -458,7 +469,7 @@ namespace bbnApp.Application.Services.CODE
         private async Task<List<TopMenuItemDto>> TopMenu()
         {
             List<TopMenuItemDto> items = new List<TopMenuItemDto>();
-            var menu = _codeContext.Set<AppsCode>();
+            var menu = dbContext.Set<AppsCode>();
             var menus = await menu.Where(i => i.Isdelete == 0).OrderBy(x => x.AppId).ToListAsync();
             foreach (AppsCode model in menus)
             {
@@ -511,14 +522,14 @@ namespace bbnApp.Application.Services.CODE
                 }
                 else
                 {
-                    var operators = _codeContext.Set<Operators>();
+                    var operators = dbContext.Set<Operators>();
                    Operators _Operator = operators.ToList().FirstOrDefault(x => x.OperatorId == OperatorId&&x.CompanyId==CompanyId&&x.Yhid==Yhid);
                     if (_Operator != null)
                     {
                         _Operator.PassWord = EncodeAndDecode.SM2Encrypt(NewPassWord);
                         _Operator.PassWordExpTime = DateTime.Now.AddMonths(3);
                         //operators.Update(_Operator);
-                        await _codeContext.SaveChangesAsync();
+                        await dbContext.SaveChangesAsync();
                         return _Operator;
                     }
                     else
@@ -532,5 +543,304 @@ namespace bbnApp.Application.Services.CODE
                 throw new Exception("无效的身份信息");
             }
         }
+        #region 操作员权限管理
+        /// <summary>
+        /// 操作员加载
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public async Task<(bool,string, List<OperatorItemDto>)> OperatorListLoad(OperatorListRequestDto request,UserModel user)
+        {
+            try
+            {
+                if (await IsAccess(user.Yhid, user.CompanyId, user.OperatorId, "operators", "browse"))
+                {
+                    StringBuilder SQL = new StringBuilder($"select * from {StaticModel.DbName.bbn}.vw_operator_permission where 1=1 ");
+                    #region 过滤条件
+                    string CompanyId = string.IsNullOrEmpty(request.CompanyId) ? user.CompanyId : request.CompanyId;
+                    var param = new DynamicParameters { };
+
+                    SQL.Append(" and CompanyId =@CompanyId");
+                    param.Add("CompanyId", $"{CompanyId}");
+
+                    SQL.Append(" and PositionLeve >=@PositionLeve");
+                    param.Add("PositionLeve", $"{user.PositionLeve}");
+
+
+                    if (!string.IsNullOrEmpty(request.EmployeeNum))
+                    {
+                        SQL.Append(" and EmployeeNum like @EmployeeNum");
+                        param.Add("EmployeeNum", $"%{request.EmployeeNum}%");
+                    }
+                    if (!string.IsNullOrEmpty(request.EmployeeNum))
+                    {
+                        SQL.Append(" and EmployeeNum like @EmployeeNum");
+                        param.Add("EmployeeNum", $"%{request.EmployeeNum}%");
+                    }
+                    if (!string.IsNullOrEmpty(request.DepartMentId))
+                    {
+                        SQL.Append(" and DepartMentId = @DepartMentId");
+                        param.Add("DepartMentId", $"{request.DepartMentId}");
+                    }
+                    #endregion
+                    //获取操作员信息
+                    var list =await _dapperRepository.QueryAsync<OperatorItemDto>(SQL.ToString(),param);
+                    List<OperatorItemDto> operators = new List<OperatorItemDto>();
+                    //获取角色信息
+                    var roles = dbContext.Set<RoleManagment>().Where(x => x.CompanyId == CompanyId && x.Yhid == user.Yhid && x.Isdelete == 0 && x.IsLock == 0).OrderBy(x => x.RoleId).ToList();
+                    //操作员角色信息
+                    var permissons=dbContext.Set<PermissionAssignment>().Where(x => x.CompanyId == CompanyId && x.Yhid == user.Yhid && x.Isdelete == 0 && x.IsLock == 0).OrderBy(x => x.RoleId).ToList();
+                    foreach (var item in list)
+                    {
+                        OperatorItemDto node = new OperatorItemDto {
+                            IdxNum = item.IdxNum,
+                            Yhid = item.Yhid,
+                            EmployeeId = item.EmployeeId,
+                            PEmployeeId = item.PEmployeeId,
+                            EmployeeName = item.EmployeeName,
+                            EmployeeNum = item.EmployeeNum,
+                            DepartMentId = CommMethod.GetValueOrDefault(item.DepartMentId, ""),
+                            Position = CommMethod.GetValueOrDefault(item.Position, ""),
+                            PositionLeve = item.PositionLeve,
+                            IsOperator = CommMethod.GetValueOrDefault(item.IsOperator, false),
+                            OperatorId =CommMethod.GetValueOrDefault(item.OperatorId,""),
+                            PassWord =string.IsNullOrEmpty(item.PassWord)?string.Empty: EncodeAndDecode.SM2Decrypt(item.PassWord) ,
+                            PassWordExpTime = CommMethod.GetValueOrDefault(item.PassWordExpTime, ""),
+                            IsLock = item.IsLock,
+                            CompanyId = CommMethod.GetValueOrDefault(item.CompanyId, ""),
+                            OperatorRoles =await OperatorRoleList(item.OperatorId,item.CompanyId,item.Yhid)
+                        };
+                        operators.Add(node);
+                    }
+                    return (true,"数据读取成功", operators);
+                }
+                return (false,"无权进行操作",new List<OperatorItemDto>());
+            }
+            catch(Exception ex)
+            {
+                return (false,$"操作员加载异常：{ex.Message.ToString()}",new List<OperatorItemDto>());
+            }
+        }
+        /// <summary>
+        /// 操作员角色列表
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        private async Task<List<OperatorRoleDto>> OperatorRoleList(string OperatorId,string CompanyId,string Yhid)
+        {
+            List<OperatorRoleDto> result = new List<OperatorRoleDto>();
+            
+            var list = await _dapperRepository.QueryAsync<OperatorRoleDto>($"CALL {StaticModel.DbName.bbn}.proc_operator_roles(@Yhid,@CompanyId,@OperatorId) ", new { Yhid, CompanyId, OperatorId });
+            foreach(var item in list)
+            {
+                result.Add(item);
+            }
+            return result;
+        }
+        /// <summary>
+        /// 权限分配
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public async Task<(bool,string, OperatorItemDto)> OperatorSave(OperatorSaveRequestDto request,UserModel user)
+        {
+            try
+            {
+                if (await IsAccess(user.Yhid, user.CompanyId, user.OperatorId, "operators", "permit"))
+                {
+                    var OperatorItem = request.Item;
+                    //系统配置
+                    var EFSetting = dbCodeContext.Set<AppSettings>();
+                    //获取操作员信息
+                    var EFObj = dbContext.Set<Operators>();
+                    var EFPermissionObj = dbContext.Set<PermissionAssignment>();
+                    Operators? model = await EFObj.FirstOrDefaultAsync(x => x.OperatorId == OperatorItem.OperatorId && x.CompanyId == OperatorItem.CompanyId && x.Yhid == user.Yhid);
+                    bool badd = false;
+                    if (model == null)
+                    {
+                        model = new Operators();
+                        model.Yhid= user.Yhid;
+                        model.OperatorId= OperatorItem.EmployeeId+DateTime.Now.ToString("yyMMddHHmmssfff");
+                        model.EmployeeId = OperatorItem.EmployeeId;
+                        model.CompanyId= OperatorItem.CompanyId;
+                        model.Isdelete = 0;
+                        model.IsLock = 0;
+                        badd = true;
+                    }
+                    #region 写操作员信息
+                    int day = 3650; //默认密码有效期3650天
+                    var settinginfo = await EFSetting.FirstOrDefaultAsync(x => x.Yhid == user.Yhid && x.SettingCode == "PassWordExpri" && x.Yhid == user.Yhid);
+                    if (settinginfo != null)
+                    {
+                        day = string.IsNullOrEmpty(settinginfo.NowValue) || settinginfo.NowValue == "0" ? 3650 : Convert.ToInt32(settinginfo.NowValue);
+                    }
+                    model.PassWord = EncodeAndDecode.SM2Encrypt(OperatorItem.PassWord);
+                    model.PassWordExpTime = DateTime.Now.AddDays(day);
+                    model.LastModified = DateTime.Now;
+                    #endregion
+                    if (badd)
+                    {
+                        await EFObj.AddAsync(model);
+                    }
+                    #region 写操作员权限
+                    foreach (var item in OperatorItem.OperatorRoles)
+                    {
+                        if (item.RoleId != "0")//不能分配超级管理员角色
+                        {
+                            var rolepermission = EFPermissionObj.FirstOrDefault(x => x.RoleId == item.RoleId && x.OperatorId == model.OperatorId && x.CompanyId == model.CompanyId);
+                            if (item.IsChecked)
+                            {
+                                bool bpermission = false;
+                                if (rolepermission == null)
+                                {
+                                    rolepermission = new PermissionAssignment();
+                                    rolepermission.Yhid = user.Yhid;
+                                    rolepermission.PermissionId = Guid.NewGuid().ToString("N");
+                                    rolepermission.OperatorId = model.OperatorId;
+                                    rolepermission.RoleId = item.RoleId;
+                                    rolepermission.IsLock = 0;
+                                    rolepermission.CompanyId = item.CompanyId;
+                                    bpermission = true;
+                                }
+                                rolepermission.Isdelete = 0;
+                                rolepermission.LastModified = DateTime.Now;
+                                if (bpermission)
+                                {
+                                    await EFPermissionObj.AddAsync(rolepermission);
+                                }
+                            }
+                            else if (rolepermission != null && rolepermission.Isdelete == 0)
+                            {
+                                rolepermission.Isdelete = 1;
+                                rolepermission.LastModified = DateTime.Now;
+                            }
+                        }
+                    }
+                    #endregion
+                    await dbContext.SaveChangesAsync();
+                    OperatorItem.OperatorId = model.OperatorId;
+                    return (true,"权限分配完成", OperatorItem);
+                }
+                return (false,"无权进行操作",new OperatorItemDto());
+            }
+            catch(Exception ex)
+            {
+                return (false, $"操作员权限分配异常：{ex.Message.ToString()}", new OperatorItemDto());
+            }
+        }
+        /// <summary>
+        /// 操作员状态变更
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public async Task<(bool,string,OperatorItemDto)> OperatorState(OperatorStateRequestDto request,UserModel user)
+        {
+            try
+            {
+                if (await IsAccess(user.Yhid, user.CompanyId, user.OperatorId, "operators", "permit"))
+                {
+                    var EFObj = dbContext.Set<Operators>();
+                    var EFPermissionObj = dbContext.Set<PermissionAssignment>();
+                    Operators? model = await EFObj.FirstOrDefaultAsync(x => x.OperatorId == request.OperatorId && x.Yhid == user.Yhid);
+                    if (model == null)
+                    {
+                        return (false,"无效的操作员信息",new OperatorItemDto());
+                    }
+                    
+                    if (request.Type == "IsLock")
+                    {
+                        #region 锁定
+                        model.IsLock = model.IsLock==0 ?Convert.ToByte(1) : Convert.ToByte(0);
+                        model.LastModified = DateTime.Now;
+                        await dbContext.SaveChangesAsync();
+                        return (true,"操作员状态变更完成", await GetOperatorDto(model));
+                        #endregion
+                    }
+                    else if (request.Type == "IsDelete")
+                    {
+                        #region 删除
+                        model.Isdelete = 0;
+                        model.LastModified = DateTime.Now;
+                        //权限同步删除
+                        var list=EFPermissionObj.Where(x => x.OperatorId == request.OperatorId && x.Yhid == user.Yhid && x.CompanyId == model.CompanyId).ToList();
+                        if (list.Count > 0)
+                        {
+                            foreach (var item in list)
+                            {
+                                item.Isdelete = 1;
+                                item.LastModified = DateTime.Now;
+                            }
+                        }
+                        await dbContext.SaveChangesAsync();
+                        return (true,"操作员删除完成",new OperatorItemDto());
+                        #endregion
+                    }
+                }
+                return (false, "无权进行操作", new OperatorItemDto());
+            }
+            catch(Exception ex)
+            {
+                return (false, $"操作员状态变更异常：{ex.Message.ToString()}", new OperatorItemDto());
+            }
+        }
+        /// <summary>
+        /// model 转换为操作员DTO
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        private async Task<OperatorItemDto> GetOperatorDto(Operators model)
+        {
+            StringBuilder SQL = new StringBuilder($"select * from {StaticModel.DbName.bbn}.vw_operator_permission where 1=1 ");
+            #region 过滤条件
+            string CompanyId = model.CompanyId;
+            string OperatorId = model.OperatorId;
+            string EmployeeId = model.EmployeeId;
+            var param = new DynamicParameters { };
+
+            SQL.Append(" and Yhid =@Yhid");
+            param.Add("Yhid", $"{model.Yhid}");
+
+            SQL.Append(" and CompanyId =@CompanyId");
+            param.Add("CompanyId", $"{CompanyId}");
+
+            SQL.Append(" and OperatorId =@OperatorId");
+            param.Add("OperatorId", $"{OperatorId}");
+
+            SQL.Append(" and EmployeeId =@EmployeeId");
+            param.Add("EmployeeId", $"{EmployeeId}");
+
+            #endregion
+            OperatorItemDto node = new OperatorItemDto();
+            //获取操作员信息
+            var list = await _dapperRepository.QueryAsync<OperatorItemDto>(SQL.ToString(), param);
+            foreach (var item in list)
+            {
+                node = new OperatorItemDto
+                {
+                    IdxNum = item.IdxNum,
+                    Yhid = item.Yhid,
+                    EmployeeId = item.EmployeeId,
+                    PEmployeeId = item.PEmployeeId,
+                    EmployeeName = item.EmployeeName,
+                    EmployeeNum = item.EmployeeNum,
+                    DepartMentId = CommMethod.GetValueOrDefault(item.DepartMentId, ""),
+                    Position = CommMethod.GetValueOrDefault(item.Position, ""),
+                    PositionLeve = item.PositionLeve,
+                    IsOperator = CommMethod.GetValueOrDefault(item.IsOperator, false),
+                    OperatorId = CommMethod.GetValueOrDefault(item.OperatorId, ""),
+                    PassWord = string.IsNullOrEmpty(item.PassWord) ? string.Empty : EncodeAndDecode.SM2Decrypt(item.PassWord),
+                    PassWordExpTime = CommMethod.GetValueOrDefault(item.PassWordExpTime, ""),
+                    IsLock = item.IsLock,
+                    CompanyId = CommMethod.GetValueOrDefault(item.CompanyId, ""),
+                    OperatorRoles = await OperatorRoleList(item.OperatorId, item.CompanyId, item.Yhid)
+                };
+                break;
+            }
+            return node;
+        }
+        #endregion
     }
 }

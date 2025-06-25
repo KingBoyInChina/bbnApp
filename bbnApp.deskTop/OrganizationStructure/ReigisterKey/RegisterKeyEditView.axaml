@@ -1,0 +1,73 @@
+<UserControl x:Class="bbnApp.deskTop.OrganizationStructure.ReigisterKey.RegisterKeyEditView"
+       xmlns="https://github.com/avaloniaui"
+       xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+       xmlns:suki="https://github.com/kikipoulet/SukiUI"
+       xmlns:converters="clr-namespace:bbnApp.deskTop.Converters"
+       xmlns:theme="clr-namespace:SukiUI.Theme;assembly=SukiUI"
+       xmlns:my="clr-namespace:bbnApp.deskTop.Controls"
+       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+       d:DesignHeight="800"
+       d:DesignWidth="450"
+       xmlns:regkey="clr-namespace:bbnApp.deskTop.OrganizationStructure.ReigisterKey"
+       x:DataType="regkey:RegisterKeyEditViewModel"
+       mc:Ignorable="d">
+
+  <suki:GroupBox Width="400">
+
+    <UserControl.Resources>
+      <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
+    </UserControl.Resources>
+
+    <suki:GroupBox.Header>
+      <Grid ColumnDefinitions="*,auto">
+        <StackPanel Orientation="Horizontal" Grid.Column="0" VerticalAlignment="Center" Margin="0,20,0,0">
+          <avalonia:MaterialIcon Kind="Key"></avalonia:MaterialIcon>
+          <TextBlock>密钥申请</TextBlock>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Column="1" VerticalAlignment="Center"  Margin="0,20,0,0">
+          <Button Command="{Binding CloseCommand}">
+            <avalonia:MaterialIcon Kind="ExitToApp" ToolTip.Tip="点击关闭" Cursor="Hand"></avalonia:MaterialIcon>
+          </Button>
+        </StackPanel>
+      </Grid>
+    </suki:GroupBox.Header>
+
+    <StackPanel Orientation="Vertical">
+
+      <StackPanel Classes="FormCell" Orientation="Vertical">
+        <TextBlock VerticalAlignment="Center">应用名称：</TextBlock>
+        <TextBox Watermark="请输入应用名称" Text="{Binding RegisterKeyItem.SetAppName}" MaxLength="20" theme:TextBoxExtensions.AddDeleteButton="True"></TextBox>
+      </StackPanel>
+
+      <StackPanel Classes="FormCell" Orientation="Vertical">
+        <TextBlock VerticalAlignment="Center">用途说明：</TextBlock>
+        <TextBox Watermark="用途说明" MaxLength="100" Text="{Binding RegisterKeyItem.SetAppDescription}" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
+      </StackPanel>
+
+      <StackPanel Classes="FormCell" Orientation="Vertical">
+        <TextBlock VerticalAlignment="Center">备注说明：</TextBlock>
+        <TextBox Watermark="备注说明" MaxLength="100" Text="{Binding RegisterKeyItem.ReMarks}"  AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
+      </StackPanel>
+
+
+      <StackPanel Orientation="Horizontal">
+        <TextBlock VerticalAlignment="Center">数据锁定：</TextBlock>
+        <ToggleSwitch IsChecked="{Binding RegisterKeyItem.IsLock,  Converter={StaticResource IntToBoolConverter}}" IsEnabled="False"/>
+        <TextBlock IsVisible="{Binding RegisterKeyItem.IsLock,  Converter={StaticResource IntToBoolConverter}}" VerticalAlignment="Center" Classes="Caption" Text="{Binding RegisterKeyItem.LockTime}"></TextBlock>
+        <TextBlock IsVisible="{Binding RegisterKeyItem.IsLock,  Converter={StaticResource IntToBoolConverter}}" VerticalAlignment="Center" Classes="Caption" Text="{Binding RegisterKeyItem.LockReason}"></TextBlock>
+      </StackPanel>
+
+      <Button Classes="Flat" HorizontalAlignment="Stretch" Margin="0,20" Command="{Binding RegisterSubmitCommand}" theme:ButtonExtensions.ShowProgress="{Binding IsBusy}">
+        <my:Space Orientation="Horizontal">
+          <avalonia:MaterialIcon IsVisible="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}" Kind="Post" Width="20" Height="20"></avalonia:MaterialIcon>
+          <TextBlock>数据提交</TextBlock>
+        </my:Space>
+      </Button>
+
+    </StackPanel>
+
+  </suki:GroupBox>
+
+</UserControl>

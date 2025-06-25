@@ -16,6 +16,7 @@ public static class BoolToIconConverters
     public static readonly BoolToIconConverter FullScreen = new(MaterialIconKind.Fullscreen, MaterialIconKind.FullscreenExit);
     public static readonly BoolToIconConverter FileLock = new(MaterialIconKind.File, MaterialIconKind.FileLock);
     public static readonly BoolToIconConverter FileLeaf = new(MaterialIconKind.File, MaterialIconKind.Folder);
+    public static readonly BoolToIconConverter Link = new(MaterialIconKind.LanConnect, MaterialIconKind.LanDisconnect);
 }
 
 public class BoolToIconConverter(MaterialIconKind trueIcon, MaterialIconKind falseIcon) : IValueConverter

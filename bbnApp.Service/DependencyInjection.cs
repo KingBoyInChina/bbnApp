@@ -243,12 +243,12 @@ public static class DependencyInjection
         services.AddScoped<IDapperRepository, DapperRepository>();
         //注册高德地图服务
         services.AddScoped<IGuideService, GuideService>();
+        // 注册操作员服务
+        services.AddScoped<IOperatorService, OperatorService>();
         // 注册行政区划代码服务
         services.AddScoped<IAreaService, AreaService>();
         // 注册通用字典服务
         services.AddScoped<IDictionaryInitialization, DictionaryInitialization>();
-        // 注册业务服务
-        services.AddScoped<IOperatorService, OperatorService>();
         // 注册机构服务
         services.AddScoped<ICompanyService, CompanyService>();
         // 注册部门服务
@@ -271,7 +271,8 @@ public static class DependencyInjection
         services.AddScoped<IFileUploadService, FileUploadService>();
         //角色服务
         services.AddScoped<IRoleService, RoleService>();
-
+        //密钥注册
+        services.AddScoped<IAuthorRegisterKeyService, AuthorRegisterKeyService>();
 
         return services;
     }

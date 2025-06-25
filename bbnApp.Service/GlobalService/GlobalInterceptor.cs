@@ -93,51 +93,53 @@ namespace bbnApp.Service.GlobalService
                 {
                     throw new RpcException(new Status(StatusCode.PermissionDenied, "无效的IP地址"));
                 }
-                // 检查黑名单
-                if (Blacklist.Contains(ipAddress))
+                if (!AllowedIps.Any(x => x == ipAddress))//白名单内不校验
                 {
-                    Log.Warning("请求来自于黑名单: {IP}", ipAddress);
-                    throw new RpcException(new Status(StatusCode.PermissionDenied, $"您的IP【{ipAddress}】已经被纳入黑名单"));
-                }
-
-                // 检查请求频率
-                var cacheKey = $"rate_limit_{ipAddress}";
-                var requestCount = _cache.GetOrCreate(cacheKey, entry =>
-                {
-                    entry.AbsoluteExpirationRelativeToNow = RequestLimitWindow;
-                    return 0;
-                });
-
-                if (requestCount >= RequestLimitCount)
-                {
-                    // 超过请求频率，拉入黑名单
-                    Blacklist.Add(ipAddress);
-                    Log.Warning("IP {IP} added to blacklist due to excessive requests", ipAddress);
-                    #region 写入数据库
-                    LimiteRecord _record = new LimiteRecord
+                    // 检查黑名单
+                    if (Blacklist.Contains(ipAddress))
                     {
-                        Yhid = "000000",
-                        LimiteId = Guid.NewGuid().ToString("N"),
-                        LimiteIP = ipAddress,
-                        LimiteTime = DateTime.Now,
-                        LimiteExpireTime = DateTime.Now.AddDays(1),
-                        LimiteReason = "异常请求频次",
-                        Isdelete = 0,
-                        LastModified = DateTime.Now,
-                    };
-                    // 获取 DbSet<T>
-                    var dbSet = _codeContext.Set<LimiteRecord>();
-                    // 添加实体
-                    await dbSet.AddAsync(_record);
-                    // 保存更改
-                    await _codeContext.SaveChangesAsync();
-                    #endregion
-                    throw new RpcException(new Status(StatusCode.PermissionDenied, $"【{ipAddress}】请求被限制"));
+                        Log.Warning("请求来自于黑名单: {IP}", ipAddress);
+                        throw new RpcException(new Status(StatusCode.PermissionDenied, $"您的IP【{ipAddress}】已经被纳入黑名单"));
+                    }
+
+                    // 检查请求频率
+                    var cacheKey = $"rate_limit_{ipAddress}";
+                    var requestCount = _cache.GetOrCreate(cacheKey, entry =>
+                    {
+                        entry.AbsoluteExpirationRelativeToNow = RequestLimitWindow;
+                        return 0;
+                    });
+
+                    if (requestCount >= RequestLimitCount)
+                    {
+                        // 超过请求频率，拉入黑名单
+                        Blacklist.Add(ipAddress);
+                        Log.Warning("IP {IP} added to blacklist due to excessive requests", ipAddress);
+                        #region 写入数据库
+                        LimiteRecord _record = new LimiteRecord
+                        {
+                            Yhid = "000000",
+                            LimiteId = Guid.NewGuid().ToString("N"),
+                            LimiteIP = ipAddress,
+                            LimiteTime = DateTime.Now,
+                            LimiteExpireTime = DateTime.Now.AddDays(1),
+                            LimiteReason = "异常请求频次",
+                            Isdelete = 0,
+                            LastModified = DateTime.Now,
+                        };
+                        // 获取 DbSet<T>
+                        var dbSet = _codeContext.Set<LimiteRecord>();
+                        // 添加实体
+                        await dbSet.AddAsync(_record);
+                        // 保存更改
+                        await _codeContext.SaveChangesAsync();
+                        #endregion
+                        throw new RpcException(new Status(StatusCode.PermissionDenied, $"【{ipAddress}】请求被限制"));
+                    }
+
+                    // 增加请求计数
+                    _cache.Set(cacheKey, requestCount + 1);
                 }
-
-                // 增加请求计数
-                _cache.Set(cacheKey, requestCount + 1);
-
                 // IP 限制逻辑-白名单校验
                 //if (!AllowedIps.Contains(ipAddress))
                 //{

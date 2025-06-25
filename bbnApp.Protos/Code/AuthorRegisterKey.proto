@@ -1,0 +1,160 @@
+﻿
+syntax = "proto3";
+
+option csharp_namespace = "bbnApp.Protos";
+
+package ReigisterKeyGrpc;
+
+//定义AuthorRegisterKey服务
+service ReigisterKeyGrpcService {
+  //获取注册机构信息清单
+  rpc CompanyAuthorRegistrKeySearch (CompanyAuthorRegistrKeySearchRequest) returns (CompanyAuthorRegistrKeySearchResponse);
+  //获取注册信息清单
+  rpc AuthorRegisterKeySearch (AuthorRegisterKeySearchRequest) returns (AuthorRegisterKeySearchResponse);
+  //获取注册信息清单（不分页）
+  rpc AuthorRegisterKeyList (AuthorRegisterKeyListRequest)returns (AuthorRegisterKeyListResponse);
+  //新增注册信息
+  rpc AuthorRegisterKeyAdd (AuthorRegisterKeyAddRequest) returns (AuthorRegisterKeyAddResponse);
+  //注册状态变更
+  rpc AuthorRegisterKeyState (AuthorRegisterKeyStateRequest) returns (AuthorRegisterKeyStateResponse);
+  //注册信息关联设备清单
+  rpc AuthorRegisterClients (AuthorReginsterKeyClientListRequest) returns (AuthorReginsterKeyClientListResponse);
+  //获取密钥对象
+  rpc AuthorRegisterInfo (AuthorReginsterKeyInfoRequest) returns (AuthorReginsterKeyInfoResponse);
+}
+
+// 注册密钥对象
+message AuthorRegisterKeyItem {
+    int32 IdxNum = 1; // 序号
+    string Yhid = 2; // 用户组ID
+    string AuthorId = 3; // 身份ID
+    string SelectedAppId = 4; // 选择使用的应用，后期可能会用到
+    string SetAppName = 5; // 用户注册时填写应用用途名称
+    string SetAppCode = 6; // 用户注册时填写应用用途代码
+    string SetAppDescription = 7; // 用户注册时填写应用用途说明
+    string AppId = 8; // 生成的APPID
+    string SecriteKey = 9; // 生成的密钥
+    string OperatorId = 10; // 操作员ID
+    string CompanyId = 11; // 机构ID
+    int32 IsLock = 12; // 停用
+    string LockTime = 13; // 停用时间
+    string LockReason = 14; // 停用原因
+    string ReMarks = 15; // 备注信息
+}
+// 注册机构信息
+message CompanyAuthorRegistrKeyItem {
+    string CompanyId = 1; // 机构ID
+    string CompanyName = 2; // 机构名称
+    int32 RegisterKeyCount = 3; // 注册密钥数量
+    repeated AuthorRegisterKeyItem RegisterKeys = 4; // 密钥清单
+}
+
+message AuthorReginsterKeyClient {
+    string ClientId = 1; // 客户端ID
+    string ClientName = 2; // 客户端名称
+    string SetAppName = 3; // 设置应用名称
+    string AuthorId = 4; // 注册的身份ID
+    string AppId = 5; // ID
+    string SecriteKey = 6; // 密钥
+    string Yhid = 7; // 用户ID
+    string CompanyId = 8; // 机构ID
+    string OperatorId = 9; // 人员ID,一般用于平台人员
+}
+
+// 注册密钥查询请求对象-公司机构
+message CompanyAuthorRegistrKeySearchRequest {
+    string AreaId = 1; // 区域ID
+}
+
+// 注册密钥查询响应对象-公司机构
+message CompanyAuthorRegistrKeySearchResponse {
+    bool Code = 1; // 状态码
+    string Message = 2; // 消息内容
+    repeated CompanyAuthorRegistrKeyItem Items = 3; // 对象
+}
+// 注册密钥查询请求对象
+message AuthorRegisterKeySearchRequest {
+    string SetAppName = 1; // 注册时设置的应用名称
+    string SetAppCode = 2; // 注册时设置的应用代码
+    string CompanyId = 3; // 申请机构
+    string AppId = 4; // 生成的应用ID
+    int32 PageSize = 5; // 单页条数
+    int32 PageIndex = 6; // 分页序号
+}
+
+// 注册密钥查询响应对象
+message AuthorRegisterKeySearchResponse {
+    bool Code = 1; // 状态码
+    string Message = 2; // 消息内容
+    int32 Total = 3; // 总数
+    repeated AuthorRegisterKeyItem Items = 4; // 对象
+}
+
+// 注册密钥清单请求对象-不分页
+message AuthorRegisterKeyListRequest {
+    string SetAppName = 1; // 注册时设置的应用名称
+    string SetAppCode = 2; // 注册时设置的应用代码
+    string CompanyId = 3; // 申请机构
+    string AppId = 4; // 生成的应用ID
+    string AuthorId=5;//
+}
+
+// 注册密钥清单响应对象-不分页
+message AuthorRegisterKeyListResponse {
+    bool Code = 1; // 状态码
+    string Message = 2; // 消息内容
+    repeated AuthorRegisterKeyItem Items = 3; // 对象
+}
+
+// 注册密钥添加请求对象
+message AuthorRegisterKeyAddRequest {
+    AuthorRegisterKeyItem Item = 1; // 对象
+}
+
+// 注册密钥添加响应对象
+message AuthorRegisterKeyAddResponse {
+    bool Code = 1; // 状态码
+    string Message = 2; // 消息内容
+    AuthorRegisterKeyItem Item = 3; // 对象
+}
+
+// 注册密钥状态请求对象
+message AuthorRegisterKeyStateRequest {
+    string Type = 1; // 操作方式
+    string AuthorId = 2; // 注册的身份ID
+    string Reason = 3; // 原因
+}
+
+// 注册密钥状态响应对象
+message AuthorRegisterKeyStateResponse {
+    bool Code = 1; // 状态码
+    string Message = 2; // 消息内容
+    AuthorRegisterKeyItem Item = 3; // 对象
+}
+
+// 密钥关联设备清单-请求对象
+message AuthorReginsterKeyClientListRequest {
+    string Type = 1; // 冗余参数
+}
+
+// 注册密钥状态响应对象
+message AuthorReginsterKeyClientListResponse {
+    bool Code = 1; // 状态码
+    string Message = 2; // 消息内容
+    repeated AuthorReginsterKeyClient Items = 3; // 对象
+}
+
+// 密钥关联设备清单-请求对象
+message AuthorReginsterKeyInfoRequest {
+    string Yhid = 1; // 用户ID
+    string CompanyId=2;//机构ID
+    string OperatorId=3;//人员ID
+}
+
+// 注册密钥状态响应对象
+message AuthorReginsterKeyInfoResponse {
+    bool Code = 1; // 状态码
+    string Message = 2; // 消息内容
+    AuthorReginsterKeyClient Item = 3; // 对象
+}
+

@@ -1,0 +1,191 @@
+<UserControl x:Class="bbnApp.deskTop.OrganizationStructure.ReigisterKey.ReigisterKeyView"
+         xmlns="https://github.com/avaloniaui"
+         xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         xmlns:suki="https://github.com/kikipoulet/SukiUI"
+         xmlns:converters="clr-namespace:bbnApp.deskTop.Converters"
+         xmlns:theme="clr-namespace:SukiUI.Theme;assembly=SukiUI"
+         xmlns:my="clr-namespace:bbnApp.deskTop.Controls"
+         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+         d:DesignHeight="1080"
+         d:DesignWidth="1920"
+         xmlns:employee="clr-namespace:bbnApp.deskTop.OrganizationStructure.ReigisterKey"
+         x:DataType="employee:ReigisterKeyViewModel"
+         mc:Ignorable="d">
+
+  <UserControl.Resources>
+    <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
+  </UserControl.Resources>
+  
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="350"></ColumnDefinition>
+      <ColumnDefinition Width="*"></ColumnDefinition>
+    </Grid.ColumnDefinitions>
+
+    <suki:GlassCard Classes="HeaderCard" Margin="10" Grid.Column="0">
+      <suki:GroupBox>
+        <suki:GroupBox.Header>
+          <UniformGrid Rows="2">
+
+            <UniformGrid Grid.Row="0" Columns="2">
+
+              <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Grid.Column="0">
+                <avalonia:MaterialIcon Kind="SecurityAccount" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+                <TextBlock Foreground="{DynamicResource SukiText}">注册机构信息</TextBlock>
+              </StackPanel>
+
+              <my:Space HorizontalAlignment="Right" Orientation="Horizontal" VerticalAlignment="Center">
+
+                <Button Classes="Basic" Command="{Binding CompanRegisterKeysReloadCommand}">
+                  <StackPanel Orientation="Horizontal">
+                    <avalonia:MaterialIcon Kind="Refresh" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+                    <TextBlock Foreground="{DynamicResource SukiText}">重载</TextBlock>
+                  </StackPanel>
+                </Button>
+              </my:Space>
+            </UniformGrid>
+            <TextBox Grid.Row="1" HorizontalAlignment="Stretch" Text="{Binding CompanyFilter}" Watermark="关键字检索"></TextBox>
+          </UniformGrid>
+
+
+        </suki:GroupBox.Header>
+        <ScrollViewer>
+          <ListBox ItemsSource="{Binding CompanyList}" SelectedItem="{Binding CompanySelected}">
+            <ListBox.ItemTemplate>
+              <DataTemplate>
+                <StackPanel Orientation="Horizontal">
+                  <TextBlock Text="{Binding CompanyName}" Foreground="{DynamicResource SukiText}"></TextBlock>
+                  <TextBlock Text="(" Foreground="{DynamicResource SukiText}"></TextBlock>
+                  <TextBlock Text="{Binding RegisterKeyCount}" Foreground="{DynamicResource SukiText}"></TextBlock>
+                  <TextBlock Text=")" Foreground="{DynamicResource SukiText}"></TextBlock>
+                </StackPanel>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+        </ScrollViewer>
+      </suki:GroupBox>
+    </suki:GlassCard>
+    <suki:GlassCard Classes="HeaderCard" Margin="10" Grid.Column="1">
+      <suki:GroupBox>
+        <suki:GroupBox.Header>
+          <UniformGrid Columns="2">
+
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Grid.Column="0">
+              <avalonia:MaterialIcon Kind="ListBox" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+              <TextBlock Text="{Binding CompanySelected.CompanyName}"></TextBlock>
+              <TextBlock Foreground="{DynamicResource SukiText}">密钥清单</TextBlock>
+
+            </StackPanel>
+
+            <Button Classes="Basic" Command="{Binding RegisterKeysAddCommand}" HorizontalAlignment="Right">
+              <StackPanel Orientation="Horizontal">
+                <avalonia:MaterialIcon Kind="Plus" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+                <TextBlock Foreground="{DynamicResource SukiText}">新增密钥</TextBlock>
+              </StackPanel>
+            </Button>
+
+          </UniformGrid>
+        </suki:GroupBox.Header>
+
+        <SplitView IsPaneOpen="{Binding IsEdit}"
+                   x:Name="RegisterKeySplite"
+                   DisplayMode="Overlay"
+                   PanePlacement="Right"
+                   OpenPaneLength="450">
+          <SplitView.Pane>
+            <ContentControl
+                Background="{DynamicResource SukiCardBackground}"
+                BorderBrush="{DynamicResource SukiLightBorderBrush}"
+                BorderThickness="1"
+                Content="{Binding RegisterKeyContent}"></ContentControl>
+          </SplitView.Pane>
+
+          <Grid>
+            <DataGrid
+                        ItemsSource="{Binding ReginsterList}"
+                        AutoGenerateColumns="False"
+                        CanUserReorderColumns="True"
+                        CanUserResizeColumns="True"
+                        CanUserSortColumns="True"
+                        GridLinesVisibility="All"
+                >
+              <DataGrid.Columns>
+
+                <DataGridTextColumn Binding="{Binding IdxNum}"  Width="80">
+                  <DataGridTextColumn.Header>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                      <TextBlock>序号</TextBlock>
+                    </StackPanel>
+                  </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Binding="{Binding SetAppName}"  Width="200">
+                  <DataGridTextColumn.Header>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                      <TextBlock>应用名称</TextBlock>
+                    </StackPanel>
+                  </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding SetAppDescription}"  Width="200">
+                  <DataGridTextColumn.Header>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                      <TextBlock>应用说明</TextBlock>
+                    </StackPanel>
+                  </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Binding="{Binding AppId}" Width="200">
+                  <DataGridTextColumn.Header>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                      <TextBlock>应用ID</TextBlock>
+                    </StackPanel>
+                  </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Binding="{Binding SecriteKey}" Width="300">
+                  <DataGridTextColumn.Header>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                      <TextBlock>密钥</TextBlock>
+                    </StackPanel>
+                  </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+
+                <DataGridTemplateColumn Header="锁定状态"  Width="120">
+                  <DataTemplate>
+                    <ToggleSwitch IsChecked="{Binding IsLock,Converter={StaticResource IntToBoolConverter }}" Click="ToggleSwitch_Click"></ToggleSwitch>
+                  </DataTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="操作" Width="160">
+                  <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                      <my:Space Orientation="Horizontal">
+                        <Button Classes="Basic" Tag="IsEdit" Click="Button_Click" ToolTip.Tip="点击修改密钥信息">
+                          <avalonia:MaterialIcon Kind="Edit" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+                        </Button>
+                        <Button Classes="Basic" Tag="IsDelete" Click="Button_Click" ToolTip.Tip="点击删除密定状态">
+                          <StackPanel Orientation="Horizontal">
+                            <avalonia:MaterialIcon Kind="Delete" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+                          </StackPanel>
+                        </Button>
+
+                      </my:Space>
+                    </DataTemplate>
+                  </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+              </DataGrid.Columns>
+            </DataGrid>
+          </Grid>
+        </SplitView>
+
+        
+
+      </suki:GroupBox>
+    </suki:GlassCard>
+
+
+  </Grid>
+</UserControl>

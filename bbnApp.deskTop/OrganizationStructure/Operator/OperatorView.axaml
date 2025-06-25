@@ -1,0 +1,232 @@
+<UserControl x:Class="bbnApp.deskTop.OrganizationStructure.Operator.OperatorView"
+         xmlns="https://github.com/avaloniaui"
+         xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         xmlns:suki="https://github.com/kikipoulet/SukiUI"
+         xmlns:converters="clr-namespace:bbnApp.deskTop.Converters"
+         xmlns:theme="clr-namespace:SukiUI.Theme;assembly=SukiUI"
+         xmlns:my="clr-namespace:bbnApp.deskTop.Controls"
+         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+         d:DesignHeight="1080"
+         d:DesignWidth="1920"
+         xmlns:employee="clr-namespace:bbnApp.deskTop.OrganizationStructure.Operator"
+         x:DataType="employee:OperatorViewModel"
+         mc:Ignorable="d">
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="300"></ColumnDefinition>
+      <ColumnDefinition Width="300"></ColumnDefinition>
+      <ColumnDefinition Width="*"></ColumnDefinition>
+    </Grid.ColumnDefinitions>
+
+    <suki:GlassCard Classes="HeaderCard" Margin="10" Grid.Column="0">
+      <suki:GroupBox>
+        <suki:GroupBox.Header>
+          <UniformGrid Rows="2">
+
+            <UniformGrid Grid.Row="0" Columns="2">
+
+              <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Grid.Column="0">
+                <avalonia:MaterialIcon Kind="ListBox" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+                <TextBlock Foreground="{DynamicResource SukiText}">部门清单</TextBlock>
+              </StackPanel>
+
+              <my:Space HorizontalAlignment="Right" Orientation="Horizontal" VerticalAlignment="Center">
+
+                <Button Classes="Basic" Command="{Binding DepartMentTreeReloadCommand}">
+                  <StackPanel Orientation="Horizontal">
+                    <avalonia:MaterialIcon Kind="Refresh" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+                    <TextBlock Foreground="{DynamicResource SukiText}">重载</TextBlock>
+                  </StackPanel>
+                </Button>
+
+              </my:Space>
+
+            </UniformGrid>
+
+            <ComboBox Grid.Row="1" HorizontalAlignment="Stretch" ItemsSource="{Binding CompanyListSource}" SelectedItem="{Binding CompanySelected}">
+              <ComboBox.ItemTemplate>
+                <DataTemplate>
+                  <TextBlock Text="{Binding Name}"/>
+                </DataTemplate>
+              </ComboBox.ItemTemplate>
+            </ComboBox>
+          </UniformGrid>
+
+
+        </suki:GroupBox.Header>
+        <ScrollViewer>
+          <TreeView ItemsSource="{Binding DepartMentTreeSource}" SelectionChanged="DepartMentTreeView_SelectionChanged">
+            <TreeView.ItemTemplate>
+              <TreeDataTemplate ItemsSource="{Binding SubItems}">
+                <StackPanel Orientation="Horizontal">
+                  <avalonia:MaterialIcon Kind="{Binding IsLeaf,Converter={x:Static converters:BoolToIconConverters.FileLeaf}}"></avalonia:MaterialIcon>
+                  <TextBlock Text="{Binding Name}" Foreground="{DynamicResource SukiText}">
+                    <avalonia:MaterialIcon Kind="Lock" IsVisible="{Binding IsLock}"></avalonia:MaterialIcon>
+                    
+                  </TextBlock>
+
+                </StackPanel>
+              </TreeDataTemplate>
+            </TreeView.ItemTemplate>
+          </TreeView>
+        </ScrollViewer>
+      </suki:GroupBox>
+    </suki:GlassCard>
+    <suki:GlassCard Classes="HeaderCard" Margin="10" Grid.Column="1">
+      <suki:GroupBox>
+        <suki:GroupBox.Header>
+          <UniformGrid Grid.Row="0" Columns="2">
+
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Grid.Column="0">
+              <avalonia:MaterialIcon Kind="Users" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+              <TextBlock Foreground="{DynamicResource SukiText}">部门人员</TextBlock>
+            </StackPanel>
+
+            <my:Space HorizontalAlignment="Right" Orientation="Horizontal" VerticalAlignment="Center">
+
+              <Button Classes="Basic" Command="{Binding OperatorListReloadCommand}">
+                <StackPanel Orientation="Horizontal">
+                  <avalonia:MaterialIcon Kind="Refresh" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+                  <TextBlock Foreground="{DynamicResource SukiText}">重载</TextBlock>
+                </StackPanel>
+              </Button>
+
+            </my:Space>
+
+          </UniformGrid>
+        </suki:GroupBox.Header>
+        <ScrollViewer>
+          <ListBox SelectionChanged="ListBox_SelectionChanged" ItemsSource="{Binding OperatorListSource}" SelectedItem="{Binding OperatorSelected}">
+            <ListBox.ItemTemplate>
+              <DataTemplate>
+                <StackPanel Orientation="Horizontal">
+                  <avalonia:MaterialIcon Kind="UserBadge" IsVisible="{Binding IsOperator}}"></avalonia:MaterialIcon>
+                  <TextBlock Text="{Binding EmployeeName}" Foreground="{DynamicResource SukiText}">
+                    <TextBlock.ContextMenu>
+                      <ContextMenu>
+                        <MenuItem Header="删除" Tag="IsDelete" Click="MenuItem_Click">
+                          <MenuItem.Icon>
+                            <avalonia:MaterialIcon Kind="Delete"></avalonia:MaterialIcon>
+                          </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="{Binding IsLock,Converter={x:Static converters:IntToTextConverters.LockLg }}" Tag="IsLock" Click="MenuItem_Click">
+                          <MenuItem.Icon>
+                            <avalonia:MaterialIcon Kind="{Binding IsLock,Converter={x:Static converters:IntToIconConverters.FileLock }}}"></avalonia:MaterialIcon>
+                          </MenuItem.Icon>
+                        </MenuItem>
+                      </ContextMenu>
+                    </TextBlock.ContextMenu>
+                  </TextBlock> 
+                  <avalonia:MaterialIcon Kind="Lock" IsVisible="{Binding IsLock,Converter={StaticResource IntToBoolConverter}}"></avalonia:MaterialIcon>
+                </StackPanel>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+        </ScrollViewer>
+      </suki:GroupBox>
+    </suki:GlassCard>
+
+    <suki:GlassCard Classes="HeaderCard" Margin="10" Grid.Column="2">
+      <suki:GroupBox>
+        <suki:GroupBox.Header>
+          <UniformGrid Columns="2">
+
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Grid.Column="0">
+              <avalonia:MaterialIcon Kind="ListBox" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+              <TextBlock Text="{Binding OperatorSelected.EmployeeName}"></TextBlock>
+              <TextBlock Text="("></TextBlock>
+              <TextBlock Text="{Binding OperatorSelected.EmployeeNum}"></TextBlock>
+              <TextBlock Text=")"></TextBlock>
+              <TextBlock Foreground="{DynamicResource SukiText}">角色分配</TextBlock>
+              
+            </StackPanel>
+
+            <Button Classes="Basic" Command="{Binding OperatorSaveCommand}" HorizontalAlignment="Right">
+                <StackPanel Orientation="Horizontal">
+                  <avalonia:MaterialIcon Kind="Post" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+                  <TextBlock Foreground="{DynamicResource SukiText}">保存</TextBlock>
+                </StackPanel>
+              </Button>
+
+          </UniformGrid>
+        </suki:GroupBox.Header>
+        <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="auto"></RowDefinition>
+              <RowDefinition Height="auto"></RowDefinition>
+            </Grid.RowDefinitions>
+
+
+            <UniformGrid Columns="3" Grid.Row="0">
+              
+              <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Column="1">
+                <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">登录密码：</TextBlock>
+                <TextBox PasswordChar="*"  Watermark="请输入密码" MaxLength="8" VerticalAlignment="Center" Width="240" Text="{Binding OperatorSelected.PassWord}"/>
+                <TextBlock VerticalAlignment="Center" Classes="NOTNULL">*</TextBlock>
+              </StackPanel>
+            
+              
+              <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Column="1">
+                <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">密码复核：</TextBlock>
+                <TextBox PasswordChar="*" Watermark="请再次输入密码" MaxLength="8" VerticalAlignment="Center" Width="240" Text="{Binding PassWord}"/>
+                <TextBlock VerticalAlignment="Center" Classes="NOTNULL">*</TextBlock>
+              </StackPanel>
+              
+              <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Column="1">
+                <TextBlock VerticalAlignment="Center" Classes="NOTNULL">密码长度为8位</TextBlock>
+              </StackPanel>
+            
+            </UniformGrid>
+            
+            <DataGrid
+              Grid.Row="1"
+                        ItemsSource="{Binding OperatorRoleListSource}"
+                        AutoGenerateColumns="False"
+                        CanUserReorderColumns="True"
+                        CanUserResizeColumns="True"
+                        CanUserSortColumns="True"
+                        GridLinesVisibility="All"
+                >
+          <DataGrid.Columns>
+
+            <DataGridTemplateColumn Header="授权"  Width="120">
+              <DataTemplate>
+                <ToggleSwitch IsEnabled="{Binding IsEnabled}"  IsChecked="{Binding IsChecked}"></ToggleSwitch>
+              </DataTemplate>
+            </DataGridTemplateColumn>
+
+            <DataGridTextColumn Binding="{Binding RoleName}"  Width="200">
+              <DataGridTextColumn.Header>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                  <TextBlock>角色名称</TextBlock>
+                </StackPanel>
+              </DataGridTextColumn.Header>
+            </DataGridTextColumn>
+            <DataGridTextColumn Binding="{Binding RoleLeveName}" Width="200">
+              <DataGridTextColumn.Header>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                  <TextBlock>角色级别</TextBlock>
+                </StackPanel>
+              </DataGridTextColumn.Header>
+            </DataGridTextColumn>
+            
+            <DataGridTextColumn Binding="{Binding RoleDescription}">
+              <DataGridTextColumn.Header>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                  <TextBlock>角色说明</TextBlock>
+                </StackPanel>
+              </DataGridTextColumn.Header>
+            </DataGridTextColumn>
+            
+          </DataGrid.Columns>
+        </DataGrid>
+          </Grid>
+
+      </suki:GroupBox>
+    </suki:GlassCard>
+
+
+  </Grid>
+</UserControl>

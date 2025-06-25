@@ -19,6 +19,7 @@
 	  <ProjectReference Include="..\bbnApp.Common\bbnApp.Common.csproj" />
     <ProjectReference Include="..\bbnApp.Core\bbnApp.Core.csproj" />
     <ProjectReference Include="..\bbnApp.Mapper\bbnApp.Mapper.csproj" />
+    <ProjectReference Include="..\bbnApp.MQTT.Client\bbnApp.MQTT.Client.csproj" />
     <ProjectReference Include="..\bbnApp.Protos\bbnApp.Protos.csproj" />
     <ProjectReference Include="..\bbnApp.Share\bbnApp.Share.csproj" />
   </ItemGroup>
@@ -67,7 +68,6 @@
     <Folder Include="FileManagement\" />
     <Folder Include="DataCenter\" />
     <Folder Include="BackupCenter\" />
-    <Folder Include="OperationsCenter\" />
     <Folder Include="UserCenter\" />
   </ItemGroup>
 </Project>

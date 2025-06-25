@@ -19,6 +19,8 @@ using bbnApp.deskTop.Features.Theming;
 using bbnApp.deskTop.OrganizationStructure.Company;
 using bbnApp.deskTop.OrganizationStructure.DepartMent;
 using bbnApp.deskTop.OrganizationStructure.Employee;
+using bbnApp.deskTop.OrganizationStructure.Operator;
+using bbnApp.deskTop.OrganizationStructure.ReigisterKey;
 using bbnApp.deskTop.OrganizationStructure.Role;
 using bbnApp.deskTop.PlatformManagement.AppSetting;
 using bbnApp.deskTop.PlatformManagement.AreaCode;
@@ -30,12 +32,11 @@ using bbnApp.deskTop.PlatformManagement.TopicCode;
 using bbnApp.deskTop.Services;
 using bbnApp.deskTop.ViewModels;
 using bbnApp.deskTop.Views;
-using bbnApp.Domain.Entities.Code;
 using bbnApp.GrpcClients;
+using bbnApp.MQTT.Client;
 using bbnApp.Service.GlobalService;
 using Consul;
 using Exceptionless;
-using Grpc.Net.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -43,7 +44,6 @@ using SukiUI.Dialogs;
 using SukiUI.Toasts;
 using System;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace bbnApp.deskTop;
@@ -160,6 +160,8 @@ public partial class App :Avalonia.Application
             .AddView<DepartMentView, DepartMentViewModel>(services)
             .AddView<EmployeeView, EmployeeViewModel>(services)
             .AddView<RoleView, RoleViewModel>(services)
+            .AddView<OperatorView, OperatorViewModel>(services)
+            .AddView<ReigisterKeyView, ReigisterKeyViewModel>(services)
 
             .AddView<InputPrompt, InputPromptViewModel>(services);
     }
@@ -207,7 +209,7 @@ public partial class App :Avalonia.Application
         //});
         //注册工厂
         //debug调试模式下延迟一会儿，不然服务还没注册就开始调用了
-        Task.Delay(20000).GetAwaiter().GetResult();
+        //Task.Delay(20000).GetAwaiter().GetResult();
         services.AddSingleton<IGrpcClientFactory, BbnGrpcClientFactory>();
         #endregion
         #region redis注入
@@ -226,6 +228,9 @@ public partial class App :Avalonia.Application
         services.AddSingleton<IDialog, Dialog>();
         services.AddSingleton(exceptionlessClient);//注册exceptionless
         services.AddSingleton<ExceptionService>();//注册全局异常处理服务
+        //注册MQTTClient服务
+        services.AddSingleton<MqttClientService>();
+
         return services.BuildServiceProvider();
     }
 }

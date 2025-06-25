@@ -17,10 +17,99 @@ namespace bbnApp.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.4")
+                .HasAnnotation("ProductVersion", "9.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
+
+            modelBuilder.Entity("bbnApp.Domain.Entities.Business.AuthorRegisterKeys", b =>
+                {
+                    b.Property<string>("Yhid")
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnOrder(0)
+                        .HasComment("用户组ID");
+
+                    b.Property<string>("AuthorId")
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnOrder(1)
+                        .HasComment("身份ID");
+
+                    b.Property<string>("AppId")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("生成的APPID");
+
+                    b.Property<string>("CompanyId")
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("机构ID");
+
+                    b.Property<sbyte>("IsLock")
+                        .HasColumnType("tinyint")
+                        .HasComment("停用");
+
+                    b.Property<sbyte>("Isdelete")
+                        .HasColumnType("tinyint")
+                        .HasComment("删除标志");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime")
+                        .HasComment("末次数据变更时间");
+
+                    b.Property<string>("LockReason")
+                        .HasColumnType("varchar(40)")
+                        .HasComment("停用原因");
+
+                    b.Property<DateTime?>("LockTime")
+                        .HasColumnType("datetime")
+                        .HasComment("停用时间");
+
+                    b.Property<string>("OperatorId")
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("操作员ID");
+
+                    b.Property<string>("ReMarks")
+                        .HasColumnType("varchar(40)")
+                        .HasComment("备注信息");
+
+                    b.Property<string>("SecriteKey")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("生成的密钥");
+
+                    b.Property<string>("SelectedAppId")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)")
+                        .HasComment("选择使用的应用，后期可能会用到");
+
+                    b.Property<string>("SetAppCode")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("用户注册时填写应用用途代码");
+
+                    b.Property<string>("SetAppDescription")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("用户注册时填写应用用途说明");
+
+                    b.Property<string>("SetAppName")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("用户注册时填写应用用途名称");
+
+                    b.HasKey("Yhid", "AuthorId");
+
+                    b.ToTable("AuthorRegisterKeys");
+                });
 
             modelBuilder.Entity("bbnApp.Domain.Entities.Business.UploadFileList", b =>
                 {
@@ -389,9 +478,7 @@ namespace bbnApp.Infrastructure.Migrations
                         .HasComment("所在部门ID");
 
                     b.Property<bool>("DepartMentMaster")
-                        .HasMaxLength(2)
                         .HasColumnType("bool")
-                        .HasColumnOrder(1)
                         .HasComment("部门最高管理人");
 
                     b.Property<string>("DepartMentName")
@@ -461,7 +548,6 @@ namespace bbnApp.Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("varchar(40)")
-                        .HasColumnOrder(1)
                         .HasComment("分管领导ID");
 
                     b.Property<string>("PhoneNum")

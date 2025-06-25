@@ -67,5 +67,26 @@ namespace bbnApp.Application.IServices.ICODE
         /// <param name="NewPassWord"></param>
         /// <returns></returns>
         Task<Operators> UpdatePassWord(string Yhid, string CompanyId, string OperatorId, string OldPassWord, string NewPassWord);
+        /// <summary>
+        /// 操作员加载
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        Task<(bool, string, List<OperatorItemDto>)> OperatorListLoad(OperatorListRequestDto request, UserModel user);
+        /// <summary>
+        /// 权限分配
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        Task<(bool, string, OperatorItemDto)> OperatorSave(OperatorSaveRequestDto request, UserModel user);
+        /// <summary>
+        /// 操作员状态变更
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        Task<(bool, string, OperatorItemDto)> OperatorState(OperatorStateRequestDto request, UserModel user);
     }
 }

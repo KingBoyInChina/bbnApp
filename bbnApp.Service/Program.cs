@@ -75,6 +75,9 @@ using (var scope = app.Services.CreateScope())
         //数据字典初始化
         var DataDictionaryService = scope.ServiceProvider.GetRequiredService<IDataDictionaryService>();
         await DataDictionaryService.DicInit();
+        //初始化注册密钥
+        var AuthorRegisterKeyService = scope.ServiceProvider.GetRequiredService<IAuthorRegisterKeyService>();
+        await AuthorRegisterKeyService.AuthorRegisterInit();
     }
     else
     {
@@ -117,6 +120,8 @@ app.MapGrpcService<GuideGrpcService>();
 app.MapGrpcService<DepartMentGrpcService>();
 app.MapGrpcService<EmployeeGrpcServcie>();
 app.MapGrpcService<RoleGrpcService>();
+app.MapGrpcService<OperatorGrpcService>();
+app.MapGrpcService<AuthorRegisterKeyGrpcService>();
 //app.MapGet("/health", () => Results.Ok("Healthy")); // 最简单的方式
 app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
 

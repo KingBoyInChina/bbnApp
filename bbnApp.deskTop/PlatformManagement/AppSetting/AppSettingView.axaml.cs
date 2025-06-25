@@ -30,7 +30,6 @@ public partial class AppSettingView : UserControl
         {
             vm?.OnPageChanged(p, currentPage, itemsPerPage, pagedData);
         };
-
         AppSettingSplite.PaneOpened += (s, e) =>
         {
 

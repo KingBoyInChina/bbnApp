@@ -1,44 +1,47 @@
-﻿using Avalonia.Collections;
+﻿using AutoMapper;
+using Avalonia;
+using Avalonia.Collections;
 using Avalonia.Controls;
+using Avalonia.Controls.Notifications;
 using Avalonia.Styling;
+using Avalonia.Threading;
+using bbnApp.Application.DTOs.LoginDto;
+using bbnApp.Common.Models;
+using bbnApp.Core;
+using bbnApp.deskTop.Common;
+using bbnApp.deskTop.Features;
+using bbnApp.deskTop.Features.CustomTheme;
+using bbnApp.deskTop.Features.Theming;
+using bbnApp.deskTop.Services;
+using bbnApp.deskTop.Utilities;
+using bbnApp.DTOs.CodeDto;
+using bbnApp.GrpcClients;
+using bbnApp.MQTT.Client;
+using bbnApp.Protos;
+using bbnApp.Share;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Exceptionless;
+using Grpc.Core;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json.Linq;
+using ReactiveUI;
+using Serilog;
 using SukiUI;
 using SukiUI.Dialogs;
 using SukiUI.Enums;
 using SukiUI.Models;
 using SukiUI.Theme.Shadcn;
 using SukiUI.Toasts;
-using System.Collections.Generic;
 using System;
-using bbnApp.deskTop.Features;
-using bbnApp.deskTop.Services;
-using System.Linq;
-using Avalonia;
-using bbnApp.deskTop.Features.CustomTheme;
-using bbnApp.deskTop.Utilities;
-using System.Threading.Tasks;
-using Avalonia.Controls.Notifications;
-using System.Reactive;
-using ReactiveUI;
-using bbnApp.deskTop.Features.Theming;
-using Exceptionless;
-using Serilog;
-using System.Timers;
-using Avalonia.Threading;
-using bbnApp.Core;
-using bbnApp.deskTop.Common;
+using System.Collections.Generic;
 using System.IO;
-using Newtonsoft.Json.Linq;
-using bbnApp.Share;
+using System.Linq;
+using System.Reactive;
 using System.Text;
-using bbnApp.GrpcClients;
-using Grpc.Core;
-using bbnApp.DTOs.CodeDto;
-using AutoMapper;
-using bbnApp.Common.Models;
-using bbnApp.Protos;
-using bbnApp.Application.DTOs.LoginDto;
+using System.Threading.Tasks;
+using System.Timers;
+using Tmds.DBus.Protocol;
 
 namespace bbnApp.deskTop.ViewModels
 {
@@ -134,13 +137,10 @@ namespace bbnApp.deskTop.ViewModels
         [ObservableProperty] private bool _isLogined=false;
         public IAvaloniaReadOnlyList<string> CustomShaders { get; } = new AvaloniaList<string> { "Space", "Weird", "Clouds" };
         public Action<string?>? CustomBackgroundStyleChanged { get; set; }
-
         [ObservableProperty] private bool _showTitleBar = true;
         [ObservableProperty] private bool _showBottomBar = true;
-
         private readonly SukiTheme _theme;
         private readonly ThemingViewModel _theming;
-
         private string? _customShader = null;
         /// <summary>
         /// 应用定义命令
@@ -163,9 +163,13 @@ namespace bbnApp.deskTop.ViewModels
         /// </summary>
         private Author.AuthorClient _client;
         /// <summary>
-        /// 
+        /// 机构服务
         /// </summary>
         private CompanyGrpcService.CompanyGrpcServiceClient _companyclient;
+        /// <summary>
+        /// 注册密钥服务
+        /// </summary>
+        private ReigisterKeyGrpcService.ReigisterKeyGrpcServiceClient _authorKeyClient;
         /// <summary>
         /// 地区代码服务
         /// </summary>
@@ -193,6 +197,14 @@ namespace bbnApp.deskTop.ViewModels
         /// <summary>
         /// 
         /// </summary>
+        private readonly IConfiguration configuration;
+        /// <summary>
+        /// MQTTClient服务
+        /// </summary>
+        private readonly MqttClientService mqttClientService;
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="logger"></param>
         /// <param name="client"></param>
         /// <param name="exceptionlessClient"></param>
@@ -200,14 +212,19 @@ namespace bbnApp.deskTop.ViewModels
         /// <param name="pageNavigationService"></param>
         /// <param name="toastManager"></param>
         /// <param name="dialogManager"></param>
-        public MainWindowViewModel(IMapper mapper,ILogger logger, IGrpcClientFactory grpcClientFactory, ExceptionlessClient exceptionlessClient,IEnumerable<BbnPageBase> wstcPages, PageNavigationService pageNavigationService, IDialog dialog,ISukiToastManager toast,  ISukiDialogManager dialogManager,IRedisService redisService)
+        public MainWindowViewModel(IMapper mapper,ILogger logger, IGrpcClientFactory grpcClientFactory, ExceptionlessClient exceptionlessClient
+            ,IEnumerable<BbnPageBase> wstcPages, PageNavigationService pageNavigationService, IDialog dialog,ISukiToastManager toast
+            ,  ISukiDialogManager dialogManager,IRedisService redisService, IConfiguration configuration, MqttClientService mqttClientService
+            )
         {
             _redisService =redisService; 
             _ILogger = logger;
             _mapper = mapper;
             _ExceptionlessClient = exceptionlessClient;
             _grpcClientFactory = grpcClientFactory;
-            _=ClientInit();
+            this.configuration = configuration;
+            this.mqttClientService = mqttClientService;
+            _ =ClientInit();
             this.dialog = dialog;
             DialogManager = dialogManager;
             ToastManager = toast;
@@ -263,6 +280,7 @@ namespace bbnApp.deskTop.ViewModels
             _codeClient = await _grpcClientFactory.CreateClient<AreaGrpc.AreaGrpcClient>();
             _appSettignClient = await _grpcClientFactory.CreateClient<AppSettingGrpc.AppSettingGrpcClient>();
             _dictionaryClient =await _grpcClientFactory.CreateClient<DataDictionaryGrpc.DataDictionaryGrpcClient>();
+            _authorKeyClient = await _grpcClientFactory.CreateClient<ReigisterKeyGrpcService.ReigisterKeyGrpcServiceClient>();
         }
         /// <summary>
         /// 主题变更
@@ -590,6 +608,13 @@ namespace bbnApp.deskTop.ViewModels
                 .WithContent(title)
                 .OfType(NotificationType.Information)
             .WithActionButton("确认", async _ => {
+
+                if (mqttClientService != null)
+                {
+                    mqttClientService.ClearHandlers();
+                    await mqttClientService.Disconnect();
+                }
+
                 await ThemeInfoSave();
                 TimerDispose();//销毁定时器
                 ac(true); 
@@ -883,6 +908,8 @@ namespace bbnApp.deskTop.ViewModels
                     await DicDataDownload(header);//数据字典下载
                     dialog.LoadingClose(e);
                     PageInited = true;
+                    //MQTT初始化
+                    await MqttInit();
                 },500);
 
             }
@@ -944,6 +971,126 @@ namespace bbnApp.deskTop.ViewModels
             else
             {
                 dialog.Error("错误提示", $"数据字典初始化失败:{response.Message}");
+            }
+        }
+        #endregion
+        #region MQTT初始化
+        /// <summary>
+        /// 
+        /// </summary>
+        private AuthorReginsterKeyClientDto AuthorKey;
+        /// <summary>
+        /// MQTT连接状态
+        /// </summary>
+        [ObservableProperty] private bool _mqttLink = false;
+        /// <summary>
+        /// 默认的订阅主题
+        /// </summary>
+        private string[] topics = [];
+        /// <summary>
+        /// MQTT连接状态
+        /// </summary>
+        [RelayCommand]
+        private void MqttConnect()
+        {
+            if (!MqttLink)
+            {
+                dialog.ShowLoading("通信连接中...",async(e) =>{
+                    try
+                    {
+                        if (AuthorKey == null)
+                        {
+                            await MqttInit();
+                        }
+                        else
+                        {
+                            string ip = configuration.GetSection("MQTT:IP").Value?.ToString() ?? string.Empty;
+                            int port = string.IsNullOrEmpty(configuration.GetSection("MQTT:Port").Value?.ToString()) ? int.MinValue : Convert.ToInt32(configuration.GetSection("MQTT:Port").Value);
+                            if (!string.IsNullOrEmpty(ip))
+                            {
+                                await MqttConnect(ip, port);
+                            }
+                        }
+                    }
+                    catch(Exception ex)
+                    {
+                        dialog.Tips("提示", ex.Message.ToString());
+                    }
+                    finally
+                    {
+                        dialog.LoadingClose(e);
+                    }
+                });
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        private async Task MqttInit()
+        {
+            try
+            {
+                string ip = configuration.GetSection("MQTT:IP").Value?.ToString() ?? string.Empty;
+                int port =string.IsNullOrEmpty(configuration.GetSection("MQTT:Port").Value?.ToString())?int.MinValue:Convert.ToInt32(configuration.GetSection("MQTT:Port").Value);
+                if (!string.IsNullOrEmpty(ip))
+                {
+                    var request = new AuthorReginsterKeyInfoRequestDto { 
+                        CompanyId=UserContext.CurrentUser.CompanyId ,
+                        Yhid=UserContext.CurrentUser.Yhid,
+                        OperatorId=UserContext.CurrentUser.OperatorId 
+                    };
+                    var response = await _authorKeyClient.AuthorRegisterInfoAsync(_mapper.Map<AuthorReginsterKeyInfoRequest>(request),CommAction.GetHeader());
+                    if (response.Code)
+                    {
+                        AuthorKey =_mapper.Map< AuthorReginsterKeyClientDto >(response.Item);
+                        topics= [
+                            $"/Private/Operator/{UserContext.CurrentUser.OperatorId}/Notice",
+                            $"/Private/Operator/{UserContext.CurrentUser.OperatorId}/Message",
+                        ];
+                        await MqttConnect(ip,port);
+                    }
+                    else
+                    {
+                        dialog.Tips("提示", response.Message);
+                    }
+                }
+                else
+                {
+                    dialog.Tips("提示","MQTT参数尚未配置");
+                }
+            }
+            catch(Exception ex)
+            {
+                dialog.Error("错误提示", $"MQTT初始化异常:{ex.Message.ToString()}");
+            }
+        }
+        /// <summary>
+        /// 连接和初始化订阅主题
+        /// </summary>
+        private async Task MqttConnect(string ip,int port) {
+            
+            await mqttClientService.Connect(ip,port,$"bbnAdmin_{UserContext.CurrentUser.OperatorId}",AuthorKey.AppId,AuthorKey.SecriteKey);
+            //订阅默认主题(主应用一般只订阅和当前登录人员有关的通知消息类主题)     
+            foreach(string topic in topics)
+            {
+                await mqttClientService.Subscribe(topic);
+                mqttClientService.RegisterHandler(topic, OnDataReceived);
+            }
+            MqttLink = true;
+        }
+        /// <summary>
+        /// 接收到的消息
+        /// </summary>
+        /// <param name="topic"></param>
+        /// <param name="payload"></param>
+        private void OnDataReceived(string topic, string payload)
+        {
+            if (topic.EndsWith("Notice")|| topic.EndsWith("Message"))
+            {
+                Dispatcher.UIThread.InvokeAsync(() =>
+                {
+                    dialog.Tips("新通知", payload,5, topic.EndsWith("Message")?NotificationType.Success:NotificationType.Information);
+                });
             }
         }
         #endregion

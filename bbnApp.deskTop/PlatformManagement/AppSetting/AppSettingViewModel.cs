@@ -275,10 +275,10 @@ namespace bbnApp.deskTop.PlatformManagement.AppSetting
             try
             {
                 IsEdit = true;
-                var viewModel = new AppSettingEditViewModel(dialog);
+                var viewModel = new AppSettingEditViewModel();
 
                 AppSettingContent = new AppSettingEditView { DataContext = viewModel };
-                viewModel.ViewModelInit(AppSettingSubmitCallBack, Item, _client);
+                viewModel.ViewModelInit(dialog,AppSettingSubmitCallBack, Item, _client,_mapper);
 
             }
             catch (Exception ex)
@@ -288,7 +288,7 @@ namespace bbnApp.deskTop.PlatformManagement.AppSetting
             }
         }
         /// <summary>
-        /// 地区代码提交回调
+        /// 代码提交回调
         /// </summary>
         private void AppSettingSubmitCallBack(bool success, string message, object data)
         {

@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+#忽略 Entitys 文件夹
+bbnApp.Infrastructure/

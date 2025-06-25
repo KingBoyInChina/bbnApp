@@ -1,4 +1,5 @@
-﻿using bbnApp.Common.Models;
+﻿using AutoMapper;
+using bbnApp.Common.Models;
 using bbnApp.deskTop.Common;
 using bbnApp.deskTop.ViewModels;
 using bbnApp.DTOs.CodeDto;
@@ -18,6 +19,7 @@ namespace bbnApp.deskTop.PlatformManagement.AppSetting
 {
     partial class AppSettingEditViewModel : ViewModelBase
     {
+        private IMapper _mapper;
         /// <summary>
         /// 值类型字典
         /// </summary>
@@ -48,7 +50,7 @@ namespace bbnApp.deskTop.PlatformManagement.AppSetting
         /// <summary>
         /// 
         /// </summary>
-        private readonly IDialog dialog;
+        private IDialog dialog;
         /// <summary>
         /// 
         /// </summary>
@@ -56,9 +58,8 @@ namespace bbnApp.deskTop.PlatformManagement.AppSetting
         /// <summary>
         /// 
         /// </summary>
-        public AppSettingEditViewModel(IDialog dialog)
+        public AppSettingEditViewModel()
         {
-            this.dialog = dialog;
             ValueTypeItems = new ObservableCollection<ComboboxItem>
             {
                 new ComboboxItem ("string","自定义字符","string" ),
@@ -77,11 +78,13 @@ namespace bbnApp.deskTop.PlatformManagement.AppSetting
         /// <param name="areaSubmitCallBack"></param>
         /// <param name="Node"></param>
 
-        public void ViewModelInit(Action<bool, string, object> CallBack, AppSettingDto InitValue, AppSettingGrpc.AppSettingGrpcClient client)
+        public void ViewModelInit(IDialog dialog,Action<bool, string, object> CallBack, AppSettingDto InitValue, AppSettingGrpc.AppSettingGrpcClient client, IMapper _mapper)
         {
             _appSettingSubmitCallBack = CallBack;
             _tempAppSettingItem = InitValue;
             _client = client;
+            this._mapper = _mapper;
+            this.dialog = dialog;
         }
         /// <summary>
         /// 
@@ -134,32 +137,32 @@ namespace bbnApp.deskTop.PlatformManagement.AppSetting
                 else
                 {
                     IsBusy = true;
-                    var data = new bbnApp.Protos.AppSetting
-                    {
-                        IdxNum=0,
-                        SettingName = AppSettingItem.SettingName,
-                        SettingCode = AppSettingItem.SettingCode,
-                        SettingDesc = AppSettingItem.SettingDesc,
-                        NowValue = AppSettingItem.NowValue,
-                        DefaultValue = AppSettingItem.DefaultValue,
-                        ValueRange = AppSettingItem.ValueRange.Replace(";","；").Replace("，",","),
-                        SettingIndex = AppSettingItem.SettingIndex,
-                        SettingType = SelectedValueType?.Id,
-                        SettingId = AppSettingItem.SettingId,
-                        IsFiexed = AppSettingItem.IsFiexed,
-                        IsLock = AppSettingItem.IsLock,
-                        LockReason =Share.CommMethod.GetValueOrDefault(AppSettingItem.LockReason,""),
-                        LockTime = Share.CommMethod.GetValueOrDefault(AppSettingItem.LockTime, "")
-                    };
+                    //var data = new AppSetting
+                    //{
+                    //    IdxNum=0,
+                    //    SettingName = AppSettingItem.SettingName,
+                    //    SettingCode = AppSettingItem.SettingCode,
+                    //    SettingDesc = AppSettingItem.SettingDesc,
+                    //    NowValue = AppSettingItem.NowValue,
+                    //    DefaultValue = AppSettingItem.DefaultValue,
+                    //    ValueRange = AppSettingItem.ValueRange.Replace(";","；").Replace("，",","),
+                    //    SettingIndex = AppSettingItem.SettingIndex,
+                    //    SettingType = SelectedValueType?.Id,
+                    //    SettingId = AppSettingItem.SettingId,
+                    //    IsFiexed = AppSettingItem.IsFiexed,
+                    //    IsLock = AppSettingItem.IsLock,
+                    //    LockReason =Share.CommMethod.GetValueOrDefault(AppSettingItem.LockReason,""),
+                    //    LockTime = Share.CommMethod.GetValueOrDefault(AppSettingItem.LockTime, "")
+                    //};
 
-                    AppSettingPostRequest request = new AppSettingPostRequest
+                    AppSettingPostRequestDto request = new AppSettingPostRequestDto
                     {
-                       Item = data,
+                       Item = AppSettingItem,
                     };
 
                     var header = CommAction.GetHeader();
 
-                    AppSettingPostResponse response = await _client.AppSettingPostSaveAsync(request, header);
+                    AppSettingPostResponse response = await _client.AppSettingPostSaveAsync(_mapper.Map<AppSettingPostRequest>(request), header);
                     if (response.Code)
                     {
                         _appSettingSubmitCallBack(response.Code, response.Message, response.Item);

@@ -21,7 +21,7 @@
                  BackgroundStyle="{Binding BackgroundStyle}"
                  BackgroundTransitionsEnabled="{Binding TransitionsEnabled}"
                  CanMinimize="{Binding !WindowLocked}"
-									CanMaximize="{Binding !WindowLocked}"
+								 CanMaximize="{Binding !WindowLocked}"
                  CanMove="{Binding !WindowLocked}"
                  CanResize="{Binding !WindowLocked}"
                  Icon="/Assets/favicon.ico"
@@ -473,7 +473,9 @@
 				</Flyout>
 			</Button.Flyout>
 		</Button>
-
+		<Button Classes="Basic Rounded WindowControlsButton" ToolTip.Tip="通信连接" Command="{Binding MqttConnectCommand}">
+      <avalonia:MaterialIcon Kind="{Binding WindowLocked, Converter={x:Static converters:BoolToIconConverters.Link}}" Foreground="{DynamicResource SukiText}" />
+    </Button>
 	</suki:SukiWindow.RightWindowTitleBarControls>
 
 	<suki:SukiWindow.MenuItems>

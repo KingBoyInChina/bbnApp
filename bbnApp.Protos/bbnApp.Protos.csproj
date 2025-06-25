@@ -9,7 +9,6 @@
   <ItemGroup>
     <Folder Include="User\" />
     <Folder Include="Author\" />
-    <Folder Include="Business\" />
     <Protobuf Include="Author\**" GrpcServices="Server,Client" />
     <Protobuf Include="User\**" GrpcServices="Server,Client" />
     <Protobuf Include="Code\**" GrpcServices="Server,Client" />
