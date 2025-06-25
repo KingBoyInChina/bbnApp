@@ -3,6 +3,7 @@ using bbnApp.Application.IServices.ICODE;
 using bbnApp.Application.IServices.IJWT;
 using bbnApp.Common.Models;
 using bbnApp.Core;
+using bbnApp.Domain.Entities.Business;
 using bbnApp.Domain.Entities.Code;
 using bbnApp.Domain.Entities.User;
 using bbnApp.Domain.Entities.UserLogin;
@@ -683,6 +684,28 @@ namespace bbnApp.Application.Services.CODE
                     if (badd)
                     {
                         await EFObj.AddAsync(model);
+                        #region 新建操作员同时自动生成操作员密钥
+                        var EFKeyObj = dbContext.Set<AuthorRegisterKeys>();
+                        var keymodel = EFKeyObj.FirstOrDefault(x => x.AuthorId == model.OperatorId && x.Yhid == user.Yhid);
+                        if (keymodel == null)
+                        {
+                            keymodel = new AuthorRegisterKeys();
+                            keymodel.Yhid = user.Yhid;
+                            keymodel.AuthorId = Guid.NewGuid().ToString("N");
+                            keymodel.OperatorId = user.OperatorId;
+                            keymodel.IsLock = 0;
+                            keymodel.AppId = Guid.NewGuid().ToString("N").Substring(0, 12);
+                            keymodel.SecriteKey = Guid.NewGuid().ToString("N");
+                            keymodel.CompanyId = model.CompanyId;
+                            keymodel.SetAppName = "个人密钥";
+                            keymodel.SetAppCode = CommMethod.GetChineseSpell(keymodel.SetAppName, false);
+                            keymodel.SetAppDescription = "平台操作员的个人密钥";
+                            keymodel.SelectedAppId = string.Empty; 
+                            keymodel.Isdelete = 0;
+                            keymodel.LastModified = DateTime.Now;
+                            await EFKeyObj.AddAsync(keymodel);
+                        }
+                        #endregion
                     }
                     #region 写操作员权限
                     foreach (var item in OperatorItem.OperatorRoles)
@@ -749,12 +772,22 @@ namespace bbnApp.Application.Services.CODE
                     {
                         return (false,"无效的操作员信息",new OperatorItemDto());
                     }
-                    
+
+                    var EFKeyObj = dbContext.Set<AuthorRegisterKeys>();
+                    var keymodel = EFKeyObj.FirstOrDefault(x => x.AuthorId == model.OperatorId && x.Yhid == user.Yhid);
+
                     if (request.Type == "IsLock")
                     {
                         #region 锁定
                         model.IsLock = model.IsLock==0 ?Convert.ToByte(1) : Convert.ToByte(0);
                         model.LastModified = DateTime.Now;
+                        //同步停用密钥信息
+                        if (keymodel != null)
+                        {
+                            keymodel.IsLock = model.IsLock;
+                            keymodel.ReMarks = model.IsLock==1? "操作员停用":"操作员启用";
+                            keymodel.LastModified = DateTime.Now;
+                        }
                         await dbContext.SaveChangesAsync();
                         return (true,"操作员状态变更完成", await GetOperatorDto(model));
                         #endregion
@@ -773,6 +806,13 @@ namespace bbnApp.Application.Services.CODE
                                 item.Isdelete = 1;
                                 item.LastModified = DateTime.Now;
                             }
+                        }
+                        //同步删除密钥信息
+                        if (keymodel != null)
+                        {
+                            keymodel.Isdelete = 1;
+                            keymodel.ReMarks = "操作员删除";
+                            keymodel.LastModified = DateTime.Now;
                         }
                         await dbContext.SaveChangesAsync();
                         return (true,"操作员删除完成",new OperatorItemDto());
