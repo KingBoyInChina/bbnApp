@@ -1,4 +1,5 @@
 ﻿using bbnApp.Common.Models;
+using bbnApp.Domain.Entities.Code;
 using bbnApp.DTOs.CodeDto;
 
 namespace bbnApp.Application.IServices.ICODE
@@ -51,5 +52,10 @@ namespace bbnApp.Application.IServices.ICODE
         /// <param name="user"></param>
         /// <returns></returns>
         Task<(bool, string, List<DeviceCodeItemDto>)> DeviceSearch(DeviceCodeSearchRequestDto request, UserModel user);
+        /// <summary>
+        /// 获取
+        /// </summary>
+        /// <returns></returns>
+        Task<List<DeviceCode>> GetDeivces(string Yhid);
     }
 }
