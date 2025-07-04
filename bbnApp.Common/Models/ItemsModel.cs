@@ -70,7 +70,7 @@ namespace bbnApp.Common.Models
         /// <param name="Name"></param>
         /// <param name="Description"></param>
         /// <param name="IsLeaf"></param>
-        public ComboboxItem(string Id, string Name, string Tag)
+        public ComboboxItem(string Id="", string Name="", string Tag = "")
         {
             this.Id = Id;
             this.Name = Name;
