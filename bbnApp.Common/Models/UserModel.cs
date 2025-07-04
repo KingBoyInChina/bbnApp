@@ -92,4 +92,4 @@ namespace bbnApp.Common.Models
         /// </summary>
         public DateTime Expires { get; set; }
     }
-    }
+}
