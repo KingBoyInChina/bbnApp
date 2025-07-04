@@ -88,5 +88,12 @@ namespace bbnApp.Application.IServices.ICODE
         /// <param name="user"></param>
         /// <returns></returns>
         Task<(bool, string, OperatorItemDto)> OperatorState(OperatorStateRequestDto request, UserModel user);
+        /// <summary>
+        /// 初始化同事信息
+        /// </summary>
+        /// <param name="Yhid"></param>
+        /// <param name="CompanyId"></param>
+        /// <returns></returns>
+        Task<(bool, string, List<WorkerItemDto>)> GetWorkers(string Yhid, string CompanyId);
     }
 }
