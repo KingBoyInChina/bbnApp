@@ -1,0 +1,493 @@
+<UserControl x:Class="bbnApp.deskTop.UserCenter.UserInformation.UserInformationView"
+         xmlns="https://github.com/avaloniaui"
+         xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         xmlns:suki="https://github.com/kikipoulet/SukiUI"
+         xmlns:converters="clr-namespace:bbnApp.deskTop.Converters"
+         xmlns:theme="clr-namespace:SukiUI.Theme;assembly=SukiUI"
+         xmlns:my="clr-namespace:bbnApp.deskTop.Controls"
+         xmlns:user="clr-namespace:bbnApp.deskTop.UserCenter.UserInformation"
+         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+         xmlns:icon="clr-namespace:bbnApp.deskTop.Controls"
+         d:DesignHeight="768"
+         d:DesignWidth="1220"
+         x:DataType="user:UserInformationViewModel"
+         mc:Ignorable="d">
+  <suki:GlassCard Classes="HeaderCard" Margin="10">
+    <suki:GroupBox>
+
+      <UserControl.Resources>
+        <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
+      </UserControl.Resources>
+
+      <suki:GroupBox.Header>
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*"></ColumnDefinition>
+              <ColumnDefinition Width="8*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Orientation="Horizontal" Grid.Column="0">
+              <avalonia:MaterialIcon Kind="Users"></avalonia:MaterialIcon>
+              <TextBlock VerticalAlignment="Center">用户信息</TextBlock>
+            </StackPanel>
+
+            <Grid Grid.Column="1">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+              </Grid.ColumnDefinitions>
+
+              <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                <avalonia:MaterialIcon Kind="Filter"></avalonia:MaterialIcon>
+                <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">所属地区：</TextBlock>
+                <my:AreaNodeSelector ShowResetButton="True" IsAllEnabled="True" AccessLeve="0" SelectionChanged="AreaNodeFilterSelector_SelectionChanged" InitValue="{Binding InitFilterValue}" Orientation="Horizontal"></my:AreaNodeSelector>
+              </StackPanel>
+
+              <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">用户名称：</TextBlock>
+                <TextBox Watermark="用户名称关键字" Text="{Binding FilterUserName}" MinWidth="150" VerticalAlignment="Center"></TextBox>
+              </StackPanel>
+
+              <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">联系电话：</TextBlock>
+                <TextBox Watermark="用户联系电话" Text="{Binding FilterPhoneNumber}" MinWidth="150" VerticalAlignment="Center"></TextBox>
+              </StackPanel>
+
+              <StackPanel Grid.Column="3" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                <Button VerticalAlignment="Center" theme:ButtonExtensions.ShowProgress="{Binding IsBusy}"  Command="{Binding UserLoadCommand}" Classes="Basic" >
+                  <StackPanel Orientation="Horizontal">
+                    <avalonia:MaterialIcon Kind="Search"   IsVisible="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}"/>
+                    <TextBlock>查询</TextBlock>
+                  </StackPanel>
+                </Button>
+              </StackPanel>
+            </Grid>
+            
+          </Grid>
+      </suki:GroupBox.Header>
+
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="300"></ColumnDefinition>
+          <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <suki:GlassCard Classes="HeaderCard" Margin="5" Grid.Column="0">
+          <suki:GroupBox>
+            <suki:GroupBox.Header>
+
+              <UniformGrid Columns="2">
+
+                <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Grid.Column="0">
+                  <avalonia:MaterialIcon Kind="UserSearch" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+                  <TextBlock Foreground="{DynamicResource SukiText}">用户分类信息</TextBlock>
+                </StackPanel>
+
+                <my:Space HorizontalAlignment="Right" Orientation="Horizontal" VerticalAlignment="Center">
+
+                  <Button Classes="Basic" Command="{Binding UserLoadCommand}">
+                    <StackPanel Orientation="Horizontal">
+                      <avalonia:MaterialIcon Kind="Refresh" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+                    </StackPanel>
+                  </Button>
+
+                  <Button VerticalAlignment="Center"  Command="{Binding UserAddActionCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" Tag="add" Classes="Basic" >
+                    <StackPanel Orientation="Horizontal">
+                      <avalonia:MaterialIcon Kind="Add" />
+                    </StackPanel>
+                  </Button>
+                  
+                </my:Space>
+
+              </UniformGrid>
+
+            </suki:GroupBox.Header>
+            <ScrollViewer>
+              <TreeView ItemsSource="{Binding UserTreeSource}" SelectedItem="{Binding SelectedNode}">
+                <TreeView.ItemTemplate>
+                  <TreeDataTemplate ItemsSource="{Binding SubItems}">
+                    <StackPanel Orientation="Horizontal">
+                      <avalonia:MaterialIcon Kind="{Binding IsLeaf,Converter={x:Static converters:BoolToIconConverters.FileLeaf}}"></avalonia:MaterialIcon>
+                      <TextBlock Text="{Binding Name}" Foreground="{DynamicResource SukiText}">
+                        <TextBlock.ContextMenu>
+                          <ContextMenu>
+                            <MenuItem Header="删除" Tag="IsDelete" Click="MenuItem_Click">
+                              <MenuItem.Icon>
+                                <avalonia:MaterialIcon Kind="Delete"></avalonia:MaterialIcon>
+                              </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="{Binding IsLock,Converter={x:Static converters:BoolToTextConverters.LockLg }}" Tag="IsLock" Click="MenuItem_Click">
+                              <MenuItem.Icon>
+                                <avalonia:MaterialIcon Kind="{Binding IsLock,Converter={x:Static converters:BoolToIconConverters.FileLock }}}"></avalonia:MaterialIcon>
+                              </MenuItem.Icon>
+                            </MenuItem>
+                          </ContextMenu>
+                        </TextBlock.ContextMenu>
+                      </TextBlock>
+                      <avalonia:MaterialIcon Kind="Lock" IsVisible="{Binding IsLock}"></avalonia:MaterialIcon>
+                    </StackPanel>
+                  </TreeDataTemplate>
+                </TreeView.ItemTemplate>
+              </TreeView>
+            </ScrollViewer>
+          </suki:GroupBox>
+        </suki:GlassCard>
+
+        <suki:GlassCard Classes="HeaderCard" Margin="5" Grid.Column="1">
+          <suki:GroupBox>
+            <suki:GroupBox.Header>
+              <UniformGrid Columns="2">
+                <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Grid.Column="0">
+                  <avalonia:MaterialIcon Kind="UserSearch" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+                  <TextBlock Foreground="{DynamicResource SukiText}">(</TextBlock>
+                  <TextBlock Foreground="{DynamicResource SukiText}" Text="{Binding SelectedNode.Name}"></TextBlock>
+                  <TextBlock Foreground="{DynamicResource SukiText}">)</TextBlock>
+                  <TextBlock Foreground="{DynamicResource SukiText}">用户分类信息</TextBlock>
+                </StackPanel>
+
+                <Button VerticalAlignment="Center" Grid.Column="1" HorizontalAlignment="Right" Command="{Binding UserSaveActionCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" Tag="add" Classes="Basic" >
+                  <StackPanel Orientation="Horizontal">
+                    <avalonia:MaterialIcon Kind="Post" />
+                    <TextBlock>保存</TextBlock>
+                  </StackPanel>
+                </Button>
+              </UniformGrid>
+            </suki:GroupBox.Header>
+            <Grid>
+              <Grid.RowDefinitions>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+              </Grid.RowDefinitions>
+              <Grid Grid.Row="0">
+                <Grid.RowDefinitions>
+                  <RowDefinition Height="*"></RowDefinition>
+                  <RowDefinition Height="*"></RowDefinition>
+                  <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="*"></ColumnDefinition>
+                  <ColumnDefinition Width="*"></ColumnDefinition>
+                  <ColumnDefinition Width="*"></ColumnDefinition>
+                  <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Row="0" Grid.Column="0">
+                  <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">用户名称：</TextBlock>
+                  <TextBox Width="230" Text="{Binding UserInformation.UserName}"/>
+                  <TextBlock VerticalAlignment="Center" Classes="NOTNULL">*</TextBlock>
+                </StackPanel>
+                <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
+                  <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">用户分类：</TextBlock>
+                  <ComboBox Width="230" ItemsSource="{Binding UserType}" SelectedItem="{Binding UserSelectedType}">
+                    <ComboBox.ItemTemplate>
+                      <DataTemplate>
+                        <TextBlock Text="{Binding Name}"/>
+                      </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                  </ComboBox>
+                  <TextBlock VerticalAlignment="Center" Classes="NOTNULL">*</TextBlock>
+                </StackPanel>
+                <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Row="0" Grid.Column="2">
+                  <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">用户等级：</TextBlock>
+                  <ComboBox Width="230" ItemsSource="{Binding UserLeve}" SelectedItem="{Binding UserSelectedLeve}">
+                    <ComboBox.ItemTemplate>
+                      <DataTemplate>
+                        <TextBlock Text="{Binding Name}"/>
+                      </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                  </ComboBox>
+                  <TextBlock VerticalAlignment="Center" Classes="NOTNULL">*</TextBlock>
+                </StackPanel>
+                <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Row="0" Grid.Column="3">
+                  <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">种养规模：</TextBlock>
+                  <ComboBox Width="230" ItemsSource="{Binding Scales}" SelectedItem="{Binding UserSelectedScale}">
+                    <ComboBox.ItemTemplate>
+                      <DataTemplate>
+                        <TextBlock Text="{Binding Name}"/>
+                      </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                  </ComboBox>
+                  <TextBlock VerticalAlignment="Center" Classes="NOTNULL">*</TextBlock>
+                </StackPanel>
+                <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                  <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">所在地区：</TextBlock>
+                  <my:AreaNodeSelector ShowResetButton="True" IsAllEnabled="True" AccessLeve="4" Tag="Form" SelectionChanged="AreaNodeSelector_SelectionChanged" InitValue="{Binding InitValue}" Orientation="Horizontal"></my:AreaNodeSelector>
+                  <TextBlock VerticalAlignment="Center" Classes="NOTNULL">*</TextBlock>
+                </StackPanel>
+                <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2">
+                  <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">通信地址：</TextBlock>
+                  <TextBox Width="300" Text="{Binding UserInformation.Address}"/>
+                  <TextBlock VerticalAlignment="Center" Classes="NOTNULL">*</TextBlock>
+                </StackPanel>
+                <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4">
+                  <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">补充说明：</TextBlock>
+                  <TextBox Watermark="备注说明" MaxLength="100" Width="1000" Text="{Binding UserInformation.ReMarks}"  AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
+                </StackPanel>
+              </Grid>
+              <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                  <RowDefinition Height="auto"></RowDefinition>
+                  <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0">
+
+                </Grid>
+                <UniformGrid Columns="2" Grid.Row="1">
+
+                  <suki:GlassCard Classes="HeaderCard" Margin="10" Grid.Column="0">
+                    <suki:GroupBox>
+                      <suki:GroupBox.Header>
+
+                        <UniformGrid Columns="2">
+                          <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Grid.Column="0">
+                            <avalonia:MaterialIcon Kind="Contact" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+                            <TextBlock Foreground="{DynamicResource SukiText}">联系人</TextBlock>
+                          </StackPanel>
+                          <my:Space HorizontalAlignment="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                            <Button Classes="Basic" Command="{Binding ContactAddActionCommand}">
+                              <StackPanel Orientation="Horizontal">
+                                <avalonia:MaterialIcon Kind="Plus" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+                                <TextBlock Foreground="{DynamicResource SukiText}">添加</TextBlock>
+                              </StackPanel>
+                            </Button>
+                          </my:Space>
+                        </UniformGrid>
+
+                      </suki:GroupBox.Header>
+                      <ScrollViewer>
+                        <DataGrid
+                          ItemsSource="{Binding Contacts}"
+                          AutoGenerateColumns="False"
+                          CanUserReorderColumns="True"
+                          CanUserResizeColumns="True"
+                          CanUserSortColumns="True"
+                          GridLinesVisibility="All"
+                          >
+                          <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="序号" Width="80">
+                              <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                  <TextBox HorizontalAlignment="Stretch" Text="{Binding IdxNum}" VerticalAlignment="Center"></TextBox>
+                                </DataTemplate>
+                              </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn Header="联系人" Width="120">
+                              <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                  <TextBox HorizontalAlignment="Stretch" Text="{Binding Contact}" VerticalAlignment="Center"></TextBox>
+                                </DataTemplate>
+                              </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn Header="联系电话" Width="160">
+                              <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                  <TextBox HorizontalAlignment="Stretch" Text="{Binding PhoneNumber}" VerticalAlignment="Center"></TextBox>
+                                </DataTemplate>
+                              </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn Header="职务" Width="120">
+                              <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                  <TextBox HorizontalAlignment="Stretch" Text="{Binding Jobs}" VerticalAlignment="Center"></TextBox>
+                                </DataTemplate>
+                              </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn Header="主要"  Width="80">
+                              <DataTemplate>
+                                <ToggleSwitch Click="ContactToggleSwitch_Click" Tag="IsFirst" IsChecked="{Binding IsFirst}"></ToggleSwitch>
+                              </DataTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn Header="锁定"  Width="80">
+                              <DataTemplate>
+                                <ToggleSwitch Click="ContactToggleSwitch_Click" Tag="ContactLock" IsChecked="{Binding IsLock,Converter={StaticResource IntToBoolConverter}}"></ToggleSwitch>
+                              </DataTemplate>
+                            </DataGridTemplateColumn>
+                            <!-- 自定义操作列 -->
+                            <DataGridTemplateColumn Header="操作" Width="80">
+
+                              <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                  <Button Margin="5,0"
+                                            Classes="Basic Accent"
+                                            ToolTip.Tip="点击删除"
+                                            Tag="ContactDelete"
+                                            Click="ContactButton_Click"
+                                          >
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                      <avalonia:MaterialIcon Kind="DeleteCircle" />
+                                    </StackPanel>
+                                  </Button>
+
+                                </DataTemplate>
+                              </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                          </DataGrid.Columns>
+                        </DataGrid>
+                      </ScrollViewer>
+                    </suki:GroupBox>
+                  </suki:GlassCard>
+
+                  <suki:GlassCard Classes="HeaderCard" Margin="10" Grid.Column="1">
+                    <suki:GroupBox>
+                      <suki:GroupBox.Header>
+
+                        <UniformGrid Columns="2">
+                          <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Grid.Column="0">
+                            <avalonia:MaterialIcon Kind="ListBox" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+                            <TextBlock Foreground="{DynamicResource SukiText}">种养信息</TextBlock>
+                          </StackPanel>
+                          <my:Space HorizontalAlignment="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                            <Button Classes="Basic" Command="{Binding AabAddActionCommand}">
+                              <StackPanel Orientation="Horizontal">
+                                <avalonia:MaterialIcon Kind="Plus" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+                                <TextBlock Foreground="{DynamicResource SukiText}">添加</TextBlock>
+                              </StackPanel>
+                            </Button>
+                          </my:Space>
+                        </UniformGrid>
+
+                      </suki:GroupBox.Header>
+                      <ScrollViewer>
+
+                        <DataGrid
+                          ItemsSource="{Binding Aabs}"
+                          AutoGenerateColumns="False"
+                          CanUserReorderColumns="True"
+                          CanUserResizeColumns="True"
+                          CanUserSortColumns="True"
+                          GridLinesVisibility="All"
+                          >
+                          <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="序号" Width="100">
+                              <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                  <TextBox HorizontalAlignment="Stretch" Text="{Binding IdxNum}" VerticalAlignment="Center"></TextBox>
+                                </DataTemplate>
+                              </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn Header="种养分类" Width="120">
+                              <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                  <ComboBox HorizontalAlignment="Stretch" VerticalAlignment="Center" ItemsSource="{Binding AABTypes}" SelectedItem="{Binding AABTypeSelected}">
+                                    <ComboBox.ItemTemplate>
+                                      <DataTemplate>
+                                        <TextBlock Text="{Binding Name}"/>
+                                      </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                  </ComboBox>
+                                </DataTemplate>
+                              </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn Header="类目" Width="120">
+                              <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                  <ComboBox HorizontalAlignment="Stretch" VerticalAlignment="Center" ItemsSource="{Binding Categoris}" SelectedItem="{Binding CategoriSelected}">
+                                    <ComboBox.ItemTemplate>
+                                      <DataTemplate>
+                                        <TextBlock Text="{Binding Name}"/>
+                                      </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                  </ComboBox>
+                                </DataTemplate>
+                              </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn Header="名称" Width="120">
+                              <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                  <TextBox HorizontalAlignment="Stretch" VerticalAlignment="Center" Text="{Binding ObjName}"></TextBox>
+                                </DataTemplate>
+                              </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn Header="规模" Width="120">
+                              <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                  <NumericUpDown HorizontalAlignment="Stretch" VerticalAlignment="Center" Value="{Binding AreaNumber}" Minimum="0" Increment="10"></NumericUpDown>
+                                </DataTemplate>
+                              </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn Header="规模单位" Width="120">
+                              <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                  <ComboBox HorizontalAlignment="Stretch" VerticalAlignment="Center" ItemsSource="{Binding AreaNumberUnits}" SelectedItem="{Binding AreaNumberUnitSelected}">
+                                    <ComboBox.ItemTemplate>
+                                      <DataTemplate>
+                                        <TextBlock Text="{Binding Name}"/>
+                                      </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                  </ComboBox>
+                                </DataTemplate>
+                              </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn Header="分布情况" Width="120">
+                              <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                  <ComboBox HorizontalAlignment="Stretch" VerticalAlignment="Center" ItemsSource="{Binding Distributions}" SelectedItem="{Binding DistributionSelected}">
+                                    <ComboBox.ItemTemplate>
+                                      <DataTemplate>
+                                        <TextBlock Text="{Binding Name}"/>
+                                      </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                  </ComboBox>
+                                </DataTemplate>
+                              </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn Header="锁定"  Width="80">
+                              <DataTemplate>
+                                <ToggleSwitch Click="AabToggleSwitch_Click" Tag="AabLock" IsChecked="{Binding IsLock,Converter={StaticResource IntToBoolConverter}}"></ToggleSwitch>
+                              </DataTemplate>
+                            </DataGridTemplateColumn>
+                            <!-- 自定义操作列 -->
+                            <DataGridTemplateColumn Header="操作" Width="80">
+
+                              <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                  <Button Margin="5,0"
+                                            Classes="Basic Accent"
+                                            ToolTip.Tip="点击删除"
+                                            Tag="AabDelete"
+                                            Click="AabButton_Click"
+                                          >
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                      <avalonia:MaterialIcon Kind="DeleteCircle" />
+                                    </StackPanel>
+                                  </Button>
+
+                                </DataTemplate>
+                              </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                          </DataGrid.Columns>
+                        </DataGrid>
+
+                      </ScrollViewer>
+                    </suki:GroupBox>
+                  </suki:GlassCard>
+                </UniformGrid>
+
+              </Grid>
+            </Grid>
+          </suki:GroupBox>
+        </suki:GlassCard>
+
+      </Grid>
+
+    </suki:GroupBox>
+  </suki:GlassCard>
+</UserControl>

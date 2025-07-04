@@ -314,7 +314,6 @@ namespace bbnApp.deskTop.OrganizationStructure.Employee
                 dialog.Error("提示", ex.Message.ToString());
             }
         }
-
         /// <summary>
         /// 加载公司所有人员信息
         /// </summary>

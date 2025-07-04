@@ -183,6 +183,10 @@ namespace bbnApp.deskTop.ViewModels
         /// </summary>
         private DataDictionaryGrpc.DataDictionaryGrpcClient _dictionaryClient;
         /// <summary>
+        /// 操作员
+        /// </summary>
+        private OperatorGrpc.OperatorGrpcClient _operatorClient;
+        /// <summary>
         /// 
         /// </summary>
         private readonly IGrpcClientFactory _grpcClientFactory;
@@ -281,6 +285,7 @@ namespace bbnApp.deskTop.ViewModels
             _appSettignClient = await _grpcClientFactory.CreateClient<AppSettingGrpc.AppSettingGrpcClient>();
             _dictionaryClient =await _grpcClientFactory.CreateClient<DataDictionaryGrpc.DataDictionaryGrpcClient>();
             _authorKeyClient = await _grpcClientFactory.CreateClient<ReigisterKeyGrpcService.ReigisterKeyGrpcServiceClient>();
+            _operatorClient = await _grpcClientFactory.CreateClient<OperatorGrpc.OperatorGrpcClient>();
         }
         /// <summary>
         /// 主题变更
@@ -533,7 +538,7 @@ namespace bbnApp.deskTop.ViewModels
                 IsLogined = true;
                 TopMenuItems = _mapper.Map<AvaloniaList<TopMenuItemDto>>(response.TopMenus);
                 UserInfoDto userInfo = _mapper.Map<UserInfoDto>(response.UserInfo);
-                //这里因为字段属性不一致，所以需要手动映射
+                #region 这里手动处理下
                 LoginUser = new UserModel {
                     Yhid = userInfo.Yhid,
                     AreaCode = userInfo.AreaCode,
@@ -556,6 +561,7 @@ namespace bbnApp.deskTop.ViewModels
                     PositionLeve = userInfo.PositionLeve,
                     PassWordExpTime =CommMethod.GetValueOrDefault(userInfo.PassWordExpTime,DateTime.Now),
                 };
+                #endregion
                 UserContext.CurrentUser = LoginUser;
                 //变更Tilte
                 Title = $"{LoginUser.CompanyName}-{LoginUser.DepartMentName}";
@@ -906,6 +912,7 @@ namespace bbnApp.deskTop.ViewModels
                     await AreaCodeInit(header);//行政区划下载
                     await AppSettingDownload(header);//系统配置下载
                     await DicDataDownload(header);//数据字典下载
+                    await WorkersDataDownload(header);//同事信息下载
                     dialog.LoadingClose(e);
                     PageInited = true;
                     //MQTT初始化
@@ -925,16 +932,23 @@ namespace bbnApp.deskTop.ViewModels
         /// <returns></returns>
         private async Task AreaCodeInit(Metadata header)
         {
-            AreaTreeNodeRequestDto request = new AreaTreeNodeRequestDto { AreaCode = string.Empty, AreaLeve = 0 };
-            AreaTreeNodeResponse response =await _codeClient.AreaTreeLoadAsync(_mapper.Map<AreaTreeNodeRequest>(request),header);
-            if(response.Code)
+            try
             {
-                List<AreaTreeNodeDto> list = _mapper.Map<List<AreaTreeNodeDto>>(response.Items);
-                DicContext.AreaTree = list;
+                AreaTreeNodeRequestDto request = new AreaTreeNodeRequestDto { AreaCode = string.Empty, AreaLeve = 0 };
+                AreaTreeNodeResponse response = await _codeClient.AreaTreeLoadAsync(_mapper.Map<AreaTreeNodeRequest>(request), header);
+                if (response.Code)
+                {
+                    List<AreaTreeNodeDto> list = _mapper.Map<List<AreaTreeNodeDto>>(response.Items);
+                    DicContext.AreaTree = list;
+                }
+                else
+                {
+                    dialog.Error("错误提示", $"行政区划字典初始化失败:{response.Message}");
+                }
             }
-            else
+            catch(Exception ex)
             {
-                dialog.Error("错误提示", $"行政区划字典初始化失败:{response.Message}");
+                dialog.Error("错误提示", $"行政区划字典初始化异常:{ex.Message}");
             }
         }
         /// <summary>
@@ -944,15 +958,22 @@ namespace bbnApp.deskTop.ViewModels
         /// <returns></returns>
         private async Task AppSettingDownload(Metadata header)
         {
-            AppSettingDownloadRequestDto request = new AppSettingDownloadRequestDto { };
-            var response = await _appSettignClient.AppSettingDownloadAsync(_mapper.Map<AppSettingDownloadRequest>(request), header);
-            if (response.Code)
+            try
             {
-                DicContext.AppSettingList = _mapper.Map<List<AppSettingDto>>(response.Items);
+                AppSettingDownloadRequestDto request = new AppSettingDownloadRequestDto { };
+                var response = await _appSettignClient.AppSettingDownloadAsync(_mapper.Map<AppSettingDownloadRequest>(request), header);
+                if (response.Code)
+                {
+                    DicContext.AppSettingList = _mapper.Map<List<AppSettingDto>>(response.Items);
+                }
+                else
+                {
+                    dialog.Error("错误提示", $"系统配置参数初始化失败:{response.Message}");
+                }
             }
-            else
+            catch(Exception ex)
             {
-                dialog.Error("错误提示", $"系统配置参数初始化失败:{response.Message}");
+                dialog.Error("错误提示", $"系统配置参数初始化异常:{ex.Message}");
             }
         }
         /// <summary>
@@ -962,15 +983,95 @@ namespace bbnApp.deskTop.ViewModels
         /// <returns></returns>
         private async Task DicDataDownload(Metadata header)
         {
-            DataDictionaryDownloadRequestDto request = new DataDictionaryDownloadRequestDto { };
-            var response = await _dictionaryClient.DicDownloadAsync(_mapper.Map<DataDictionaryDownloadRequest>(request), header);
-            if (response.Code)
+            try
             {
-                DicContext.DicItems = _mapper.Map<List<DicTreeItemDto>>(response.Item);
+                DataDictionaryDownloadRequestDto request = new DataDictionaryDownloadRequestDto { };
+                var response = await _dictionaryClient.DicDownloadAsync(_mapper.Map<DataDictionaryDownloadRequest>(request), header);
+                if (response.Code)
+                {
+                    DicContext.DicItems = _mapper.Map<List<DicTreeItemDto>>(response.Item);
+
+                    List<ComboboxItem> items = new List<ComboboxItem>();
+                    foreach (var item in response.Item)
+                    {
+                        if (item.SubItems.Count > 0)
+                        {
+                            foreach (var citem in item.SubItems)
+                            {
+                                if (citem.SubItems.Count > 0)
+                                {
+                                    var i = citem.SubItems.Select(x => new ComboboxItem
+                                    {
+                                        Id = x.PId,
+                                        Name = x.Name,
+                                        Tag = x.Tag
+                                    }).ToList();
+                                    items.AddRange(i);
+                                }
+                                else
+                                {
+                                    items.Add(new ComboboxItem
+                                    {
+                                        Id = citem.Id,
+                                        Name = citem.Name,
+                                        Tag = citem.Tag
+                                    });
+                                }
+                            }
+                        }
+                        else
+                        {
+                            items.Add(new ComboboxItem
+                            { 
+                                Id=item.Id,
+                                Name=item.Name,
+                                Tag=item.Tag
+                            });
+                        }
+                           
+                    }
+                    DicContext.DicList = items;
+                }
+                else
+                {
+                    dialog.Error("错误提示", $"数据字典初始化失败:{response.Message}");
+                }
             }
-            else
+            catch(Exception ex)
             {
-                dialog.Error("错误提示", $"数据字典初始化失败:{response.Message}");
+                dialog.Error("错误提示", $"数据字典初始化异常:{ex.Message}");
+            }
+        }
+        /// <summary>
+        /// 公司和部门同事初始化
+        /// </summary>
+        /// <param name="header"></param>
+        /// <returns></returns>
+        private async Task WorkersDataDownload(Metadata header)
+        {
+            try
+            {
+                OperatorsLoadRequestDto request = new OperatorsLoadRequestDto
+                {
+                    CompanyId = UserContext.CurrentUser.CompanyId,
+                    Yhid = UserContext.CurrentUser.Yhid
+                };
+                var response = await _operatorClient.OperatorsLoadAsync(_mapper.Map<OperatorsLoadRequest>(request), header);
+                if (response.Code)
+                {
+                    var operators = _mapper.Map<List<WorkerItemDto>>(response.Operators);
+                    //解析同事
+                    UserContext.CompanyUsers = operators;
+                    UserContext.DepartMentUsers = operators.Where(x => x.DepartMentId == UserContext.CurrentUser.DepartMentId).ToList();
+                }
+                else
+                {
+                    dialog.Error("错误提示", $"数据字典初始化失败:{response.Message}");
+                }
+            }
+            catch(Exception ex)
+            {
+                dialog.Error("错误提示", $"数据字典初始化异常:{ex.Message}");
             }
         }
         #endregion
@@ -1069,7 +1170,7 @@ namespace bbnApp.deskTop.ViewModels
         /// </summary>
         private async Task MqttConnect(string ip,int port) {
             
-            await mqttClientService.Connect(ip,port,$"bbnAdmin_{UserContext.CurrentUser.OperatorId}",AuthorKey.AppId,AuthorKey.SecriteKey);
+            await mqttClientService.Connect(ip,port,$"{UserContext.CurrentUser.OperatorId}",AuthorKey.AppId,AuthorKey.SecriteKey);
             //订阅默认主题(主应用一般只订阅和当前登录人员有关的通知消息类主题)     
             foreach(string topic in topics)
             {

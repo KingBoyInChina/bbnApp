@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using bbnApp.Application.DTOs.LoginDto;
+using bbnApp.Domain.Entities.Business;
 using bbnApp.DTOs.BusinessDto;
 using bbnApp.DTOs.CodeDto;
 using bbnApp.DTOs.CommDto;
@@ -107,6 +108,10 @@ namespace bbnApp.Service.GlobalService
             CreateMap<OperatorStateRequestDto, OperatorStateRequest>().ReverseMap();
             // 操作员状态响应对象
             CreateMap<OperatorStateResponseDto, OperatorStateResponse>().ReverseMap();
+            CreateMap<OperatorsLoadRequestDto, OperatorsLoadRequest>().ReverseMap();
+            CreateMap<OperatorsLoadResponseDto, OperatorsLoadResponse>().ReverseMap();
+            CreateMap<WorkerItemDto, WorkerItem>().ReverseMap();
+            
             #endregion
             #region 平台服务密钥生成
             CreateMap<AuthorReginsterKeyClientDto, AuthorReginsterKeyClient>().ReverseMap();
@@ -271,6 +276,104 @@ namespace bbnApp.Service.GlobalService
             CreateMap<GetLoactionResponseDto, GetLoactionResponse>().ReverseMap();
             CreateMap<GetDefaultLoactionRequestDto, GetDefaultLoactionRequest>().ReverseMap();
             CreateMap<GetDefaultLoactionResponseDto, GetDefaultLoactionResponse>().ReverseMap();
+            #endregion
+            #region 用户
+            // 用户树形对象映射
+            CreateMap<UserTreeItemDto, UserTreeItem>().ReverseMap();
+
+            // 用户信息映射
+            CreateMap<UserInformationDto, UserInformation>().ReverseMap();
+
+            // 联系人映射
+            CreateMap<UserContactDto, UserContact>().ReverseMap();
+
+            // 种养信息映射
+            CreateMap<UserAabInformationDto, UserAabInformation>().ReverseMap();
+
+            // 用户信息树查询请求映射
+            CreateMap<UserInformationTreeRequestDto, UserInformationTreeRequest>().ReverseMap();
+
+            // 用户信息树查询响应映射
+            CreateMap<UserInformationTreeResponseDto, UserInformationTreeResponse>().ReverseMap();
+
+            // 用户信息列表请求映射
+            CreateMap<UserInformationListRequestDto, UserInformationListRequest>().ReverseMap();
+
+            // 用户信息列表响应映射
+            CreateMap<UserInformationListResponseDto, UserInformationListResponse>().ReverseMap();
+
+            // 用户信息读取请求映射
+            CreateMap<UserInformationLoadRequestDto, UserInformationLoadRequest>().ReverseMap();
+
+            // 用户信息读取响应映射
+            CreateMap<UserInformationLoadResponseDto, UserInformationLoadResponse>().ReverseMap();
+
+            // 用户信息提交请求映射
+            CreateMap<UserInformationSaveRequestDto, UserInformationSaveRequest>().ReverseMap();
+
+            // 用户信息提交响应映射
+            CreateMap<UserInformationSaveResponseDto, UserInformationSaveResponse>().ReverseMap();
+
+            // 用户信息状态变更请求映射
+            CreateMap<UserInformationStateRequestDto, UserInformationStateRequest>().ReverseMap();
+
+            // 用户信息状态变更响应映射
+            CreateMap<UserInformationStateResponseDto, UserInformationStateResponse>().ReverseMap();
+            #endregion
+            #region 设备
+            
+            // 树形对象
+            CreateMap<UserInformationDto, UserInfoData>().ReverseMap();
+            // 树形对象
+            CreateMap<UserDeviceTreeItemDto, UserDeviceTreeItem>().ReverseMap();
+
+            // 用户网关设备对象
+            CreateMap<UserGetWayDto, UserGetWay>().ReverseMap();
+
+            // 用户网关关联设备
+            CreateMap<UserGetWayDeviceDto, UserGetWayDevice>().ReverseMap();
+
+            // 边缘盒子
+            CreateMap<UserBoxDto, UserBox>().ReverseMap();
+
+            // 边缘盒子对应的摄像头
+            CreateMap<UserCameraDto, UserCamera>().ReverseMap();
+
+            // 用户设备信息树查询请求
+            CreateMap<UserDeviceTreeRequestDto, UserDeviceTreeRequest>().ReverseMap();
+
+            // 用户设备信息树查询响应
+            CreateMap<UserDeviceTreeResponseDto, UserDeviceTreeResponse>().ReverseMap();
+
+            // 用户设备树查询请求
+            CreateMap<UserDeviceListRequestDto, UserDeviceListRequest>().ReverseMap();
+
+            // 用户设备树查询响应
+            CreateMap<UserDeviceListResponseDto, UserDeviceListResponse>().ReverseMap();
+
+            // 用户网关提交请求
+            CreateMap<UserGetWaySaveRequestDto, UserGetWaySaveRequest>().ReverseMap();
+            // 用户网关提交响应
+            CreateMap<UserGetWaySaveResponseDto, UserGetWaySaveResponse>().ReverseMap();
+            // 用户网关设备提交请求
+            CreateMap<UserGetWayDeviceSaveRequestDto, UserGetWayDeviceSaveRequest>().ReverseMap();
+            // 用户网关设备提交响应
+            CreateMap<UserGetWayDeviceSaveResponseDto, UserGetWayDeviceSaveResponse>().ReverseMap();
+            // 用户边缘盒子提交请求
+            CreateMap<UserBoxSaveRequestDto, UserBoxSaveRequest>().ReverseMap();
+            // 用户边缘盒子提交响应
+            CreateMap<UserBoxSaveResponseDto, UserBoxSaveResponse>().ReverseMap();
+            // 用户摄像头提交请求
+            CreateMap<UserCameraSaveRequestDto, UserCameraSaveRequest>().ReverseMap();
+            // 用户摄像头提交响应
+            CreateMap<UserCameraSaveResponseDto, UserCameraSaveResponse>().ReverseMap();
+
+            // 用户设备状态变更请求
+            CreateMap<UserDeviceStateRequestDto, UserDeviceStateRequest>().ReverseMap();
+
+            // 用户设备状态变更响应
+            CreateMap<UserDeviceStateResponseDto, UserDeviceStateResponse>().ReverseMap();
+
             #endregion
         }
     }

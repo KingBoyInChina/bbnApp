@@ -30,6 +30,8 @@ using bbnApp.deskTop.PlatformManagement.MaterialsCode;
 using bbnApp.deskTop.PlatformManagement.OperationCode;
 using bbnApp.deskTop.PlatformManagement.TopicCode;
 using bbnApp.deskTop.Services;
+using bbnApp.deskTop.UserCenter.UserDevice;
+using bbnApp.deskTop.UserCenter.UserInformation;
 using bbnApp.deskTop.ViewModels;
 using bbnApp.deskTop.Views;
 using bbnApp.GrpcClients;
@@ -162,7 +164,8 @@ public partial class App :Avalonia.Application
             .AddView<RoleView, RoleViewModel>(services)
             .AddView<OperatorView, OperatorViewModel>(services)
             .AddView<ReigisterKeyView, ReigisterKeyViewModel>(services)
-
+            .AddView<UserInformationView, UserInformationViewModel>(services)
+            .AddView<UserDeviceView, UserDeviceViewModel>(services)
             .AddView<InputPrompt, InputPromptViewModel>(services);
     }
 
@@ -209,7 +212,7 @@ public partial class App :Avalonia.Application
         //});
         //注册工厂
         //debug调试模式下延迟一会儿，不然服务还没注册就开始调用了
-        //Task.Delay(20000).GetAwaiter().GetResult();
+        Task.Delay(20000).GetAwaiter().GetResult();
         services.AddSingleton<IGrpcClientFactory, BbnGrpcClientFactory>();
         #endregion
         #region redis注入

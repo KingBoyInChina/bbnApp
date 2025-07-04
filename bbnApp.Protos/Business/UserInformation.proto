@@ -1,0 +1,161 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "bbnApp.Protos";
+
+package UserInformationGrpc;
+
+/********定义UserInformation服务********/
+service UserInformationGrpc {
+	//查询
+  rpc UserInformationTree (UserInformationTreeRequest) returns (UserInformationTreeResponse);
+	//查询
+  rpc UserInformationList (UserInformationListRequest) returns (UserInformationListResponse);
+  //读取
+  rpc UserInformationLoad (UserInformationLoadRequest) returns (UserInformationLoadResponse);
+  //提交
+  rpc UserInformationSave (UserInformationSaveRequest) returns (UserInformationSaveResponse);
+  //状态变更
+  rpc UserInformationState (UserInformationStateRequest) returns (UserInformationStateResponse);
+}
+
+// 用户树形对象
+message UserTreeItem {
+    string Id = 1; // ID
+    string PId = 2; // 父ID
+    string Name = 3; // 名称
+    string Tag = 4; // 标签
+    bool IsLeaf = 5; // 是否叶子节点
+    bool IsLock = 6; // 锁定状态
+    repeated UserTreeItem SubItems = 7; // 子项
+}
+
+// 用户信息
+message UserInformation {
+    int32 IdxNum = 1; // 序号
+    string UserId = 2; // 用户ID
+    string UserType = 3; // 用户类型
+    string UserLeve = 4; // 用户等级
+    string UserName = 5; // 用户名称
+    string UserNumber = 6; // 用户编号
+    string Contact = 7; // 联系人
+    string PhoneNumber = 8; // 联系电话
+    string AreaName = 9; // 所在地名称
+    string AreaId = 10; // 所在地ID
+    string Address = 11; // 通信地址
+    string Point = 12; // 位置坐标
+    int32 IsLock = 13; // 停用
+    string LockTime = 14; // 锁定时间
+    string LockReason = 15; // 锁定原因
+    string ReMarks = 16; // 备注信息
+    string Scale=17;//种养规模
+}
+
+// 联系人
+message UserContact {
+    int32 IdxNum = 1; // 序号
+    string ContactId = 2; // 联系人ID
+    string UserId = 3; // 用户ID
+    string Contact = 4; // 联系人
+    string PhoneNumber = 5; // 联系电话
+    bool IsFirst = 6; // 主要联系人
+    string Jobs = 7; // 职务
+    int32 IsLock = 8; // 停用
+    string LockTime = 9; // 锁定时间
+    string LockReason = 10; // 锁定原因
+    string ReMarks = 11; // 备注信息
+}
+
+// 种养信息
+message UserAabInformation {
+    int32 IdxNum = 1; // 序号
+    string AabId = 2; // 种养信息ID
+    string UserId = 3; // 用户ID
+    string AABType = 4; // 种养类型
+    string Categori = 5; // 种养分类
+    string ObjName = 6; // 种养名称
+    string ObjCode = 7; // 种养名称代码
+    double AreaNumber = 8; // 面积
+    string AreaNumberUnit = 9; // 面积单位
+    string Distribution = 10; // 分布情况
+    string Point = 11; // 主要位置
+    int32 IsLock = 12; // 停用
+    string LockTime = 13; // 锁定时间
+    string LockReason = 14; // 锁定原因
+    string ReMarks = 15; // 备注信息
+}
+
+// 用户信息树查询请求
+message UserInformationTreeRequest {
+    string AreaId = 1; // 所在地区
+    string UserName = 2; // 用户名称
+    string PhoneNumber = 3; // 联系电话
+}
+
+// 用户信息树查询响应
+message UserInformationTreeResponse {
+    bool Code = 1; // 请求状态
+    string Message = 2; // 消息
+    repeated UserTreeItem Items = 3; // 响应数据集
+}
+
+// 用户信息树查询请求
+message UserInformationListRequest {
+    string AreaId = 1; // 所在地区
+    string UserName = 2; // 用户名称
+    string PhoneNumber = 3; // 联系电话
+}
+
+// 用户信息树查询响应
+message UserInformationListResponse {
+    bool Code = 1; // 请求状态
+    string Message = 2; // 消息
+    repeated UserInformation Items = 3; // 响应数据集
+}
+
+// 用户信息读取请求
+message UserInformationLoadRequest {
+    string UserId = 1; // 用户ID
+}
+
+// 用户信息读取响应
+message UserInformationLoadResponse {
+    bool Code = 1; // 请求状态
+    string Message = 2; // 消息
+    UserInformation User = 3; // 基础信息
+    repeated UserContact Contacts = 4; // 联系人信息
+    repeated UserAabInformation Aabs = 5; // 种养信息
+}
+
+// 用户信息提交请求
+message UserInformationSaveRequest {
+    UserInformation User = 1; // 基础信息
+    repeated UserContact Contacts = 2; // 联系人信息
+    repeated UserAabInformation Aabs = 3; // 种养信息
+}
+
+// 用户信息提交响应
+message UserInformationSaveResponse {
+    bool Code = 1; // 请求状态
+    string Message = 2; // 消息
+    UserInformation User = 3; // 基础信息
+    repeated UserContact Contacts = 4; // 联系人信息
+    repeated UserAabInformation Aabs = 5; // 种养信息
+}
+
+// 用户信息状态变更请求
+message UserInformationStateRequest {
+    string Type = 1; // 类型
+    string UserId = 2; // 用户ID
+    string Reason = 3; // 原因
+    string ContactId = 4; // 用户ID
+    string AabId = 5; // 用户ID
+}
+
+// 用户信息状态变更响应
+message UserInformationStateResponse {
+    bool Code = 1; // 请求状态
+    string Message = 2; // 消息
+    UserInformation User = 3; // 基础信息
+    repeated UserContact Contacts = 4; // 联系人信息
+    repeated UserAabInformation Aabs = 5; // 种养信息
+}

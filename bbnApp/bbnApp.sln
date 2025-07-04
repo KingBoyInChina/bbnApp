@@ -35,6 +35,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bbnApp.MQTT.Service", "..\b
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bbnApp.MQTT.Client", "..\bbnApp.MQTT.Client\bbnApp.MQTT.Client.csproj", "{4D1DEA63-20A6-4E72-A0DD-C89FF09BDA10}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bbnApp.MQTT.DataReciveClient", "..\bbnApp.MQTT.DataReciveClient\bbnApp.MQTT.DataReciveClient.csproj", "{92CF17BC-1494-4408-847A-96BAEA7260CA}"
+EndProject
+Project("{11A8DD76-328B-46DF-9F39-F559912D0360}") = "bbnApp.loT.ESP32C3", "..\bbnApp.loT.ESP32C3\bbnApp.loT.ESP32C3.nfproj", "{8AD19C81-42DF-42E8-91BB-EE6F2365B8BF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -105,6 +109,16 @@ Global
 		{4D1DEA63-20A6-4E72-A0DD-C89FF09BDA10}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D1DEA63-20A6-4E72-A0DD-C89FF09BDA10}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D1DEA63-20A6-4E72-A0DD-C89FF09BDA10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92CF17BC-1494-4408-847A-96BAEA7260CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92CF17BC-1494-4408-847A-96BAEA7260CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92CF17BC-1494-4408-847A-96BAEA7260CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92CF17BC-1494-4408-847A-96BAEA7260CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8AD19C81-42DF-42E8-91BB-EE6F2365B8BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AD19C81-42DF-42E8-91BB-EE6F2365B8BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AD19C81-42DF-42E8-91BB-EE6F2365B8BF}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{8AD19C81-42DF-42E8-91BB-EE6F2365B8BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AD19C81-42DF-42E8-91BB-EE6F2365B8BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8AD19C81-42DF-42E8-91BB-EE6F2365B8BF}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

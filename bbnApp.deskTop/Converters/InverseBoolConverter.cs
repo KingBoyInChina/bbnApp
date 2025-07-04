@@ -14,17 +14,17 @@ public class InverseBoolConverter : IValueConverter
     {
         if (value is bool boolValue)
         {
-            return !boolValue; // 反转布尔值
+            return !(bool)boolValue; // 反转布尔值
         }
-        return value;
+        return (bool)value;
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
     {
         if (value is bool boolValue)
         {
-            return !boolValue; // 反转布尔值
+            return !(bool)boolValue; // 反转布尔值
         }
-        return value;
+        return (bool)value;
     }
 }

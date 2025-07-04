@@ -4,6 +4,12 @@ using System.Globalization;
 
 namespace bbnApp.deskTop.Converters
 {
+
+    public static class IntToBoolConverters
+    {
+        public static IValueConverter Instance { get; } = new IntToBoolConverter();
+    }
+
     public class IntToBoolConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

@@ -1,0 +1,241 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "bbnApp.Protos";
+
+package UserDeviceGrpc;
+
+/********定义UserDevice服务********/
+service UserDeviceGrpc {
+	//查询
+  rpc UserDeviceTree (UserDeviceTreeRequest) returns (UserDeviceTreeResponse);
+	//查询
+  rpc UserDeviceList (UserDeviceListRequest) returns (UserDeviceListResponse);
+  //网关提交
+  rpc UserGetWaySave (UserGetWaySaveRequest) returns (UserGetWaySaveResponse);
+  //网关设备提交
+  rpc UserGetWayDeviceSave (UserGetWayDeviceSaveRequest) returns (UserGetWayDeviceSaveResponse);
+  //盒子提交
+  rpc UserBoxSave (UserBoxSaveRequest) returns (UserBoxSaveResponse);
+  //盒子摄像头提交
+  rpc UserCameraSave (UserCameraSaveRequest) returns (UserCameraSaveResponse);
+  //状态变更
+  rpc UserDeviceState (UserDeviceStateRequest) returns (UserDeviceStateResponse);
+}
+// 树形对象
+message UserDeviceTreeItem {
+    string Id = 1; // ID
+    string PId = 2; // 父ID
+    string Name = 3; // 名称
+    string Tag = 4; // Tag
+    bool IsLeaf = 5; // 是否叶子节点
+    bool IsLock = 6; // 是否锁定
+    repeated UserDeviceTreeItem SubItems = 7; // 子项
+}
+
+// 用户网关设备对象
+message UserGetWay {
+    int32 IdxNum = 1; // 序号
+    string Yhid = 2; // 用户组ID
+    string GetWayId = 3; // 网关ID
+    string UserId = 4; // 用户ID
+    string DeviceId = 5; // 网关设备ID
+    string GetWayName = 6; // 网关名称
+    string GetWayNumber = 7; // 网关编号
+    string GetWayLocation = 8; // 安装位置
+    string WlanType = 9; // 网络连接方式
+    string InstallTime = 10; // 安装时间（字符串格式）
+    string Installer = 11; // 安装人
+    string InstallerId = 12; // 安装人ID
+    string Warranty = 13; // 维保到期时间（字符串格式）
+    int32 IsLock = 14; // 停用
+    string LockTime = 15; // 停用时间
+    string LockReason = 16; // 停用原因
+    string ReMarks = 17; // 备注信息
+    repeated UserGetWayDevice Devices = 18; // 网关关联设备
+    string DeviceName = 19; // 网关设备名称
+}
+
+// 用户网关关联设备
+message UserGetWayDevice {
+    int32 IdxNum = 1; // 序号
+    string Yhid = 2; // 用户组ID
+    string GetWayDeviceId = 3; // 网关管理的设备ID
+    string GetWayId = 4; // 网关ID
+    string UserId = 5; // 用户ID
+    string DeviceId = 6; // 设备ID
+    string DeviceNumber = 7; // 设备编号
+    string InstallTime = 8; // 安装时间（字符串格式）
+    string Installer = 9; // 安装人
+    string InstallerId = 10; // 安装人ID
+    string Warranty = 11; // 维保到期时间（字符串格式）
+    int32 IsLock = 12; // 停用
+    string LockTime = 13; // 停用时间
+    string LockReason = 14; // 停用原因
+    string ReMarks = 15; // 备注信息
+    string DeviceName = 16; // 设备名称
+}
+
+// 边缘盒子
+message UserBox {
+    int32 IdxNum = 1; // 序号
+    string Yhid = 2; // 用户组ID
+    string BoxId = 3; // 盒子ID
+    string UserId = 4; // 用户ID
+    string DeviceId = 5; // 设备ID
+    string BoxName = 6; // 盒子名称
+    string BoxNumber = 7; // 盒子编号
+    string BoxLocation = 8; // 安装位置
+    string WlanType = 9; // 网络连接方式
+    int32 TapeWidth = 10; // 带宽
+    string InstallTime = 11; // 安装时间（字符串格式）
+    string Installer = 12; // 安装人
+    string InstallerId = 13; // 安装人ID
+    string Warranty = 14; // 维保到期时间（字符串格式）
+    int32 IsLock = 15; // 停用
+    string LockTime = 16; // 停用时间
+    string LockReason = 17; // 停用原因
+    string ReMarks = 18; // 备注信息
+    repeated UserCamera UserCameras = 19; // 关联摄像头
+    string DeviceName = 20; //设备名称
+}
+
+// 边缘盒子对应的摄像头
+message UserCamera {
+    int32 IdxNum = 1; // 序号
+    string Yhid = 2; // 用户组ID
+    string CameraId = 3; // 摄像头ID
+    string BoxId = 4; // 盒子ID
+    string UserId = 5; // 用户ID
+    string DeviceId = 6; // 设备ID
+    string CameraNumber = 7; // 摄像头编号
+    string CameraIp = 8; // 摄像头IP
+    string CameraChannel = 9; // 摄像头通道号
+    string CameraName = 10; // 摄像头自定义名称
+    string CameraAdmin = 11; // 摄像头登录名
+    string CameraPassword = 12; // 摄像头登录密码
+    string InstallTime = 13; // 安装时间（字符串格式）
+    string Installer = 14; // 安装人
+    string InstallerId = 15; // 安装人ID
+    string Warranty = 16; // 维保到期时间（字符串格式）
+    int32 IsLock = 17; // 停用
+    string LockTime = 18; // 停用时间
+    string LockReason = 19; // 停用原因
+    string ReMarks = 20; // 备注信息
+    string DeviceName = 21; //设备名称
+}
+
+// 用户信息
+message UserInfoData {
+    int32 IdxNum = 1; // 序号
+    string UserId = 2; // 用户ID
+    string UserType = 3; // 用户类型
+    string UserLeve = 4; // 用户等级
+    string UserName = 5; // 用户名称
+    string UserNumber = 6; // 用户编号
+    string Contact = 7; // 联系人
+    string PhoneNumber = 8; // 联系电话
+    string AreaName = 9; // 所在地名称
+    string AreaId = 10; // 所在地ID
+    string Address = 11; // 通信地址
+    string Point = 12; // 位置坐标
+    int32 IsLock = 13; // 停用
+    string LockTime = 14; // 锁定时间
+    string LockReason = 15; // 锁定原因
+    string ReMarks = 16; // 备注信息
+    string Scale=17;//种养规模
+}
+
+// 用户设备信息树查询请求
+message UserDeviceTreeRequest {
+    string AreaId = 1; // 所在地区
+    string UserName = 2; // 用户名称
+    string PhoneNumber = 3; // 联系电话
+}
+
+// 用户设备信息树查询响应
+message UserDeviceTreeResponse {
+    bool Code = 1; // 请求状态
+    string Message = 2; // 消息
+    repeated UserDeviceTreeItem Items = 3; // 响应数据集
+}
+
+// 用户设备树查询请求
+message UserDeviceListRequest {
+    string UserId = 1; // 用户ID
+}
+
+// 用户设备树查询响应
+message UserDeviceListResponse {
+    bool Code = 1; // 请求状态
+    string Message = 2; // 消息
+    repeated UserGetWay GetWays = 3; // 网关-响应数据集
+    repeated UserBox Boxs = 4; // 边缘盒子-响应数据集
+    UserInfoData User = 5; // 边缘盒子-响应数据集
+}
+
+// 用户网关提交请求
+message UserGetWaySaveRequest {
+    UserGetWay GetWay = 1; // 网关
+}
+
+// 用户网关提交响应
+message UserGetWaySaveResponse {
+    bool Code = 1; // 请求状态
+    string Message = 2; // 消息
+    UserGetWay GetWay = 3; // 网关
+}
+
+// 用户网关设备提交请求
+message UserGetWayDeviceSaveRequest {
+    UserGetWayDevice Device = 1; // 网关设备
+}
+
+// 用户网关设备提交响应
+message UserGetWayDeviceSaveResponse {
+    bool Code = 1; // 请求状态
+    string Message = 2; // 消息
+    UserGetWayDevice Device = 3; // 网关设备
+}
+
+// 用户盒子提交请求
+message UserBoxSaveRequest {
+    UserBox Box = 1; // 边缘盒子
+}
+
+// 用户盒子提交响应
+message UserBoxSaveResponse {
+    bool Code = 1; // 请求状态
+    string Message = 2; // 消息
+    UserBox Box = 3; // 边缘盒子
+}
+
+// 用户摄像头提交请求
+message UserCameraSaveRequest {
+    UserCamera Camera = 1; // 摄像头
+}
+
+// 用户摄像头提交响应
+message UserCameraSaveResponse {
+    bool Code = 1; // 请求状态
+    string Message = 2; // 消息
+    UserCamera Camera = 3; // 摄像头
+}
+
+// 用户设备状态变更请求
+message UserDeviceStateRequest {
+    string Type = 1; // 类型
+    string UserId = 2; // 用户ID
+    string GetWayId = 3; // 网关ID
+    string GetWayDeviceId = 4; // 网关设备ID
+    string BoxId = 5; // 盒子ID
+    string CameraId = 6; // 摄像头ID
+    string Reason = 7; // 原因
+}
+
+// 用户设备状态变更响应
+message UserDeviceStateResponse {
+    bool Code = 1; // 请求状态
+    string Message = 2; // 消息
+    repeated UserGetWay GetWay = 3; // 网关
+    repeated UserBox Box = 4; // 边缘盒子
+}

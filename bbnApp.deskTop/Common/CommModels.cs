@@ -56,7 +56,18 @@ namespace bbnApp.deskTop.Common
     /// </summary>
     public static class UserContext
     {
+        /// <summary>
+        /// 当前操作员信息
+        /// </summary>
         public static UserModel CurrentUser { get; set; }
+        /// <summary>
+        /// 公司同事
+        /// </summary>
+        public static List<WorkerItemDto> CompanyUsers{get;set;}
+        /// <summary>
+        /// 部门同事
+        /// </summary>
+        public static List<WorkerItemDto> DepartMentUsers{get;set;}
     }
     /// <summary>
     /// 字典信息
@@ -75,5 +86,9 @@ namespace bbnApp.deskTop.Common
         /// 数据字典
         /// </summary>
         public static List<DicTreeItemDto> DicItems { get; set; }
+        /// <summary>
+        /// 数据字典-叶子清单
+        /// </summary>
+        public static List<ComboboxItem> DicList { get; set; }
     }
 }

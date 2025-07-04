@@ -187,6 +187,686 @@ namespace bbnApp.Infrastructure.Migrations
                     b.ToTable("UploadFileList");
                 });
 
+            modelBuilder.Entity("bbnApp.Domain.Entities.Business.UserAabInformations", b =>
+                {
+                    b.Property<string>("Yhid")
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnOrder(0)
+                        .HasComment("用户组ID");
+
+                    b.Property<string>("AabId")
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnOrder(1)
+                        .HasComment("种养信息ID");
+
+                    b.Property<string>("AABType")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("种养类型");
+
+                    b.Property<decimal>("AreaNumber")
+                        .HasColumnType("DECIMAL(8,2)")
+                        .HasComment("面积");
+
+                    b.Property<string>("AreaNumberUnit")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)")
+                        .HasComment("面积单位");
+
+                    b.Property<string>("Categori")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("种养分类");
+
+                    b.Property<string>("Distribution")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasComment("分布情况");
+
+                    b.Property<sbyte>("IsLock")
+                        .HasColumnType("tinyint")
+                        .HasComment("停用");
+
+                    b.Property<sbyte>("Isdelete")
+                        .HasColumnType("tinyint")
+                        .HasComment("删除标志");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime")
+                        .HasComment("末次数据变更时间");
+
+                    b.Property<string>("LockReason")
+                        .HasColumnType("varchar(40)")
+                        .HasComment("停用原因");
+
+                    b.Property<DateTime?>("LockTime")
+                        .HasColumnType("datetime")
+                        .HasComment("停用时间");
+
+                    b.Property<string>("ObjCode")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("种养名称代码");
+
+                    b.Property<string>("ObjName")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("种养名称");
+
+                    b.Property<string>("Point")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("varchar(80)")
+                        .HasComment("主要位置");
+
+                    b.Property<string>("ReMarks")
+                        .HasColumnType("varchar(40)")
+                        .HasComment("备注信息");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("用户ID");
+
+                    b.HasKey("Yhid", "AabId");
+
+                    b.ToTable("UserAabInformations");
+                });
+
+            modelBuilder.Entity("bbnApp.Domain.Entities.Business.UserBoxs", b =>
+                {
+                    b.Property<string>("Yhid")
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnOrder(0)
+                        .HasComment("用户组ID");
+
+                    b.Property<string>("BoxId")
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnOrder(1)
+                        .HasComment("盒子ID");
+
+                    b.Property<string>("BoxLocation")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("varchar(80)")
+                        .HasComment("安装位置");
+
+                    b.Property<string>("BoxName")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("盒子名称");
+
+                    b.Property<string>("BoxNumber")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("盒子编号");
+
+                    b.Property<string>("DeviceId")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("设备ID,盒子对应的标准代码");
+
+                    b.Property<DateTime>("InstallTime")
+                        .HasColumnType("datetime")
+                        .HasComment("安装时间");
+
+                    b.Property<string>("Installer")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("安装人");
+
+                    b.Property<string>("InstallerId")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("安装人ID");
+
+                    b.Property<sbyte>("IsDelete")
+                        .HasColumnType("tinyint")
+                        .HasComment("删除标志");
+
+                    b.Property<sbyte>("IsLock")
+                        .HasColumnType("tinyint")
+                        .HasComment("停用");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime")
+                        .HasComment("末次数据变更时间");
+
+                    b.Property<string>("LockReason")
+                        .HasColumnType("varchar(40)")
+                        .HasComment("停用原因");
+
+                    b.Property<DateTime?>("LockTime")
+                        .HasColumnType("datetime")
+                        .HasComment("停用时间");
+
+                    b.Property<string>("ReMarks")
+                        .HasColumnType("varchar(40)")
+                        .HasComment("备注信息");
+
+                    b.Property<int>("TapeWidth")
+                        .HasColumnType("INT")
+                        .HasComment("带宽,M");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("用户ID");
+
+                    b.Property<DateTime>("Warranty")
+                        .HasColumnType("datetime")
+                        .HasComment("维保到期时间");
+
+                    b.Property<string>("WlanType")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasComment("网络连接方式");
+
+                    b.HasKey("Yhid", "BoxId");
+
+                    b.ToTable("UserBoxs");
+                });
+
+            modelBuilder.Entity("bbnApp.Domain.Entities.Business.UserCameras", b =>
+                {
+                    b.Property<string>("Yhid")
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnOrder(0)
+                        .HasComment("用户组ID");
+
+                    b.Property<string>("CameraId")
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnOrder(1)
+                        .HasComment("摄像头ID");
+
+                    b.Property<string>("BoxId")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("盒子ID");
+
+                    b.Property<string>("CameraAdmin")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("摄像头登录名");
+
+                    b.Property<string>("CameraChannel")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("摄像头通道号");
+
+                    b.Property<string>("CameraIp")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("摄像头IP");
+
+                    b.Property<string>("CameraName")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("摄像头自定义名称");
+
+                    b.Property<string>("CameraNumber")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("摄像头编号");
+
+                    b.Property<string>("CameraPassword")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)")
+                        .HasComment("摄像头登录密码");
+
+                    b.Property<string>("DeviceId")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("设备ID,摄像头对应标准代码");
+
+                    b.Property<DateTime>("InstallTime")
+                        .HasColumnType("datetime")
+                        .HasComment("安装时间");
+
+                    b.Property<string>("Installer")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("安装人");
+
+                    b.Property<string>("InstallerId")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("安装人ID");
+
+                    b.Property<sbyte>("IsDelete")
+                        .HasColumnType("tinyint")
+                        .HasComment("删除标志");
+
+                    b.Property<sbyte>("IsLock")
+                        .HasColumnType("tinyint")
+                        .HasComment("停用");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime")
+                        .HasComment("末次数据变更时间");
+
+                    b.Property<string>("LockReason")
+                        .HasColumnType("varchar(40)")
+                        .HasComment("停用原因");
+
+                    b.Property<DateTime?>("LockTime")
+                        .HasColumnType("datetime")
+                        .HasComment("停用时间");
+
+                    b.Property<string>("ReMarks")
+                        .HasColumnType("varchar(40)")
+                        .HasComment("备注信息");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("用户ID");
+
+                    b.Property<DateTime>("Warranty")
+                        .HasColumnType("datetime")
+                        .HasComment("维保到期时间");
+
+                    b.HasKey("Yhid", "CameraId");
+
+                    b.ToTable("UserCameras");
+                });
+
+            modelBuilder.Entity("bbnApp.Domain.Entities.Business.UserContacts", b =>
+                {
+                    b.Property<string>("Yhid")
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnOrder(0)
+                        .HasComment("用户组ID");
+
+                    b.Property<string>("ContactId")
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnOrder(1)
+                        .HasComment("联系人ID");
+
+                    b.Property<string>("Contact")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("联系人");
+
+                    b.Property<bool>("IsFirst")
+                        .HasColumnType("TINYINT(1)")
+                        .HasComment("主要联系人");
+
+                    b.Property<sbyte>("IsLock")
+                        .HasColumnType("tinyint")
+                        .HasComment("停用");
+
+                    b.Property<sbyte>("Isdelete")
+                        .HasColumnType("tinyint")
+                        .HasComment("删除标志");
+
+                    b.Property<string>("Jobs")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("职务");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime")
+                        .HasComment("末次数据变更时间");
+
+                    b.Property<string>("LockReason")
+                        .HasColumnType("varchar(40)")
+                        .HasComment("停用原因");
+
+                    b.Property<DateTime?>("LockTime")
+                        .HasColumnType("datetime")
+                        .HasComment("停用时间");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("联系电话");
+
+                    b.Property<string>("ReMarks")
+                        .HasColumnType("varchar(40)")
+                        .HasComment("备注信息");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("用户ID");
+
+                    b.HasKey("Yhid", "ContactId");
+
+                    b.ToTable("UserContacts");
+                });
+
+            modelBuilder.Entity("bbnApp.Domain.Entities.Business.UserGetWayDevices", b =>
+                {
+                    b.Property<string>("Yhid")
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnOrder(0)
+                        .HasComment("用户组ID");
+
+                    b.Property<string>("GetWayDeviceId")
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnOrder(1)
+                        .HasComment("网关管理的设备ID");
+
+                    b.Property<string>("DeviceId")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("设备ID,设备对应标准代码");
+
+                    b.Property<string>("DeviceNumber")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("设备编号");
+
+                    b.Property<string>("GetWayId")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("网关ID");
+
+                    b.Property<DateTime>("InstallTime")
+                        .HasColumnType("datetime")
+                        .HasComment("安装时间");
+
+                    b.Property<string>("Installer")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("安装人");
+
+                    b.Property<string>("InstallerId")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("安装人ID");
+
+                    b.Property<sbyte>("IsDelete")
+                        .HasColumnType("tinyint")
+                        .HasComment("删除标志");
+
+                    b.Property<sbyte>("IsLock")
+                        .HasColumnType("tinyint")
+                        .HasComment("停用");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime")
+                        .HasComment("末次数据变更时间");
+
+                    b.Property<string>("LockReason")
+                        .HasColumnType("varchar(40)")
+                        .HasComment("停用原因");
+
+                    b.Property<DateTime?>("LockTime")
+                        .HasColumnType("datetime")
+                        .HasComment("停用时间");
+
+                    b.Property<string>("ReMarks")
+                        .HasColumnType("varchar(40)")
+                        .HasComment("备注信息");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("用户ID");
+
+                    b.Property<DateTime>("Warranty")
+                        .HasColumnType("datetime")
+                        .HasComment("维保到期时间");
+
+                    b.HasKey("Yhid", "GetWayDeviceId");
+
+                    b.ToTable("UserGetWayDevices");
+                });
+
+            modelBuilder.Entity("bbnApp.Domain.Entities.Business.UserGetWays", b =>
+                {
+                    b.Property<string>("Yhid")
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnOrder(0)
+                        .HasComment("用户组ID");
+
+                    b.Property<string>("GetWayId")
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnOrder(1)
+                        .HasComment("网关ID");
+
+                    b.Property<string>("DeviceId")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("网关设备ID,网关设备对应标准代码");
+
+                    b.Property<string>("GetWayLocation")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("varchar(80)")
+                        .HasComment("安装位置");
+
+                    b.Property<string>("GetWayName")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("网关名称,网关名称");
+
+                    b.Property<string>("GetWayNumber")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("网关编号");
+
+                    b.Property<DateTime>("InstallTime")
+                        .HasColumnType("datetime")
+                        .HasComment("安装时间");
+
+                    b.Property<string>("Installer")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("安装人");
+
+                    b.Property<string>("InstallerId")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("安装人ID");
+
+                    b.Property<sbyte>("IsDelete")
+                        .HasColumnType("tinyint")
+                        .HasComment("删除标志");
+
+                    b.Property<sbyte>("IsLock")
+                        .HasColumnType("tinyint")
+                        .HasComment("停用");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime")
+                        .HasComment("末次数据变更时间");
+
+                    b.Property<string>("LockReason")
+                        .HasColumnType("varchar(40)")
+                        .HasComment("停用原因");
+
+                    b.Property<DateTime?>("LockTime")
+                        .HasColumnType("datetime")
+                        .HasComment("停用时间");
+
+                    b.Property<string>("ReMarks")
+                        .HasColumnType("varchar(40)")
+                        .HasComment("备注信息");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("用户ID");
+
+                    b.Property<DateTime>("Warranty")
+                        .HasColumnType("datetime")
+                        .HasComment("维保到期时间");
+
+                    b.Property<string>("WlanType")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasComment("网络连接方式");
+
+                    b.HasKey("Yhid", "GetWayId");
+
+                    b.ToTable("UserGetWays");
+                });
+
+            modelBuilder.Entity("bbnApp.Domain.Entities.Business.UserInformations", b =>
+                {
+                    b.Property<string>("Yhid")
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnOrder(0)
+                        .HasComment("用户组ID");
+
+                    b.Property<string>("UserId")
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnOrder(1)
+                        .HasComment("用户ID");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)")
+                        .HasComment("通信地址");
+
+                    b.Property<string>("AreaId")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("所在地ID");
+
+                    b.Property<string>("AreaName")
+                        .IsRequired()
+                        .HasMaxLength(140)
+                        .HasColumnType("varchar(140)")
+                        .HasComment("所在地名称");
+
+                    b.Property<string>("Contact")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("联系人");
+
+                    b.Property<sbyte>("IsDelete")
+                        .HasColumnType("tinyint")
+                        .HasComment("删除标志");
+
+                    b.Property<sbyte>("IsLock")
+                        .HasColumnType("tinyint")
+                        .HasComment("停用");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime")
+                        .HasComment("末次数据变更时间");
+
+                    b.Property<string>("LockReason")
+                        .HasColumnType("varchar(40)")
+                        .HasComment("停用原因");
+
+                    b.Property<DateTime?>("LockTime")
+                        .HasColumnType("datetime")
+                        .HasComment("停用时间");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("联系电话");
+
+                    b.Property<string>("Point")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasComment("通信地址");
+
+                    b.Property<string>("ReMarks")
+                        .HasColumnType("varchar(40)")
+                        .HasComment("备注信息");
+
+                    b.Property<string>("Scale")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("种养规模");
+
+                    b.Property<string>("UserLeve")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("用户等级");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("用户名称");
+
+                    b.Property<string>("UserNumber")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("用户编号");
+
+                    b.Property<string>("UserType")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("用户类型");
+
+                    b.HasKey("Yhid", "UserId");
+
+                    b.ToTable("UserInformations");
+                });
+
             modelBuilder.Entity("bbnApp.Domain.Entities.Safe.LimiteRecord", b =>
                 {
                     b.Property<string>("Yhid")

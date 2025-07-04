@@ -273,6 +273,10 @@ public static class DependencyInjection
         services.AddScoped<IRoleService, RoleService>();
         //密钥注册
         services.AddScoped<IAuthorRegisterKeyService, AuthorRegisterKeyService>();
+        //用户信息
+        services.AddScoped<IUserService, UserService>();
+        //用户设备
+        services.AddScoped<IUserDevices, UserDevices>();
 
         return services;
     }

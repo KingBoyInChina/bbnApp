@@ -13,12 +13,13 @@
                       ToolTipText="帮帮农">
 				<TrayIcon.Menu>
 					<NativeMenu>
-						<NativeMenuItem Header="Native Menu Demo">
+						<NativeMenuItem Header="快捷操作">
 							<NativeMenu>
-								<NativeMenuItem Header="Option 1"   />
-								<NativeMenuItem Header="Option 2"   />
+                <NativeMenuItem Header="最大化"   />
+								<NativeMenuItem Header="数据重载"   />
+								<NativeMenuItem Header="通信连接"   />
 								<NativeMenuItemSeparator/>
-								<NativeMenuItem Header="Option 3"  />
+								<NativeMenuItem Header="退出"  />
 							</NativeMenu>
 						</NativeMenuItem>
 					</NativeMenu>

@@ -330,7 +330,7 @@
 				</Flyout>
 			</Button.Flyout>
 		</Button>
-		<Button Classes="Basic Rounded WindowControlsButton" ToolTip.Tip="应用中心">
+		<Button Classes="Basic Rounded WindowControlsButton" ToolTip.Tip="个人中心">
 			<avalonia:MaterialIcon Kind="User" Foreground="{DynamicResource SukiText}" />
 			<Button.Flyout>
 				<Flyout ShowMode="TransientWithDismissOnPointerMoveAway">
@@ -474,7 +474,7 @@
 			</Button.Flyout>
 		</Button>
 		<Button Classes="Basic Rounded WindowControlsButton" ToolTip.Tip="通信连接" Command="{Binding MqttConnectCommand}">
-      <avalonia:MaterialIcon Kind="{Binding WindowLocked, Converter={x:Static converters:BoolToIconConverters.Link}}" Foreground="{DynamicResource SukiText}" />
+      <avalonia:MaterialIcon Kind="{Binding MqttLink, Converter={x:Static converters:BoolToIconConverters.Link}}" Foreground="{DynamicResource SukiText}" />
     </Button>
 	</suki:SukiWindow.RightWindowTitleBarControls>
 

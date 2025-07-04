@@ -1,35 +1,78 @@
 ﻿using System;
 using System.Globalization;
-using Avalonia.Controls;
 using Avalonia.Data.Converters;
-using Avalonia.Markup.Xaml;
-using bbnApp.deskTop.Utilities;
 
 namespace bbnApp.deskTop.Converters;
 
-public sealed class StringToControlConverter : IValueConverter
-{
-    public static readonly StringToControlConverter Instance = new();
 
+public static class DateFormatConverters
+{
+    public static IValueConverter SmallDate { get; } = new DateToTextConverter();
+    public static IValueConverter LongDate { get; } = new DateToTextConverter();
+}
+
+public class DateToTextConverter: IValueConverter
+{
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (value is not string xamlCode) return null;
-        if (string.IsNullOrWhiteSpace(xamlCode)) return null;
-
-        var previewCode = XamlData.InsertIntoGridControl(xamlCode);
-
-        try
+        string result = string.Empty;
+        if (value is DateTime v)
         {
-            return AvaloniaRuntimeXamlLoader.Parse<Grid>(previewCode);
+            result = v.ToString("yyyy-MM-dd");
         }
-        catch
+        else 
         {
-            return null;
+            try
+            {
+                var vd=System.Convert.ToDateTime(value);
+                result = vd.ToString("yyyy-MM-dd");
+            }
+            catch(Exception ex)
+            {
+
+            }
         }
+        return result;
     }
 
-    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        throw new NotSupportedException();
+        if (value is not string text) return null;
+
+        // 根据文本返回对应的布尔值
+        return text == trueText;
+    }
+}
+
+public class DateToLongTextConverter : IValueConverter
+{
+    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        string result = string.Empty;
+        if (value is DateTime v)
+        {
+            result = v.ToString("yyyy-MM-dd HH:mm:ss");
+        }
+        else
+        {
+            try
+            {
+                var vd = System.Convert.ToDateTime(value);
+                result = vd.ToString("yyyy-MM-dd HH:mm:ss");
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+        return result;
+    }
+
+    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        if (value is not string text) return null;
+
+        // 根据文本返回对应的布尔值
+        return text == trueText;
     }
 }

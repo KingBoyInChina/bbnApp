@@ -122,6 +122,8 @@ app.MapGrpcService<EmployeeGrpcServcie>();
 app.MapGrpcService<RoleGrpcService>();
 app.MapGrpcService<OperatorGrpcService>();
 app.MapGrpcService<AuthorRegisterKeyGrpcService>();
+app.MapGrpcService<UserGrpcService>();
+app.MapGrpcService<UserDeviceGrpcService>();
 //app.MapGet("/health", () => Results.Ok("Healthy")); // 最简单的方式
 app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
 

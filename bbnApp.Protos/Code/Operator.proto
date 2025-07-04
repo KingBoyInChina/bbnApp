@@ -14,6 +14,8 @@ service OperatorGrpc {
     rpc OperatorSave (OperatorSaveRequest) returns (OperatorSaveResponse);
     //操作员状态变更
     rpc OperatorState (OperatorStateRequest) returns (OperatorStateResponse);
+    //获取同事信息
+    rpc OperatorsLoad (OperatorsLoadRequest) returns (OperatorsLoadResponse);
 }
 
 // 操作员对象
@@ -35,6 +37,20 @@ message OperatorItem {
     string CompanyId = 15; // 机构ID
     repeated OperatorRole OperatorRoles = 16; // 操作员角色
 }
+//同事
+message WorkerItem {
+    int32 IdxNum = 1; // 序号
+    string Yhid = 2; // 用户组ID
+    string EmployeeId = 3; // 员工ID
+    string EmployeeName = 5; // 员工姓名
+    string EmployeeNum = 6; // 员工工号
+    string DepartMentId = 7; // 所在部门ID
+    string DepartMentName = 8; // 所在部门ID
+    string Position = 9; // 职务等级ID
+    int32 PositionLeve = 10; // 职务等级
+    string OperatorId = 11; // 操作员ID
+    string CompanyId = 12; // 机构ID
+}
 
 // 操作员角色
 message OperatorRole {
@@ -48,6 +64,17 @@ message OperatorRole {
     string OperatorId=8; // 操作员ID
     string CompanyId=9; // 机构ID
     bool IsEnabled=10;//可选中
+}
+//同事信息读取请求
+message OperatorsLoadRequest{
+    string Yhid=1;
+    string CompanyId=2;
+}
+//同事信息读取响应
+message OperatorsLoadResponse{
+    bool Code=1;
+    string Message=2;
+    repeated WorkerItem Operators=3;
 }
 
 // 操作员树查询请求对象

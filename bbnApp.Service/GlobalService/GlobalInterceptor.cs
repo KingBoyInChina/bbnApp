@@ -116,23 +116,35 @@ namespace bbnApp.Service.GlobalService
                         Blacklist.Add(ipAddress);
                         Log.Warning("IP {IP} added to blacklist due to excessive requests", ipAddress);
                         #region 写入数据库
-                        LimiteRecord _record = new LimiteRecord
+                        try
                         {
-                            Yhid = "000000",
-                            LimiteId = Guid.NewGuid().ToString("N"),
-                            LimiteIP = ipAddress,
-                            LimiteTime = DateTime.Now,
-                            LimiteExpireTime = DateTime.Now.AddDays(1),
-                            LimiteReason = "异常请求频次",
-                            Isdelete = 0,
-                            LastModified = DateTime.Now,
-                        };
-                        // 获取 DbSet<T>
-                        var dbSet = _codeContext.Set<LimiteRecord>();
-                        // 添加实体
-                        await dbSet.AddAsync(_record);
-                        // 保存更改
-                        await _codeContext.SaveChangesAsync();
+                            LimiteRecord _record = new LimiteRecord
+                            {
+                                Yhid = "000000",
+                                LimiteId = Guid.NewGuid().ToString("N"),
+                                LimiteIP = ipAddress,
+                                LimiteTime = DateTime.Now,
+                                LimiteExpireTime = DateTime.Now.AddDays(1),
+                                LimiteReason = "异常请求频次",
+                                Isdelete = 0,
+                                LastModified = DateTime.Now,
+                            };
+                            // 获取 DbSet<T>
+                            var dbSet = _codeContext.Set<LimiteRecord>();
+                            // 添加实体
+                            await dbSet.AddAsync(_record);
+                            // 保存更改
+                            await _codeContext.SaveChangesAsync();
+                        }
+                        catch (Exception ex)
+                        {
+
+                            ex.ToExceptionless()
+                              .SetProperty("Method", context.Method)
+                              .SetProperty("Peer", context.Peer)
+                              .SetProperty("Host", context.Host)
+                              .Submit();
+                        }
                         #endregion
                         throw new RpcException(new Status(StatusCode.PermissionDenied, $"【{ipAddress}】请求被限制"));
                     }
@@ -191,7 +203,7 @@ namespace bbnApp.Service.GlobalService
                 {
                     // 异常监听逻辑
                     LogException(ex, context);
-                    throw new RpcException(new Status(StatusCode.Internal, $"[GetUser]拦截器中请求产生了异常{ex.StackTrace.ToString()}"));
+                    throw new RpcException(new Status(StatusCode.Internal, $"[GetUser]拦截器中请求产生了异常{ex.Message.ToString()}"));
                 }
                 finally
                 {
@@ -207,23 +219,34 @@ namespace bbnApp.Service.GlobalService
                         await Task.Run(async () =>
                         {
                             #region 写入数据库
-                            ResponseAnalysis _rsp = new ResponseAnalysis
+                            try
                             {
-                                RequestTime = DateTime.Now,
-                                RequestIp = ipAddress,
-                                RequestHost = context.Host,
-                                RequestMethod = context.Method,
-                                RequestPeer = context.Peer,
-                                ResponseTime = responseTime,
-                                Isdelete = 0,
-                                LastModified = DateTime.Now,
-                            };
-                            // 获取 DbSet<T>
-                            var dbSet = _codeContext.Set<ResponseAnalysis>();
-                            // 添加实体
-                            await dbSet.AddAsync(_rsp);
-                            // 保存更改
-                            await _codeContext.SaveChangesAsync();
+                                ResponseAnalysis _rsp = new ResponseAnalysis
+                                {
+                                    RequestTime = DateTime.Now,
+                                    RequestIp = ipAddress,
+                                    RequestHost = context.Host,
+                                    RequestMethod = context.Method,
+                                    RequestPeer = context.Peer,
+                                    ResponseTime = responseTime,
+                                    Isdelete = 0,
+                                    LastModified = DateTime.Now,
+                                };
+                                // 获取 DbSet<T>
+                                var dbSet = _codeContext.Set<ResponseAnalysis>();
+                                // 添加实体
+                                await dbSet.AddAsync(_rsp);
+                                // 保存更改
+                                await _codeContext.SaveChangesAsync();
+                            }
+                            catch(Exception ex)
+                            {
+                                ex.ToExceptionless()
+                                  .SetProperty("Method", context.Method)
+                                  .SetProperty("Peer", context.Peer)
+                                  .SetProperty("Host", context.Host)
+                                  .Submit();
+                            }
                             #endregion
                         });
                         #endregion
@@ -235,7 +258,7 @@ namespace bbnApp.Service.GlobalService
             catch(Exception ex)
             {
                 LogException(ex, context);
-                throw new RpcException(new Status(StatusCode.Internal, $"拦截器中发生了一个未知异常{ex.StackTrace.ToString()}"));
+                throw new RpcException(new Status(StatusCode.Internal, $"拦截器中发生了一个未知异常{ex.Message.ToString()}"));
             }
         }
 

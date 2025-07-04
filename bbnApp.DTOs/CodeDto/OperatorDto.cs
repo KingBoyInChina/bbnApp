@@ -1,4 +1,5 @@
-﻿using Org.BouncyCastle.Bcpg.OpenPgp;
+﻿using bbnApp.Application.DTOs.LoginDto;
+using Org.BouncyCastle.Bcpg.OpenPgp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -90,6 +91,68 @@ namespace bbnApp.DTOs.CodeDto
         public List<OperatorRoleDto> OperatorRoles { get; set; } = new List<OperatorRoleDto>();
     }
     /// <summary>
+    /// 操作员对象
+    /// </summary>
+    public class WorkerItemDto
+    {
+        /// <summary>
+        /// 序号
+        /// </summary>
+        public int IdxNum { get; set; } = 1;
+        /// <summary>
+        /// 用户组ID
+        /// </summary>
+        public string Yhid { get; set; } = string.Empty;
+
+        /// <summary>
+        /// 员工ID
+        /// </summary>
+        public string EmployeeId { get; set; } = string.Empty;
+
+        /// <summary>
+        /// 上级管理ID
+        /// </summary>
+        public string PEmployeeId { get; set; } = string.Empty;
+
+        /// <summary>
+        /// 员工姓名
+        /// </summary>
+        public string EmployeeName { get; set; } = string.Empty;
+
+        /// <summary>
+        /// 员工工号
+        /// </summary>
+        public string EmployeeNum { get; set; } = string.Empty;
+
+        /// <summary>
+        /// 所在部门ID
+        /// </summary>
+        public string DepartMentId { get; set; } = string.Empty;
+        /// <summary>
+        /// 所在部门名称
+        /// </summary>
+        public string DepartMentName { get; set; } = string.Empty;
+        /// <summary>
+        /// 职务等级ID
+        /// </summary>
+        public string Position { get; set; } = string.Empty;
+
+        /// <summary>
+        /// 职务等级
+        /// </summary>
+        public byte PositionLeve { get; set; } = 0;
+
+        /// <summary>
+        /// 操作员ID
+        /// </summary>
+        public string OperatorId { get; set; } = string.Empty;
+
+        /// <summary>
+        /// 机构ID
+        /// </summary>
+        public string CompanyId { get; set; } = string.Empty;
+    }
+    /// <summary>
     /// 操作员角色
     /// </summary>
     public class OperatorRoleDto
@@ -134,6 +197,38 @@ namespace bbnApp.DTOs.CodeDto
         /// 机构ID
         /// </summary>
         public string CompanyId { get; set; } = string.Empty;
+    }
+    /// <summary>
+    /// 同事信息读取响应
+    /// </summary>
+    public class OperatorsLoadRequestDto
+    {
+        /// <summary>
+        /// 机构ID
+        /// </summary>
+        public string CompanyId { get; set; } = string.Empty;
+        /// <summary>
+        /// 部门ID
+        /// </summary>
+        public string Yhid { get; set; } = string.Empty;
+    }
+    /// <summary>
+    /// 同事信息读取响应
+    /// </summary>
+    public class OperatorsLoadResponseDto
+    {
+        /// <summary>
+        /// 状态码
+        /// </summary>
+        public bool Code { get; set; } = false;
+        /// <summary>
+        /// 消息内容
+        /// </summary>
+        public string Message { get; set; } = string.Empty;
+        /// <summary>
+        /// 员工列表
+        /// </summary>
+        public List<WorkerItemDto> Items { get; set; } = new List<WorkerItemDto>();
     }
     /// <summary>
     /// 操作员树查询请求对象

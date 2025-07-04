@@ -234,7 +234,7 @@
             <UniformGrid Columns="2" Grid.Row="2">
 
               <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Column="0">
-                <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">性别：</TextBlock>
+                <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">员工性别：</TextBlock>
                 <ComboBox Width="230" HorizontalAlignment="Stretch" ItemsSource="{Binding GenderTypeList}" SelectedItem="{Binding GenderSelected}">
                   <ComboBox.ItemTemplate>
                     <DataTemplate>
@@ -256,7 +256,7 @@
             <UniformGrid Columns="2" Grid.Row="3">
 
               <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Column="0">
-                <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">职位：</TextBlock>
+                <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">员工职位：</TextBlock>
                 <ComboBox Width="230" HorizontalAlignment="Stretch" ItemsSource="{Binding PositionTypeList}" SelectedItem="{Binding PositionSelected}">
                   <ComboBox.ItemTemplate>
                     <DataTemplate>
@@ -278,7 +278,7 @@
 
               <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Column="0">
                 <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">出生日期：</TextBlock>
-                <DatePicker  VerticalAlignment="Center" Width="230" SelectedDate="{Binding BirthDateTimeOffset}" YearFormat="yyyy" MonthFormat="MM" DayFormat="dd"/>
+                <DatePicker VerticalAlignment="Center" Width="230" SelectedDate="{Binding BirthDateTimeOffset}" YearFormat="yyyy" MonthFormat="MM" DayFormat="dd"/>
                 <TextBlock VerticalAlignment="Center" Classes="NOTNULL">*</TextBlock>
               </StackPanel>
 

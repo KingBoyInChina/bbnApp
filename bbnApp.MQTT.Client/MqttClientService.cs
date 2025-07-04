@@ -181,5 +181,20 @@ namespace bbnApp.MQTT.Client
                 _messageHandlers.Clear();
             }
         }
+        /// <summary>
+        /// 消息发布
+        /// </summary>
+        /// <param name="topic"></param>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public async Task PublishAsync(string topic,string message)
+        {
+            var applicationMessage = new MqttApplicationMessageBuilder()
+                .WithTopic(topic)
+                .WithPayload(message)
+                .Build();
+
+            await _mqttClient.PublishAsync(applicationMessage, CancellationToken.None);
+        }
     }
 }

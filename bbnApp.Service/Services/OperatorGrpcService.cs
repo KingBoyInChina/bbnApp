@@ -4,6 +4,7 @@ using bbnApp.Application.Services.CODE;
 using bbnApp.Common.Models;
 using bbnApp.DTOs.CodeDto;
 using bbnApp.Protos;
+using Google.Protobuf;
 using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
 
@@ -142,6 +143,47 @@ namespace bbnApp.Service.Services
             }
             return response;
         }
-        
+        /// <summary>
+        /// 同事信息读取
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        [Authorize]
+        public override async Task<OperatorsLoadResponse> OperatorsLoad(OperatorsLoadRequest request, ServerCallContext context)
+        {
+            OperatorsLoadResponse? response = null;
+            try
+            {
+                if (context.UserState.TryGetValue("User", out var userObj) && userObj is UserModel user)
+                {
+                    var (code, msg, data) = await operatorService.GetWorkers(request.Yhid,request.CompanyId);
+                    response = new OperatorsLoadResponse
+                    {
+                        Code = code,
+                        Message = msg
+                    };
+                    response.Operators.AddRange(_mapper.Map<List<WorkerItem>>(data));
+                }
+                else
+                {
+                    response = new OperatorsLoadResponse
+                    {
+                        Code = false,
+                        Message = "无效操作员身份信息"
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                response = new OperatorsLoadResponse
+                {
+                    Code = false,
+                    Message = ex.Message
+                };
+            }
+            return response;
+        }
+
     }
 }

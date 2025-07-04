@@ -1,0 +1,424 @@
+<UserControl x:Class="bbnApp.deskTop.UserCenter.UserDevice.UserDeviceView"
+         xmlns="https://github.com/avaloniaui"
+         xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         xmlns:suki="https://github.com/kikipoulet/SukiUI"
+         xmlns:converters="clr-namespace:bbnApp.deskTop.Converters"
+         xmlns:theme="clr-namespace:SukiUI.Theme;assembly=SukiUI"
+         xmlns:my="clr-namespace:bbnApp.deskTop.Controls"
+         xmlns:device="clr-namespace:bbnApp.deskTop.UserCenter.UserDevice"
+         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+         xmlns:icon="clr-namespace:bbnApp.deskTop.Controls"
+         d:DesignHeight="768"
+         d:DesignWidth="1220"
+         x:DataType="device:UserDeviceViewModel"
+         mc:Ignorable="d">
+  <suki:GlassCard Classes="HeaderCard" Margin="10">
+    <suki:GroupBox>
+
+      <suki:GroupBox.Header>
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*"></ColumnDefinition>
+              <ColumnDefinition Width="8*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Orientation="Horizontal" Grid.Column="0">
+              <avalonia:MaterialIcon Kind="Users"></avalonia:MaterialIcon>
+              <TextBlock VerticalAlignment="Center">用户信息</TextBlock>
+            </StackPanel>
+
+            <Grid Grid.Column="1">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+              </Grid.ColumnDefinitions>
+
+              <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                <avalonia:MaterialIcon Kind="Filter"></avalonia:MaterialIcon>
+                <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">所属地区：</TextBlock>
+                <my:AreaNodeSelector ShowResetButton="True" IsAllEnabled="True" AccessLeve="0" SelectionChanged="AreaNodeFilterSelector_SelectionChanged" InitValue="{Binding InitFilterValue}" Orientation="Horizontal"></my:AreaNodeSelector>
+              </StackPanel>
+
+              <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">用户名称：</TextBlock>
+                <TextBox Watermark="用户名称关键字" Text="{Binding FilterUserName}" MinWidth="150" VerticalAlignment="Center"></TextBox>
+              </StackPanel>
+
+              <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">联系电话：</TextBlock>
+                <TextBox Watermark="用户联系电话" Text="{Binding FilterPhoneNumber}" MinWidth="150" VerticalAlignment="Center"></TextBox>
+              </StackPanel>
+
+              <StackPanel Grid.Column="3" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                <Button VerticalAlignment="Center" theme:ButtonExtensions.ShowProgress="{Binding IsBusy}"  Command="{Binding UserLoadCommand}" Classes="Basic" >
+                  <StackPanel Orientation="Horizontal">
+                    <avalonia:MaterialIcon Kind="Search"  IsVisible="{Binding IsBusy}}"/>
+                    <TextBlock>查询</TextBlock>
+                  </StackPanel>
+                </Button>
+              </StackPanel>
+            </Grid>
+            
+          </Grid>
+      </suki:GroupBox.Header>
+
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="300"></ColumnDefinition>
+          <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <suki:GlassCard Classes="HeaderCard" Margin="5" Grid.Column="0">
+          <suki:GroupBox>
+            <suki:GroupBox.Header>
+
+              <UniformGrid Columns="2">
+
+                <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Grid.Column="0">
+                  <avalonia:MaterialIcon Kind="UserSearch" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+                  <TextBlock Foreground="{DynamicResource SukiText}">用户分类信息</TextBlock>
+                </StackPanel>
+
+                <my:Space HorizontalAlignment="Right" Orientation="Horizontal" VerticalAlignment="Center">
+
+                  <Button Classes="Basic" Command="{Binding UserLoadCommand}">
+                    <StackPanel Orientation="Horizontal">
+                      <avalonia:MaterialIcon Kind="Refresh" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+                    </StackPanel>
+                  </Button>
+                </my:Space>
+
+              </UniformGrid>
+
+            </suki:GroupBox.Header>
+            <ScrollViewer>
+              <TreeView ItemsSource="{Binding UserDeviceTreeSource}" SelectedItem="{Binding SelectedNode}">
+                <TreeView.ItemTemplate>
+                  <TreeDataTemplate ItemsSource="{Binding SubItems}">
+                    <StackPanel Orientation="Horizontal">
+                      <avalonia:MaterialIcon Kind="{Binding IsLeaf,Converter={x:Static converters:IntToIconConverters.FileLock}}"></avalonia:MaterialIcon>
+                      <TextBlock Text="{Binding Name}" Foreground="{DynamicResource SukiText}"></TextBlock>
+                      <avalonia:MaterialIcon Kind="Lock" IsVisible="{Binding IsLock}"></avalonia:MaterialIcon>
+                    </StackPanel>
+                  </TreeDataTemplate>
+                </TreeView.ItemTemplate>
+              </TreeView>
+            </ScrollViewer>
+          </suki:GroupBox>
+        </suki:GlassCard>
+
+        <SplitView 
+           Grid.Column="1"
+          IsPaneOpen="{Binding IsEdit}"
+          x:Name="DeviceSplite"
+          DisplayMode="Overlay"
+          PanePlacement="Right"
+          OpenPaneLength="450">
+          <SplitView.Pane>
+            <ContentControl
+                Background="{DynamicResource SukiCardBackground}"
+                BorderBrush="{DynamicResource SukiLightBorderBrush}"
+                BorderThickness="1"
+                Content="{Binding Content}"></ContentControl>
+          </SplitView.Pane>
+
+          <suki:GlassCard Classes="HeaderCard" Margin="5">
+            <suki:GroupBox>
+              <suki:GroupBox.Header>
+                <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Grid.Column="0">
+                  <avalonia:MaterialIcon Kind="Devices" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+                  <TextBlock Foreground="{DynamicResource SukiText}">(</TextBlock>
+                  <TextBlock Foreground="{DynamicResource SukiText}" Text="{Binding SelectedNode.Name}"></TextBlock>
+                  <TextBlock Foreground="{DynamicResource SukiText}">)</TextBlock>
+                  <TextBlock Foreground="{DynamicResource SukiText}">用户设备信息</TextBlock>
+                </StackPanel>
+              </suki:GroupBox.Header>
+
+              <Grid>
+                <Grid.RowDefinitions>
+                  <RowDefinition Height="auto"></RowDefinition>
+                  <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="*"></ColumnDefinition>
+                  <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <!--用户信息-->
+                <Grid Grid.Row="0" Grid.ColumnSpan="2">
+                  <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                  </Grid.RowDefinitions>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                  </Grid.ColumnDefinitions>
+                  <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Row="0" Grid.Column="0">
+                    <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">用户名称：</TextBlock>
+                    <TextBlock Width="230" Text="{Binding UserInformation.UserName}"/>
+                  </StackPanel>
+                  <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
+                    <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">用户分类：</TextBlock>
+                    <TextBlock Width="230" Text="{Binding UserSelectedType.Name}"/>
+                  </StackPanel>
+                  <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Row="0" Grid.Column="2">
+                    <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">用户等级：</TextBlock>
+                    <TextBlock Width="230" Text="{Binding UserSelectedLeve.Name}"/>
+                  </StackPanel>
+                  <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Row="0" Grid.Column="3">
+                    <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">种养规模：</TextBlock>
+                    <TextBlock Width="230" Text="{Binding UserSelectedScale.Name}"/>
+                  </StackPanel>
+                  <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                    <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">所在地区：</TextBlock>
+                    <TextBlock Width="230" Text="{Binding UserInformation.AreaName}"/>
+                  </StackPanel>
+                  <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2">
+                    <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">通信地址：</TextBlock>
+                    <TextBlock Width="230" Text="{Binding UserInformation.Address}"/>
+                  </StackPanel>
+                  <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="4">
+                    <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">补充说明：</TextBlock>
+                    <TextBlock Width="230" Text="{Binding UserInformation.ReMarks}"/>
+                  </StackPanel>
+                </Grid>
+
+                <suki:GlassCard Classes="HeaderCard" Margin="5" Grid.Row="1" Grid.Column="0">
+                  <suki:GroupBox>
+                    <suki:GroupBox.Header>
+                      <UniformGrid Columns="2">
+                        <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Grid.Column="0">
+                          <avalonia:MaterialIcon Kind="Wan" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+                          <TextBlock Foreground="{DynamicResource SukiText}">网关设备</TextBlock>
+                        </StackPanel>
+
+                        <Button VerticalAlignment="Center" Grid.Column="1" HorizontalAlignment="Right" Command="{Binding GetWayAddCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" Tag="add" Classes="Basic" >
+                          <StackPanel Orientation="Horizontal">
+                            <avalonia:MaterialIcon Kind="Add" />
+                            <TextBlock>新建</TextBlock>
+                          </StackPanel>
+                        </Button>
+                      </UniformGrid>
+                    </suki:GroupBox.Header>
+
+                    <StackPanel >
+                      <ItemsRepeater ItemsSource="{Binding GetWays}">
+                        <ItemsRepeater.ItemTemplate>
+                          <DataTemplate>
+                            <Expander ExpandDirection="Down">
+                              <Expander.Header>
+                                <StackPanel Orientation="Horizontal" Grid.Column="0">
+                                  <avalonia:MaterialIcon Kind="ListBoxOutline" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+                                  <TextBlock VerticalAlignment="Center" Text="{Binding GetWayName}" Foreground="{DynamicResource SukiText}"></TextBlock>
+                                  <avalonia:MaterialIcon VerticalAlignment="Center" Kind="Lock" IsVisible="{Binding IsLock,Converter={x:Static converters:IntToBoolConverters.Instance}}"></avalonia:MaterialIcon>
+                                </StackPanel>
+                              </Expander.Header>
+                                <Grid>
+                                  <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"></RowDefinition>
+                                    <RowDefinition Height="*"></RowDefinition>
+                                  </Grid.RowDefinitions>
+                                      <UniformGrid Grid.Row="0" Columns="3" Rows="3">
+                                        <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" Classes="FormCell">
+                                          <TextBlock Foreground="{DynamicResource SukiText}">网关编号：</TextBlock>
+                                          <TextBlock Text="{Binding GetWayNumber}" Foreground="{DynamicResource SukiText}"></TextBlock>
+                                        </StackPanel>
+                              
+                                        <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" Classes="FormCell">
+                                          <TextBlock Foreground="{DynamicResource SukiText}">网关分类：</TextBlock>
+                                          <TextBlock Text="{Binding DeviceName}" Foreground="{DynamicResource SukiText}"></TextBlock>
+                                        </StackPanel>  
+                              
+                                        <StackPanel Grid.Column="2" Grid.Row="0" Orientation="Horizontal" Classes="FormCell">
+                                          <TextBlock Foreground="{DynamicResource SukiText}">通信方式：</TextBlock>
+                                          <TextBlock Text="{Binding WlanType, Converter={x:Static converters:DicIdToNameConverters.Instance}}" Foreground="{DynamicResource SukiText}"></TextBlock>
+                                        </StackPanel> 
+                              
+                                        <StackPanel Grid.ColumnSpan="2" Grid.Row="1" Orientation="Horizontal" Classes="FormCell">
+                                          <TextBlock Foreground="{DynamicResource SukiText}">安装位置：</TextBlock>
+                                          <TextBlock Text="{Binding GetWayLocation}" Foreground="{DynamicResource SukiText}"></TextBlock>
+                                        </StackPanel> 
+                              
+                                        <StackPanel Grid.Column="2" Grid.Row="1" Orientation="Horizontal" Classes="FormCell">
+                                          <TextBlock Foreground="{DynamicResource SukiText}">安装时间：</TextBlock>
+                                          <TextBlock Text="{Binding InstallTime}" Foreground="{DynamicResource SukiText}"></TextBlock>
+                                        </StackPanel> 
+                                
+                                        <StackPanel Grid.Column="0" Grid.Row="2" Orientation="Horizontal" Classes="FormCell">
+                                          <TextBlock Foreground="{DynamicResource SukiText}">安装人：</TextBlock>
+                                          <TextBlock Text="{Binding Installer}" Foreground="{DynamicResource SukiText}"></TextBlock>
+                                        </StackPanel> 
+                              
+                                        <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal" Classes="FormCell">
+                                          <TextBlock Foreground="{DynamicResource SukiText}">维保到期：</TextBlock>
+                                          <TextBlock Text="{Binding Warranty}" Foreground="{DynamicResource SukiText}"></TextBlock>
+                                        </StackPanel> 
+                                
+                                        <StackPanel Orientation="Horizontal" Grid.Column="2" Grid.Row="2" Classes="FormCell">
+                                          <TextBlock VerticalAlignment="Center">锁定：</TextBlock>
+                                          <CheckBox IsChecked="{Binding IsLock,  Converter={x:Static converters:IntToBoolConverters.Instance}}" IsEnabled="False"/>
+                                          <TextBlock IsVisible="{Binding IsLock,  Converter={x:Static converters:IntToBoolConverters.Instance}}" VerticalAlignment="Center" Classes="Caption" Text="{Binding LockTime}"></TextBlock>
+                                          <TextBlock IsVisible="{Binding IsLock,  Converter={x:Static converters:IntToBoolConverters.Instance}}" VerticalAlignment="Center" Classes="Caption" Text="{Binding LockReason}"></TextBlock>
+                                        </StackPanel>
+                                      </UniformGrid>
+                                
+                                      <DataGrid
+                                        Grid.Row="1"
+                                        ItemsSource="{Binding Devices}"
+                                        AutoGenerateColumns="False"
+                                        CanUserReorderColumns="True"
+                                        CanUserResizeColumns="True"
+                                        CanUserSortColumns="True"
+                                        GridLinesVisibility="All"
+                                            >
+                                        <DataGrid.Columns>
+                                          <DataGridTextColumn Binding="{Binding  DeviceName}">
+                                            <DataGridTextColumn.Header>
+                                              <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                <TextBlock>设备名称</TextBlock>
+                                              </StackPanel>
+                                            </DataGridTextColumn.Header>
+                                          </DataGridTextColumn>
+
+                                          <DataGridTextColumn Binding="{Binding  DeviceNumber}">
+                                            <DataGridTextColumn.Header>
+                                              <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                <TextBlock>设备编号</TextBlock>
+                                              </StackPanel>
+                                            </DataGridTextColumn.Header>
+                                          </DataGridTextColumn>
+
+                                          <DataGridTextColumn Binding="{Binding  InstallTime,Converter={x:Static converters:DateFormatConverters.SmallDate}}" >
+                                            <DataGridTextColumn.Header>
+                                              <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                <TextBlock>安装日期</TextBlock>
+                                              </StackPanel>
+                                            </DataGridTextColumn.Header>
+                                          </DataGridTextColumn>
+
+                                          <DataGridTextColumn Binding="{Binding  Warranty,Converter={x:Static converters:DateFormatConverters.SmallDate}}"  Width="*">
+                                            <DataGridTextColumn.Header>
+                                              <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                <TextBlock>维保日期</TextBlock>
+                                              </StackPanel>
+                                            </DataGridTextColumn.Header>
+                                          </DataGridTextColumn>
+
+                                          <DataGridTemplateColumn Header="停用" Width="80">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                              <DataTemplate>
+                                                <CheckBox Tag="GetWayDeviceLock" Click="GetWayDeviceCheckbox_Click" IsChecked="{Binding IsLock,Converter={x:Static converters:IntToBoolConverters.Instance}}"></CheckBox>
+                                              </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                          </DataGridTemplateColumn>
+
+                                          <!-- 自定义操作列 -->
+                                          <DataGridTemplateColumn Header="操作" Width="80">
+
+                                            <DataGridTemplateColumn.CellTemplate>
+                                              <DataTemplate>
+                                                <my:Space Orientation="Horizontal" Spacing="2">
+
+                                                  <Button
+                                                   Classes="Basic"
+                                                   ToolTip.Tip="修改"
+                                                   Click="GetWayDeviceButton_Click"
+                                                   Tag="GetWayDeviceEdit">
+                                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                      <avalonia:MaterialIcon Kind="EditCircle" />
+                                                    </StackPanel>
+                                                  </Button>
+                                                  <Button
+                                                   Classes="Basic Accent"
+                                                   ToolTip.Tip="点击删除"
+                                                   Click="GetWayDeviceButton_Click"
+                                                   Tag="GetWayDeviceDelete">
+                                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                      <avalonia:MaterialIcon Kind="DeleteCircle" />
+                                                    </StackPanel>
+                                                  </Button>
+
+                                                </my:Space>
+
+                                              </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                          </DataGridTemplateColumn>
+
+                                        </DataGrid.Columns>
+                                      </DataGrid>
+                                   </Grid> 
+                                  <Expander.ContextMenu>
+                                    <ContextMenu>
+                                      <MenuItem Header="添加关联设备" Tag="AddDevice" Click="GetWayMenuItem_Click">
+                                        <MenuItem.Icon>
+                                          <avalonia:MaterialIcon Kind="AddAlarm"></avalonia:MaterialIcon>
+                                        </MenuItem.Icon>
+                                      </MenuItem>
+                                      <MenuItem Header="修改" Tag="GetWayEdit" Click="GetWayMenuItem_Click">
+                                        <MenuItem.Icon>
+                                          <avalonia:MaterialIcon Kind="Edit"></avalonia:MaterialIcon>
+                                        </MenuItem.Icon>
+                                      </MenuItem>
+                                      <MenuItem Header="删除" Tag="GetWayDelete" Click="GetWayMenuItem_Click">
+                                        <MenuItem.Icon>
+                                          <avalonia:MaterialIcon Kind="Delete"></avalonia:MaterialIcon>
+                                        </MenuItem.Icon>
+                                      </MenuItem>
+                                      <MenuItem Header="{Binding IsLock,Converter={x:Static converters:IntToTextConverters.LockLg }}" Tag="GetWayLock" Click="GetWayMenuItem_Click">
+                                        <MenuItem.Icon>
+                                          <avalonia:MaterialIcon Kind="{Binding IsLock,Converter={x:Static converters:IntToIconConverters.FileLock }}"></avalonia:MaterialIcon>
+                                        </MenuItem.Icon>
+                                      </MenuItem>
+                                    </ContextMenu>
+                                  </Expander.ContextMenu>
+                             
+                            </Expander>
+                          </DataTemplate>
+                        </ItemsRepeater.ItemTemplate>
+                      </ItemsRepeater>
+                    </StackPanel>  
+                
+                  </suki:GroupBox>
+                </suki:GlassCard>
+
+                <suki:GlassCard Classes="HeaderCard" Margin="5" Grid.Row="1" Grid.Column="1">
+                  <suki:GroupBox>
+                    <suki:GroupBox.Header>
+                      <UniformGrid Columns="2">
+                        <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Grid.Column="0">
+                          <avalonia:MaterialIcon Kind="Computer" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+                          <TextBlock Foreground="{DynamicResource SukiText}">边缘盒子</TextBlock>
+                        </StackPanel>
+
+                        <Button VerticalAlignment="Center" Grid.Column="1" HorizontalAlignment="Right" Command="{Binding BoxAddCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" Tag="add" Classes="Basic" >
+                          <StackPanel Orientation="Horizontal">
+                            <avalonia:MaterialIcon Kind="Add" />
+                            <TextBlock>新建</TextBlock>
+                          </StackPanel>
+                        </Button>
+                      </UniformGrid>
+                    </suki:GroupBox.Header>
+
+                  </suki:GroupBox>
+                </suki:GlassCard>
+
+              </Grid>
+
+
+
+            </suki:GroupBox>
+          </suki:GlassCard>
+
+        </SplitView>
+        
+      </Grid>
+
+    </suki:GroupBox>
+  </suki:GlassCard>
+</UserControl>

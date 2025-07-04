@@ -17,6 +17,7 @@ using MQTTnet.Diagnostics.Logger;
 using MQTTnet.Protocol;
 using MQTTnet.Server;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Serilog.Core;
 using System.Collections.Concurrent;
 using System.Collections.Immutable;
@@ -184,8 +185,13 @@ public class MqttServerHostedService : IHostedService
         else if (topic.Contains("/MqttService/GetClients"))
         {
             #region 得到实时连接信息(一般由平台触发,数据也只需返回触发对象获取)
-            string data = JsonConvert.SerializeObject(_validClients);
-            var message = new MqttApplicationMessageBuilder().WithTopic($"/Private/Operator/{args.ClientId}/GetClients").WithPayload(data).Build();
+            string clients = string.Empty;
+            foreach(var item in _connectionClients)
+            {
+                clients += item.Key + ";";
+            }
+            clients = clients.TrimEnd(';');
+            var message = new MqttApplicationMessageBuilder().WithTopic($"/Private/Operator/{args.ClientId}/GetClients").WithPayload(clients).Build();
 
             _ = _mqttServer.InjectApplicationMessage(
                 new InjectedMqttApplicationMessage(message)
