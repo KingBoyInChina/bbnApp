@@ -494,5 +494,22 @@ namespace bbnApp.Application.Services.CODE
             }
             return list;
         }
+        /// <summary>
+        /// 获取
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<DeviceCode>> GetDeivces(string Yhid)
+        {
+            try
+            {
+
+                var list = await dbContext.Set<DeviceCode>().Where(x => x.Isdelete == 0 && x.Yhid == Yhid).OrderBy(x => x.DeviceType).ToListAsync();
+                return list;
+            }
+            catch(Exception ex)
+            {
+                return new List<DeviceCode>();
+            }
+        }
     }
 }
