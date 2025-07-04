@@ -99,6 +99,52 @@ namespace bbnApp.Application.Services.CODE
             }
         }
         /// <summary>
+        /// 获取本单位人员信息
+        /// </summary>
+        /// <param name="Yhid"></param>
+        /// <param name="CompanyId"></param>
+        /// <returns></returns>
+        public async Task<(bool,string,List<WorkerItemDto>)> GetWorkers(string Yhid,string CompanyId)
+        {
+            try
+            {
+                var operators = await _redisService.GetAsync("Operator");
+                if (string.IsNullOrEmpty(operators))
+                {
+                    return (false,"同事信息初始化失败",new List<WorkerItemDto>());
+                }
+                JArray ArrOperators = JArray.Parse(operators);
+                var Operator = ArrOperators.Where(x => CommMethod.GetValueOrDefault(x["Yhid"], string.Empty) == Yhid && CommMethod.GetValueOrDefault(x["CompanyId"], string.Empty) == CompanyId).ToList();
+                if (Operator.Count == 0)
+                {
+                    return (false, "未找到有效的同事信息", new List<WorkerItemDto>());
+                }
+                else
+                {
+                    var items = ArrOperators.Select(x=>new WorkerItemDto {
+                        Yhid =CommMethod.GetValueOrDefault(x["Yhid"],""),
+                        CompanyId = CommMethod.GetValueOrDefault(x["CompanyId"], ""),
+                        DepartMentId = CommMethod.GetValueOrDefault(x["DepartMentId"], ""),
+                        DepartMentName = CommMethod.GetValueOrDefault(x["DepartMentName"], ""),
+                        EmployeeId = CommMethod.GetValueOrDefault(x["EmployeeId"], ""),
+                        EmployeeName = CommMethod.GetValueOrDefault(x["EmployeeName"], ""),
+                        EmployeeNum = CommMethod.GetValueOrDefault(x["EmployeeNum"], ""),
+                        PEmployeeId = CommMethod.GetValueOrDefault(x["PEmployeeId"], ""),
+                        PositionLeve = CommMethod.GetValueOrDefault(x["PositionLeve"], Convert.ToByte(99)),
+                        Position = CommMethod.GetValueOrDefault(x["Position"], ""),
+                        IdxNum = 1,
+                        OperatorId = CommMethod.GetValueOrDefault(x["OperatorId"], ""),
+                    }).ToList();
+
+                    return (true,"同事信息读取成功", items);
+                }
+            }
+            catch (Exception ex)
+            {
+                return (false,$"同事信息初始化异常：{ex.Message.ToString()}",new List<WorkerItemDto>());
+            }
+        }
+        /// <summary>
         /// redis中操作员信息更新
         /// </summary>
         public async Task OperatorRefresh()
@@ -193,6 +239,7 @@ namespace bbnApp.Application.Services.CODE
             }
             return null;
         }
+
         /// <summary>
         /// 通过账号，密码获取操作员信息
         /// </summary>
@@ -656,6 +703,7 @@ namespace bbnApp.Application.Services.CODE
                     var EFSetting = dbCodeContext.Set<AppSettings>();
                     //获取操作员信息
                     var EFObj = dbContext.Set<Operators>();
+                    var EFEmployyObj = dbContext.Set<Employees>();
                     var EFPermissionObj = dbContext.Set<PermissionAssignment>();
                     Operators? model = await EFObj.FirstOrDefaultAsync(x => x.OperatorId == OperatorItem.OperatorId && x.CompanyId == OperatorItem.CompanyId && x.Yhid == user.Yhid);
                     bool badd = false;
@@ -670,6 +718,7 @@ namespace bbnApp.Application.Services.CODE
                         model.IsLock = 0;
                         badd = true;
                     }
+                    var employeeModel = EFEmployyObj.FirstOrDefault(x=>x.Isdelete==0&&x.EmployeeId==model.EmployeeId);
                     #region 写操作员信息
                     int day = 3650; //默认密码有效期3650天
                     var settinginfo = await EFSetting.FirstOrDefaultAsync(x => x.Yhid == user.Yhid && x.SettingCode == "PassWordExpri" && x.Yhid == user.Yhid);
@@ -697,10 +746,11 @@ namespace bbnApp.Application.Services.CODE
                             keymodel.AppId = Guid.NewGuid().ToString("N").Substring(0, 12);
                             keymodel.SecriteKey = Guid.NewGuid().ToString("N");
                             keymodel.CompanyId = model.CompanyId;
-                            keymodel.SetAppName = "个人密钥";
+                            keymodel.SetAppName = employeeModel.EmployeeName+ "的个人密钥";
                             keymodel.SetAppCode = CommMethod.GetChineseSpell(keymodel.SetAppName, false);
                             keymodel.SetAppDescription = "平台操作员的个人密钥";
-                            keymodel.SelectedAppId = string.Empty; 
+                            keymodel.SelectedAppId = string.Empty;
+                            keymodel.ReMarks = "User";
                             keymodel.Isdelete = 0;
                             keymodel.LastModified = DateTime.Now;
                             await EFKeyObj.AddAsync(keymodel);
