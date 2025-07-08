@@ -39,6 +39,7 @@ public partial class UserDeviceView : UserControl
         if (DataContext is not UserDeviceViewModel vm) return;
         vm.AreaFilterSelected = selected;
     }
+    #region 网关
     /// <summary>
     /// MenuItem
     /// </summary>
@@ -68,4 +69,36 @@ public partial class UserDeviceView : UserControl
         if (item.DataContext is not UserGetWayDeviceDto node) return;
         _ = vm.GetWayDeviceState(item.Tag.ToString(), node);
     }
+    #endregion
+    #region 盒子
+    /// <summary>
+    /// MenuItem
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void BoxMenuItem_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not MenuItem item) return;
+        if (item.DataContext is not UserBoxDto node) return;
+        _ = vm.BoxState(item.Tag.ToString(), node);
+    }
+    /// <summary>
+    /// 设备按钮点击操作
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    public void CameraButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button item) return;
+        if (item.DataContext is not UserCameraDto node) return;
+        _ = vm.CameraState(item.Tag.ToString(), node);
+    }
+
+    public void CameraCheckbox_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not CheckBox item) return;
+        if (item.DataContext is not UserCameraDto node) return;
+        _ = vm.CameraState(item.Tag.ToString(), node);
+    }
+    #endregion
 }

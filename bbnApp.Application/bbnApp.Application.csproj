@@ -21,4 +21,8 @@
     <ProjectReference Include="..\bbnApp.DTOs\bbnApp.DTOs.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\Lot\" />
+  </ItemGroup>
+
 </Project>

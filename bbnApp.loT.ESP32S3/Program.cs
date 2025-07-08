@@ -20,13 +20,18 @@ namespace bbnApp.loT.ESP32C3
         /// </summary>
         private static GpioController gpio;
         /// <summary>
-        /// LED蓝灯
+        /// 呼吸灯
+        /// 定义 PWM 引脚和频率
         /// </summary>
-        private static int ledPin = 8;
+        private static PwmChannel pwmRed, pwmGreen, pwmBlue;
         /// <summary>
         /// 扇热风扇
         /// </summary>
-        private static int djPin = 10;
+        private static int djPin = 33;
+        /// <summary>
+        /// 日志
+        /// </summary>
+        private static int logPin = 15;
         /// <summary>
         /// 缓冲区
         /// </summary>
@@ -37,18 +42,28 @@ namespace bbnApp.loT.ESP32C3
         {
             gpio = new GpioController();
 
-            gpio.OpenPin(ledPin, PinMode.Output);
+            // 配置 GPIO 引脚功能
+            Configuration.SetPinFunction(25, DeviceFunction.PWM1); // R (GPIO25)
+            Configuration.SetPinFunction(26, DeviceFunction.PWM2); // G (GPIO26)
+            Configuration.SetPinFunction(27, DeviceFunction.PWM3); // B (GPIO27)
+            // 初始化 PWM 通道（频率 1000Hz）
+            pwmRed = PwmChannel.CreateFromPin(25, 1000, 0);
+            pwmGreen = PwmChannel.CreateFromPin(26, 1000, 0);
+            pwmBlue = PwmChannel.CreateFromPin(27, 1000, 0);
+
+            gpio.OpenPin(logPin, PinMode.Output);
             gpio.OpenPin(djPin, PinMode.Output);
+            //高电平日志输出
+            gpio.Write(logPin, PinValue.High);
             //扇热风扇
             gpio.Write(djPin, PinValue.Low);
-            gpio.Write(ledPin, PinValue.Low);
             State();
 
             try
             {
                 // 配置 UART2 的引脚（GPIO17=TX, GPI16=RX）
-                Configuration.SetPinFunction(21, DeviceFunction.COM2_TX);
-                Configuration.SetPinFunction(20, DeviceFunction.COM2_RX);
+                Configuration.SetPinFunction(17, DeviceFunction.COM2_TX);
+                Configuration.SetPinFunction(16, DeviceFunction.COM2_RX);
                 // 使用 COM2（对应 UART2）
                 uart = new SerialPort("COM2", 9600, Parity.None, 8, StopBits.One);
                 uart.DataReceived += Uart_DataReceived;
@@ -87,12 +102,12 @@ namespace bbnApp.loT.ESP32C3
                     string completeMessage = Encoding.UTF8.GetString(byteBuffer, 0, bufferIndex - 2);
                     Debug.WriteLine($"完整数据帧: {completeMessage}");
                     bufferIndex = 0;
-                    string code = completeMessage.Substring(6, completeMessage.Length-6);
-                    if (code=="000000")
+                    string code = completeMessage.Substring(6, completeMessage.Length - 6);
+                    if (code == "000000")
                     {
                         gpio.Write(djPin, PinValue.High);
                     }
-                    else if(code == "000001")
+                    else if (code == "000001")
                     {
                         gpio.Write(djPin, PinValue.Low);
                     }
@@ -109,23 +124,49 @@ namespace bbnApp.loT.ESP32C3
         /// 
         /// </summary>
         /// <param name="type"></param>
-        private static void State(byte type=0)
+        private static void State(byte type = 0)
         {
-            if (type ==1)
+            if (type == 2)
             {
-                gpio.Write(ledPin, PinValue.High);
-                Thread.Sleep(100);
-                gpio.Write(ledPin, PinValue.Low);
-                Thread.Sleep(100);
-                gpio.Write(ledPin, PinValue.High);
-                Thread.Sleep(100);
-                gpio.Write(ledPin, PinValue.Low);
+                SetColor(Color.Red);
+            }
+            else if (type == 1)
+            {
+                SetColor(Color.Orange);
             }
             else
             {
-                gpio.Write(ledPin, PinValue.High);
-                Thread.Sleep(100);
-                gpio.Write(ledPin, PinValue.Low);
+                SetColor(Color.Green);
+            }
+        }
+        /// <summary>
+        /// 颜色枚举
+        /// </summary>
+        private enum Color { Red, Orange, Green }
+        /// <summary>
+        /// 设置颜色
+        /// </summary>
+        /// <param name="color"></param>
+        private static void SetColor(Color color)
+        {
+            // 关闭所有通道
+            pwmRed.DutyCycle = 0;
+            pwmGreen.DutyCycle = 0;
+            pwmBlue.DutyCycle = 0;
+
+            // 根据状态点亮对应颜色
+            switch (color)
+            {
+                case Color.Green:
+                    pwmGreen.DutyCycle = 1.0; // 纯绿
+                    break;
+                case Color.Orange:
+                    pwmRed.DutyCycle = 1.0;   // 红 + 少量绿 = 橙
+                    pwmGreen.DutyCycle = 0.2;
+                    break;
+                case Color.Red:
+                    pwmRed.DutyCycle = 1.0;   // 纯红
+                    break;
             }
         }
     }

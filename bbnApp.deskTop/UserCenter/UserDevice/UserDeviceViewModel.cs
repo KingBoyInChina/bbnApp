@@ -180,7 +180,7 @@ namespace bbnApp.deskTop.UserCenter.UserDevice
         /// <param name="ToastManager"></param>
         /// <param name="DialogManager"></param>
         /// <param name="nav"></param>
-        public UserDeviceViewModel(ISukiDialogManager DialogManager, PageNavigationService nav, IGrpcClientFactory grpcClientFactory, IMapper mapper, IDialog dialog, MqttClientService _mqttClientService) : base("UserCenter", "用户设备", MaterialIconKind.Devices, "", 2)
+        public UserDeviceViewModel(ISukiDialogManager DialogManager, PageNavigationService nav, IGrpcClientFactory grpcClientFactory, IMapper mapper, IDialog dialog, MqttClientService _mqttClientService) : base("UserCenter", "用户设备维护", MaterialIconKind.Devices, "", 2)
         {
             _ = ClientInit(grpcClientFactory);
             this.dialogManager = DialogManager;
@@ -548,6 +548,171 @@ namespace bbnApp.deskTop.UserCenter.UserDevice
             }
         }
         #endregion
+        #region 边缘盒子
+        /// <summary>
+        /// 新建盒子
+        /// </summary>
+        [RelayCommand]
+        private void BoxAdd()
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(UserInformation.UserId))
+                {
+                    dialog.Error("提示", "请选择用户");
+                    return;
+                }
+                BoxContent(new UserBoxDto
+                {
+                    UserId = UserInformation.UserId
+                });
+            }
+            catch (Exception ex)
+            {
+                dialog.Error("提示", $"新建盒子异常：{ex.Message.ToString()}");
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
+        private void BoxContent(UserBoxDto Item)
+        {
+            try
+            {
+                IsEdit = true;
+                var viewModel = new UserBoxViewModel();
+                Content = new UserBoxView { DataContext = viewModel };
+                viewModel.ViewModelInit(dialog, SubmitCallBack, Item, _client, _mapper, _deviceCodeItems);
+
+            }
+            catch (Exception ex)
+            {
+                IsEdit = false;
+                dialog.Error("异常提示", $"数据新增操作异常：{ex.Message.ToString()}");
+            }
+        }
+        /// <summary>
+        /// 盒子状态变更
+        /// </summary>
+        /// <param name="Tag"></param>
+        /// <param name="Item"></param>
+        public async Task BoxState(string Tag, UserBoxDto Item)
+        {
+            try
+            {
+                if (Tag == "AddCamera")
+                {
+                    var device = new UserCameraDto
+                    {
+                        UserId = SelectedNode?.Id ?? string.Empty,
+                        BoxId = Item.BoxId
+                    };
+                    CameraWindow(device);
+                }
+                else if (Tag == "BoxEdit")
+                {
+                    BoxContent(Item);
+                }
+                else
+                {
+                    var request = new UserDeviceStateRequestDto
+                    {
+                        Type = Tag,
+                        UserId = SelectedNode?.Id ?? string.Empty,
+                        GetWayId = "",
+                        GetWayDeviceId = "",
+                        BoxId = Item.BoxId,
+                        CameraId = "",
+                        Reason = ""
+                    };
+                    if (Tag == "BoxLock" && Item.IsLock == 0)
+                    {
+                        var reason = await dialog.Prompt("请填写停用原因说明", "确定");
+                        if (reason.Item1)
+                        {
+                            request.Reason = reason.Item2;
+                            StateSave(request);
+                        }
+                    }
+                    else
+                    {
+                        StateSave(request);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                dialog.Error("提示", ex.Message.ToString());
+            }
+        }
+        /// <summary>
+        /// 摄像头设备信息提交
+        /// </summary>
+        /// <param name="item"></param>
+        public void CameraWindow(UserCameraDto Item)
+        {
+            try
+            {
+                IsEdit = true;
+                var viewModel = new UserCameraViewModel();
+                Content = new UserCameraView { DataContext = viewModel };
+                viewModel.ViewModelInit(dialog, SubmitCallBack, Item, _client, _mapper, _deviceCodeItems);
+            }
+            catch (Exception ex)
+            {
+                dialog.Error("提示", $"摄像头设备添加异常：{ex.Message.ToString()}");
+            }
+        }
+        /// <summary>
+        /// 摄像头状态变更
+        /// </summary>
+        /// <param name="Tag"></param>
+        /// <param name="Item"></param>
+        public async Task CameraState(string Tag, UserCameraDto Item)
+        {
+            try
+            {
+                if (Tag == "CameraEdit")
+                {
+                    CameraWindow(Item);
+                }
+                else
+                {
+                    var request = new UserDeviceStateRequestDto
+                    {
+                        Type = Tag,
+                        UserId = SelectedNode?.Id ?? string.Empty,
+                        GetWayId = "",
+                        GetWayDeviceId = "",
+                        BoxId = Item.BoxId,
+                        CameraId = Item.CameraId,
+                        Reason = ""
+                    };
+
+                    if (Tag == "CameraLock" && Item.IsLock == 1)
+                    {
+                        var reason = await dialog.Prompt("请填写停用原因说明", "确定");
+                        if (reason.Item1)
+                        {
+                            request.Reason = reason.Item2;
+                            StateSave(request);
+                        }
+                    }
+                    else
+                    {
+                        StateSave(request);
+                    }
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                dialog.Error("异常", $"摄像头状态变更异常：{ex.Message.ToString()}");
+            }
+        }
+        #endregion
         /// <summary>
         /// 代码提交回调
         /// </summary>
@@ -603,26 +768,6 @@ namespace bbnApp.deskTop.UserCenter.UserDevice
                     dialog.Error("状态变更异常", $"状态变更提交异常：{ex.Message.ToString()}");
                 }
             });
-        }
-        /// <summary>
-        /// 新建边缘盒子
-        /// </summary>
-        [RelayCommand]
-        private void BoxAdd()
-        {
-            try
-            {
-                if (!string.IsNullOrEmpty(SelectedNode.Id))
-                {
-                    dialog.Error("提示", "请选择用户");
-                    return;
-                }
-               
-            }
-            catch (Exception ex)
-            {
-                dialog.Error("提示", $"新建网关异常：{ex.Message.ToString()}");
-            }
         }
     }
 }

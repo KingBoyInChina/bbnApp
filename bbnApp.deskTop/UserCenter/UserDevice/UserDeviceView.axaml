@@ -278,7 +278,7 @@
                                         GridLinesVisibility="All"
                                             >
                                         <DataGrid.Columns>
-                                          <DataGridTextColumn Binding="{Binding  DeviceName}">
+                                          <DataGridTextColumn Binding="{Binding  DeviceName}"  Width="120">
                                             <DataGridTextColumn.Header>
                                               <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                                                 <TextBlock>设备名称</TextBlock>
@@ -286,7 +286,7 @@
                                             </DataGridTextColumn.Header>
                                           </DataGridTextColumn>
 
-                                          <DataGridTextColumn Binding="{Binding  DeviceNumber}">
+                                          <DataGridTextColumn Binding="{Binding  DeviceNumber}"  Width="120">
                                             <DataGridTextColumn.Header>
                                               <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                                                 <TextBlock>设备编号</TextBlock>
@@ -294,7 +294,7 @@
                                             </DataGridTextColumn.Header>
                                           </DataGridTextColumn>
 
-                                          <DataGridTextColumn Binding="{Binding  InstallTime,Converter={x:Static converters:DateFormatConverters.SmallDate}}" >
+                                          <DataGridTextColumn Binding="{Binding  InstallTime,Converter={x:Static converters:DateFormatConverters.SmallDate}}"  Width="120">
                                             <DataGridTextColumn.Header>
                                               <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                                                 <TextBlock>安装日期</TextBlock>
@@ -302,7 +302,7 @@
                                             </DataGridTextColumn.Header>
                                           </DataGridTextColumn>
 
-                                          <DataGridTextColumn Binding="{Binding  Warranty,Converter={x:Static converters:DateFormatConverters.SmallDate}}"  Width="*">
+                                          <DataGridTextColumn Binding="{Binding  Warranty,Converter={x:Static converters:DateFormatConverters.SmallDate}}"  Width="120">
                                             <DataGridTextColumn.Header>
                                               <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                                                 <TextBlock>维保日期</TextBlock>
@@ -405,6 +405,199 @@
                       </UniformGrid>
                     </suki:GroupBox.Header>
 
+                      <StackPanel >
+                      <ItemsRepeater ItemsSource="{Binding Boxs}">
+                        <ItemsRepeater.ItemTemplate>
+                          <DataTemplate>
+                            <Expander ExpandDirection="Down">
+                              <Expander.Header>
+                                <StackPanel Orientation="Horizontal" Grid.Column="0">
+                                  <avalonia:MaterialIcon Kind="ListBoxOutline" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+                                  <TextBlock VerticalAlignment="Center" Text="{Binding BoxName}" Foreground="{DynamicResource SukiText}"></TextBlock>
+                                  <avalonia:MaterialIcon VerticalAlignment="Center" Kind="Lock" IsVisible="{Binding IsLock,Converter={x:Static converters:IntToBoolConverters.Instance}}"></avalonia:MaterialIcon>
+                                </StackPanel>
+                              </Expander.Header>
+                                <Grid>
+                                  <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"></RowDefinition>
+                                    <RowDefinition Height="*"></RowDefinition>
+                                  </Grid.RowDefinitions>
+                                      <UniformGrid Grid.Row="0" Columns="3" Rows="3">
+                                        <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" Classes="FormCell">
+                                          <TextBlock Foreground="{DynamicResource SukiText}">盒子编号：</TextBlock>
+                                          <TextBlock Text="{Binding BoxNumber}" Foreground="{DynamicResource SukiText}"></TextBlock>
+                                        </StackPanel>
+                              
+                                        <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" Classes="FormCell">
+                                          <TextBlock Foreground="{DynamicResource SukiText}">盒子分类：</TextBlock>
+                                          <TextBlock Text="{Binding BoxName}" Foreground="{DynamicResource SukiText}"></TextBlock>
+                                        </StackPanel>  
+                              
+                                        <StackPanel Grid.Column="2" Grid.Row="0" Orientation="Horizontal" Classes="FormCell">
+                                          <TextBlock Foreground="{DynamicResource SukiText}">通信方式：</TextBlock>
+                                          <TextBlock Text="{Binding WlanType, Converter={x:Static converters:DicIdToNameConverters.Instance}}" Foreground="{DynamicResource SukiText}"></TextBlock>
+                                        </StackPanel> 
+                              
+                                        <StackPanel Grid.ColumnSpan="2" Grid.Row="1" Orientation="Horizontal" Classes="FormCell">
+                                          <TextBlock Foreground="{DynamicResource SukiText}">安装位置：</TextBlock>
+                                          <TextBlock Text="{Binding BoxLocation}" Foreground="{DynamicResource SukiText}"></TextBlock>
+                                        </StackPanel> 
+                              
+                                        <StackPanel Grid.Column="2" Grid.Row="1" Orientation="Horizontal" Classes="FormCell">
+                                          <TextBlock Foreground="{DynamicResource SukiText}">安装时间：</TextBlock>
+                                          <TextBlock Text="{Binding InstallTime}" Foreground="{DynamicResource SukiText}"></TextBlock>
+                                        </StackPanel> 
+                                
+                                        <StackPanel Grid.Column="0" Grid.Row="2" Orientation="Horizontal" Classes="FormCell">
+                                          <TextBlock Foreground="{DynamicResource SukiText}">安装人：</TextBlock>
+                                          <TextBlock Text="{Binding Installer}" Foreground="{DynamicResource SukiText}"></TextBlock>
+                                        </StackPanel> 
+                              
+                                        <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal" Classes="FormCell">
+                                          <TextBlock Foreground="{DynamicResource SukiText}">维保到期：</TextBlock>
+                                          <TextBlock Text="{Binding Warranty}" Foreground="{DynamicResource SukiText}"></TextBlock>
+                                        </StackPanel> 
+                                
+                                        <StackPanel Orientation="Horizontal" Grid.Column="2" Grid.Row="2" Classes="FormCell">
+                                          <TextBlock VerticalAlignment="Center">锁定：</TextBlock>
+                                          <CheckBox IsChecked="{Binding IsLock,  Converter={x:Static converters:IntToBoolConverters.Instance}}" IsEnabled="False"/>
+                                          <TextBlock IsVisible="{Binding IsLock,  Converter={x:Static converters:IntToBoolConverters.Instance}}" VerticalAlignment="Center" Classes="Caption" Text="{Binding LockTime}"></TextBlock>
+                                          <TextBlock IsVisible="{Binding IsLock,  Converter={x:Static converters:IntToBoolConverters.Instance}}" VerticalAlignment="Center" Classes="Caption" Text="{Binding LockReason}"></TextBlock>
+                                        </StackPanel>
+                                      </UniformGrid>
+                                
+                                      <DataGrid
+                                        Grid.Row="1"
+                                        ItemsSource="{Binding UserCameras}"
+                                        AutoGenerateColumns="False"
+                                        CanUserReorderColumns="True"
+                                        CanUserResizeColumns="True"
+                                        CanUserSortColumns="True"
+                                        GridLinesVisibility="All"
+                                            >
+                                        <DataGrid.Columns>
+                                          <DataGridTextColumn Binding="{Binding  CameraNumber}"  Width="120">
+                                            <DataGridTextColumn.Header>
+                                              <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                <TextBlock>摄像头编号</TextBlock>
+                                              </StackPanel>
+                                            </DataGridTextColumn.Header>
+                                          </DataGridTextColumn>
+
+                                          <DataGridTextColumn Binding="{Binding  CameraIp}"  Width="120">
+                                            <DataGridTextColumn.Header>
+                                              <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                <TextBlock>摄像头IP</TextBlock>
+                                              </StackPanel>
+                                            </DataGridTextColumn.Header>
+                                          </DataGridTextColumn>
+
+                                          <DataGridTextColumn Binding="{Binding  CameraChannel}"  Width="120">
+                                            <DataGridTextColumn.Header>
+                                              <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                <TextBlock>摄像头通道</TextBlock>
+                                              </StackPanel>
+                                            </DataGridTextColumn.Header>
+                                          </DataGridTextColumn>
+
+                                          <DataGridTextColumn Binding="{Binding  CameraName}"  Width="120">
+                                            <DataGridTextColumn.Header>
+                                              <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                <TextBlock>摄像头名称</TextBlock>
+                                              </StackPanel>
+                                            </DataGridTextColumn.Header>
+                                          </DataGridTextColumn>
+
+                                          <DataGridTextColumn Binding="{Binding  InstallTime,Converter={x:Static converters:DateFormatConverters.SmallDate}}"  Width="120">
+                                            <DataGridTextColumn.Header>
+                                              <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                <TextBlock>安装日期</TextBlock>
+                                              </StackPanel>
+                                            </DataGridTextColumn.Header>
+                                          </DataGridTextColumn>
+
+                                          <DataGridTextColumn Binding="{Binding  Warranty,Converter={x:Static converters:DateFormatConverters.SmallDate}}"  Width="120">
+                                            <DataGridTextColumn.Header>
+                                              <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                <TextBlock>维保日期</TextBlock>
+                                              </StackPanel>
+                                            </DataGridTextColumn.Header>
+                                          </DataGridTextColumn>
+
+                                          <DataGridTemplateColumn Header="停用" Width="80">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                              <DataTemplate>
+                                                <CheckBox Tag="CameraLock" Click="CameraCheckbox_Click" IsChecked="{Binding IsLock,Converter={x:Static converters:IntToBoolConverters.Instance}}"></CheckBox>
+                                              </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                          </DataGridTemplateColumn>
+
+                                          <!-- 自定义操作列 -->
+                                          <DataGridTemplateColumn Header="操作" Width="80">
+
+                                            <DataGridTemplateColumn.CellTemplate>
+                                              <DataTemplate>
+                                                <my:Space Orientation="Horizontal" Spacing="2">
+
+                                                  <Button
+                                                   Classes="Basic"
+                                                   ToolTip.Tip="修改"
+                                                   Click="CameraButton_Click"
+                                                   Tag="CameraEdit">
+                                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                      <avalonia:MaterialIcon Kind="EditCircle" />
+                                                    </StackPanel>
+                                                  </Button>
+                                                  <Button
+                                                   Classes="Basic Accent"
+                                                   ToolTip.Tip="点击删除"
+                                                   Click="CameraButton_Click"
+                                                   Tag="CameraDelete">
+                                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                      <avalonia:MaterialIcon Kind="DeleteCircle" />
+                                                    </StackPanel>
+                                                  </Button>
+
+                                                </my:Space>
+
+                                              </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                          </DataGridTemplateColumn>
+
+                                        </DataGrid.Columns>
+                                      </DataGrid>
+                                   </Grid> 
+                                  <Expander.ContextMenu>
+                                    <ContextMenu>
+                                      <MenuItem Header="添加摄像头" Tag="AddCamera" Click="BoxMenuItem_Click">
+                                        <MenuItem.Icon>
+                                          <avalonia:MaterialIcon Kind="AddAlarm"></avalonia:MaterialIcon>
+                                        </MenuItem.Icon>
+                                      </MenuItem>
+                                      <MenuItem Header="修改" Tag="BoxEdit" Click="BoxMenuItem_Click">
+                                        <MenuItem.Icon>
+                                          <avalonia:MaterialIcon Kind="Edit"></avalonia:MaterialIcon>
+                                        </MenuItem.Icon>
+                                      </MenuItem>
+                                      <MenuItem Header="删除" Tag="BoxDelete" Click="BoxMenuItem_Click">
+                                        <MenuItem.Icon>
+                                          <avalonia:MaterialIcon Kind="Delete"></avalonia:MaterialIcon>
+                                        </MenuItem.Icon>
+                                      </MenuItem>
+                                      <MenuItem Header="{Binding IsLock,Converter={x:Static converters:IntToTextConverters.LockLg }}" Tag="BoxLock" Click="BoxMenuItem_Click">
+                                        <MenuItem.Icon>
+                                          <avalonia:MaterialIcon Kind="{Binding IsLock,Converter={x:Static converters:IntToIconConverters.FileLock }}"></avalonia:MaterialIcon>
+                                        </MenuItem.Icon>
+                                      </MenuItem>
+                                    </ContextMenu>
+                                  </Expander.ContextMenu>
+                             
+                            </Expander>
+                          </DataTemplate>
+                        </ItemsRepeater.ItemTemplate>
+                      </ItemsRepeater>
+                    </StackPanel>    
+                
                   </suki:GroupBox>
                 </suki:GlassCard>
 

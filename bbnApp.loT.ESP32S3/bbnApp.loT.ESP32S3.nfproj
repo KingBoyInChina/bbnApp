@@ -8,12 +8,12 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectTypeGuids>{11A8DD76-328B-46DF-9F39-F559912D0360};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <ProjectGuid>8ad19c81-42df-42e8-91bb-ee6f2365b8bf</ProjectGuid>
+    <ProjectGuid>4a1a184f-991d-45c1-a9f4-c4e7d80e7642</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <FileAlignment>512</FileAlignment>
-    <RootNamespace>bbnApp.loT.ESP32C3</RootNamespace>
-    <AssemblyName>bbnApp.loT.ESP32C3</AssemblyName>
+    <RootNamespace>bbnApp.loT.ESP32S3</RootNamespace>
+    <AssemblyName>bbnApp.loT.ESP32S3</AssemblyName>
     <TargetFrameworkVersion>v1.0</TargetFrameworkVersion>
   </PropertyGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />

@@ -43,6 +43,7 @@ public static class DependencyInjection
         // 读取数据库连接字符串
         var basicConnectionString = bbnApp.Share.EncodeAndDecode.MixDecrypt(configuration.GetConnectionString("DataConnection")); // 基础数据数据库
         var codeConnectionString = bbnApp.Share.EncodeAndDecode.MixDecrypt(configuration.GetConnectionString("CodeConnection"));     // 代码数据数据库
+        var lotConnectionString = bbnApp.Share.EncodeAndDecode.MixDecrypt(configuration.GetConnectionString("LotConnection"));     // lot数据数据库
 
         // 配置 ApplicationDbContext 并注入到服务容器中
         services.AddDbContext<ApplicationDbContext>(options =>
@@ -55,16 +56,23 @@ public static class DependencyInjection
         {
             options.UseMySql(codeConnectionString, ServerVersion.AutoDetect(codeConnectionString));
         });
+        // 配置 ApplicationDbLotContext 并注入到服务容器中
+        services.AddDbContext<ApplicationDbLotContext>(options =>
+        {
+            options.UseMySql(lotConnectionString, ServerVersion.AutoDetect(lotConnectionString));
+        });
 
         // 注册 IApplicationDbContext 使用不同的实现
         services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
         services.AddScoped<IApplicationDbCodeContext>(provider => provider.GetRequiredService<ApplicationDbCodeContext>());
+        services.AddScoped<IApplicationDbLotContext>(provider => provider.GetRequiredService<ApplicationDbLotContext>());
 
         // 注册连接字符串
         services.AddSingleton(new ConnectionStringOptions
         {
             BasicConnectionString = basicConnectionString,
-            CodeConnectionString = codeConnectionString
+            CodeConnectionString = codeConnectionString,
+            LotConnectionString = lotConnectionString
         });
 
         // 注册 DbConnectionFactory

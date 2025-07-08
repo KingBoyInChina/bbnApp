@@ -37,10 +37,21 @@ public class DateToTextConverter: IValueConverter
 
     public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (value is not string text) return null;
-
-        // 根据文本返回对应的布尔值
-        return text == trueText;
+        if (value is DateTime text) {
+            return text.ToString("yyyy-MM-dd");
+        }
+        else
+        {
+            try
+            {
+                var vd = System.Convert.ToDateTime(value);
+                return vd.ToString("yyyy-MM-dd");
+            }
+            catch (Exception ex)
+            {
+                return "";
+            }
+        }
     }
 }
 
@@ -70,9 +81,21 @@ public class DateToLongTextConverter : IValueConverter
 
     public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (value is not string text) return null;
-
-        // 根据文本返回对应的布尔值
-        return text == trueText;
+        if (value is DateTime text)
+        {
+            return text.ToString("yyyy-MM-dd HH:mm:ss");
+        }
+        else
+        {
+            try
+            {
+                var vd = System.Convert.ToDateTime(value);
+                return vd.ToString("yyyy-MM-dd HH:mm:ss");
+            }
+            catch (Exception ex)
+            {
+                return "";
+            }
+        }
     }
 }

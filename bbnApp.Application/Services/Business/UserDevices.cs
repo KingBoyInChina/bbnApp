@@ -447,20 +447,21 @@ namespace bbnApp.Application.Services.Business
                 {
                     var EFObj = dbContext.Set<UserBoxs>();
                     var CameraEFObj = dbContext.Set<UserCameras>();
-                    var Box = request.Camera;
-                    var boxmodel = EFObj.FirstOrDefault(x => x.IsDelete == 0 && x.BoxId == Box.BoxId);
+                    var Camera = request.Camera;
+                    var boxmodel = EFObj.FirstOrDefault(x => x.IsDelete == 0 && x.BoxId == Camera.BoxId);
                     if (boxmodel == null)
                     {
                         return (false, "请选择有效的边缘盒子信息", new UserCameraDto());
                     }
-                    var model = CameraEFObj.FirstOrDefault(x => x.IsDelete == 0 && x.BoxId == Box.BoxId && x.UserId == Box.UserId && x.CameraId == Box.CameraId);
+                    var model = CameraEFObj.FirstOrDefault(x => x.IsDelete == 0 && x.BoxId == Camera.BoxId && x.UserId == Camera.UserId && x.CameraId == Camera.CameraId);
 
                     bool b = false;
                     if (model == null)
                     {
                         model = new UserCameras();
                         model.Yhid = user.Yhid;
-                        model.UserId = Box.UserId;
+                        model.BoxId = Camera.BoxId;
+                        model.UserId = Camera.UserId;
                         model.CameraId = Guid.NewGuid().ToString("N");
                         var topmodel = CameraEFObj.Where(x => x.CameraNumber.StartsWith(boxmodel.BoxNumber)).OrderByDescending(x => Convert.ToInt64(x.CameraNumber)).Take(1).FirstOrDefault();
                         if (topmodel != null)
@@ -474,20 +475,21 @@ namespace bbnApp.Application.Services.Business
                             model.CameraNumber = boxmodel.BoxNumber + "001";
                         }
 
-                        model.InstallTime = Box.InstallTime;
-                        model.Installer = Box.Installer;
-                        model.InstallerId = Box.InstallerId;
-                        model.Warranty = Box.InstallTime.AddYears(1);
                         model.IsLock = 0;
                         model.IsDelete = 0;
                         b = true;
                     }
                     #region 写数据
-                    model.CameraIp = Box.CameraIp;
-                    model.CameraChannel = Box.CameraChannel;
-                    model.CameraName = Box.CameraName;
-                    model.CameraAdmin = Box.CameraAdmin;
-                    model.CameraPassword = Box.CameraPassword;
+                    model.DeviceId = Camera.DeviceId;
+                    model.CameraIp = Camera.CameraIp;
+                    model.CameraChannel = Camera.CameraChannel;
+                    model.CameraName = Camera.CameraName;
+                    model.CameraAdmin = Camera.CameraAdmin;
+                    model.CameraPassword = Camera.CameraPassword;
+                    model.InstallTime = Camera.InstallTime;
+                    model.Installer = Camera.Installer;
+                    model.InstallerId = Camera.InstallerId;
+                    model.Warranty = Camera.InstallTime.AddYears(1);
                     model.LastModified = DateTime.Now;
                     #endregion
                     StringBuilder _error = new StringBuilder();
@@ -521,7 +523,7 @@ namespace bbnApp.Application.Services.Business
             }
             catch (Exception ex)
             {
-                return (false, $"网关维护异常：{ex.Message.ToString()}", new UserCameraDto());
+                return (false, $"摄像头维护异常：{ex.Message.ToString()}", new UserCameraDto());
             }
         }
         #endregion

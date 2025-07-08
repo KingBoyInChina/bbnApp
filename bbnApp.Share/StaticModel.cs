@@ -9,7 +9,8 @@ namespace bbnApp.Share
         public enum DbName
         {
             bbn = 1,
-            bbn_code = 2
+            bbn_code = 2,
+            bbn_lot = 3
         }
     }
     /// <summary>

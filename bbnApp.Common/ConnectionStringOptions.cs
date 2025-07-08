@@ -16,5 +16,9 @@ namespace bbnApp.Common
         /// 代码库连接字符串
         /// </summary>
         public string CodeConnectionString { get; set; }
+        /// <summary>
+        /// lot连接字符串
+        /// </summary>
+        public string LotConnectionString { get; set; }
     }
 }

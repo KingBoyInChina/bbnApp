@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 namespace bbnApp.Infrastructure;
 /// <summary>
-/// 基础数据
+/// 业务数据
 /// </summary>
 public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
 {
@@ -34,7 +34,7 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<Applicatio
     }
 }
 /// <summary>
-/// 监测数据
+/// 代码数据
 /// </summary>
 public class DesignTimeDbCodeContextFactory : IDesignTimeDbContextFactory<ApplicationDbCodeContext>
 {
@@ -56,9 +56,7 @@ public class DesignTimeDbCodeContextFactory : IDesignTimeDbContextFactory<Applic
             .Build();
         // 从配置中获取连接字符串
         var connectionString = Share.EncodeAndDecode.MixDecrypt(configuration.GetConnectionString("CodeConnection"));
-        // 手动指定连接字符串
-        //var connectionString = "Server=localhost;Database=bbn_code;User Id=KGBDEV;Password=Wyy@1589;Convert Zero Datetime=True;Character Set=utf8mb4;";
-
+        
         // 配置 DbContextOptions
         var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbCodeContext>();
         optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
@@ -66,5 +64,36 @@ public class DesignTimeDbCodeContextFactory : IDesignTimeDbContextFactory<Applic
         return new ApplicationDbCodeContext(optionsBuilder.Options);
     }
 }
+/// <summary>
+/// 采集数据
+/// </summary>
+public class DesignTimeDbLotContextFactory : IDesignTimeDbContextFactory<ApplicationDbLotContext>
+{
+    /// <summary>
+    /// 获取项目根目录路径
+    /// </summary>
+    private static string basePath = Directory.GetCurrentDirectory();
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="args"></param>
+    /// <returns></returns>
+    public ApplicationDbLotContext CreateDbContext(string[] args)
+    {
+        // 获取配置
+        IConfiguration configuration = new ConfigurationBuilder()
+            .SetBasePath(basePath) // 设置配置文件所在路径
+            .AddJsonFile("appsettings.json") // 加载 appsettings.json
+            .Build();
+        // 从配置中获取连接字符串
+        var connectionString = Share.EncodeAndDecode.MixDecrypt(configuration.GetConnectionString("LotConnection"));
 
-    
+        // 配置 DbContextOptions
+        var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbLotContext>();
+        optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+
+        return new ApplicationDbLotContext(optionsBuilder.Options);
+    }
+}
+
+

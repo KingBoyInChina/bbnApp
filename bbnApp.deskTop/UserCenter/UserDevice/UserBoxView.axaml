@@ -1,0 +1,104 @@
+<UserControl x:Class="bbnApp.deskTop.UserCenter.UserDevice.UserBoxView"
+       xmlns="https://github.com/avaloniaui"
+       xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+       xmlns:suki="https://github.com/kikipoulet/SukiUI"
+       xmlns:converters="clr-namespace:bbnApp.deskTop.Converters"
+       xmlns:theme="clr-namespace:SukiUI.Theme;assembly=SukiUI"
+       xmlns:my="clr-namespace:bbnApp.deskTop.Controls"
+       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+       d:DesignHeight="800"
+       d:DesignWidth="450"
+       xmlns:regkey="clr-namespace:bbnApp.deskTop.UserCenter.UserDevice"
+       x:DataType="regkey:UserBoxViewModel"
+       mc:Ignorable="d">
+
+  <suki:GroupBox Width="400">
+
+    <suki:GroupBox.Header>
+      <Grid ColumnDefinitions="*,auto">
+        <StackPanel Orientation="Horizontal" Grid.Column="0" VerticalAlignment="Center" Margin="0,20,0,0">
+          <avalonia:MaterialIcon Kind="Key"></avalonia:MaterialIcon>
+          <TextBlock>边缘盒子设备维护</TextBlock>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Column="1" VerticalAlignment="Center"  Margin="0,20,0,0">
+          <Button Command="{Binding CloseCommand}">
+            <avalonia:MaterialIcon Kind="ExitToApp" ToolTip.Tip="点击关闭" Cursor="Hand"></avalonia:MaterialIcon>
+          </Button>
+        </StackPanel>
+      </Grid>
+    </suki:GroupBox.Header>
+
+    <StackPanel Orientation="Vertical">
+
+      <StackPanel Classes="FormCell" Orientation="Vertical">
+        <TextBlock VerticalAlignment="Center">盒子名称：</TextBlock>
+        <TextBox Watermark="请输入自定义盒子名称" Text="{Binding Box.BoxName}" MaxLength="20" theme:TextBoxExtensions.AddDeleteButton="True"></TextBox>
+      </StackPanel>
+
+      <StackPanel Classes="FormCell" Orientation="Vertical">
+        <TextBlock VerticalAlignment="Center">盒子分类：</TextBlock>
+        <ComboBox ItemsSource="{Binding Devices}" SelectedItem="{Binding SelectedDevice}">
+          <ComboBox.ItemTemplate>
+            <DataTemplate>
+              <TextBlock Text="{Binding DeviceName}"/>
+            </DataTemplate>
+          </ComboBox.ItemTemplate>
+        </ComboBox>
+      </StackPanel>
+
+      <StackPanel Classes="FormCell" Orientation="Vertical">
+        <TextBlock VerticalAlignment="Center">通信方式：</TextBlock>
+        <ComboBox ItemsSource="{Binding WlanType}" SelectedItem="{Binding SelectedWlanType}">
+          <ComboBox.ItemTemplate>
+            <DataTemplate>
+              <TextBlock Text="{Binding Name}"/>
+            </DataTemplate>
+          </ComboBox.ItemTemplate>
+        </ComboBox>
+      </StackPanel>
+
+      <StackPanel Classes="FormCell" Orientation="Vertical">
+        <TextBlock VerticalAlignment="Center">安装位置：</TextBlock>
+        <TextBox Watermark="安装位置" MaxLength="100" Text="{Binding Box.BoxLocation}" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
+      </StackPanel>
+
+      <StackPanel Classes="FormCell" Orientation="Vertical">
+        <TextBlock VerticalAlignment="Center">安装人：</TextBlock>
+        <ComboBox ItemsSource="{Binding Installers}" SelectedItem="{Binding SelectedInstaller}">
+          <ComboBox.ItemTemplate>
+            <DataTemplate>
+              <TextBlock Text="{Binding Name}"/>
+            </DataTemplate>
+          </ComboBox.ItemTemplate>
+        </ComboBox>
+      </StackPanel>
+
+      <StackPanel Classes="FormCell" Orientation="Vertical">
+        <TextBlock VerticalAlignment="Center">安装时间：</TextBlock>
+        <DatePicker HorizontalAlignment="Stretch" VerticalAlignment="Center" SelectedDate="{Binding InstallTime}" YearFormat="yyyy" MonthFormat="MM" DayFormat="dd"/>
+      </StackPanel>
+
+      <StackPanel Classes="FormCell" Orientation="Vertical">
+        <TextBlock VerticalAlignment="Center">备注说明：</TextBlock>
+        <TextBox Watermark="备注说明" MaxLength="100" Text="{Binding Box.ReMarks}"  AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
+      </StackPanel>
+
+      <StackPanel Orientation="Horizontal">
+        <TextBlock VerticalAlignment="Center">数据锁定：</TextBlock>
+        <ToggleSwitch IsChecked="{Binding Box.IsLock,  Converter={StaticResource IntToBoolConverter}}" IsEnabled="False"/>
+        <TextBlock IsVisible="{Binding Box.IsLock,  Converter={StaticResource IntToBoolConverter}}" VerticalAlignment="Center" Classes="Caption" Text="{Binding Box.LockTime}"></TextBlock>
+        <TextBlock IsVisible="{Binding Box.IsLock,  Converter={StaticResource IntToBoolConverter}}" VerticalAlignment="Center" Classes="Caption" Text="{Binding Box.LockReason}"></TextBlock>
+      </StackPanel>
+
+      <Button Classes="Flat" HorizontalAlignment="Stretch" Margin="0,20" Command="{Binding BoxSubmitCommand}" theme:ButtonExtensions.ShowProgress="{Binding IsBusy}">
+        <my:Space Orientation="Horizontal">
+          <avalonia:MaterialIcon IsVisible="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}" Kind="Post" Width="20" Height="20"></avalonia:MaterialIcon>
+          <TextBlock>数据提交</TextBlock>
+        </my:Space>
+      </Button>
+
+    </StackPanel>
+  </suki:GroupBox>
+</UserControl>

@@ -39,6 +39,7 @@ namespace bbnApp.Infrastructure.Dapr
             {
                 "Basic" => _connectionStringOptions.BasicConnectionString,
                 "Code" => _connectionStringOptions.CodeConnectionString,
+                "Lot" => _connectionStringOptions.LotConnectionString,
                 _ => throw new ArgumentException("Invalid connection string name", nameof(connectionStringName))
             };
 
