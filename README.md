@@ -4,4 +4,6 @@
 数据库：MySQL+Redis
 实时通信：MQTT
 智能网关：单板机+linux+.net8+avalonia+4G/Lora
-终端：arduino+lora+其他一些硬件设备或传感器
+终端：esp32 S3+lora+其他一些硬件设备或传感器
+数采：RS485+Modbu RTU+RS485串口服务器/自主开发硬件采集设备
+自主开发硬件：基于esp32 C3 实现的 远程电机控制模块、 远程电磁阀控制、远程继电器控制
