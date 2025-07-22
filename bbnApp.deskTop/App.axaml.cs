@@ -13,9 +13,10 @@ using bbnApp.deskTop.AssistiveTools.SM2;
 using bbnApp.deskTop.AssistiveTools.WaterMark;
 using bbnApp.deskTop.Common;
 using bbnApp.deskTop.Common.CommonViews;
-using bbnApp.deskTop.Features.CustomTheme;
-using bbnApp.deskTop.Features.Splash;
-using bbnApp.deskTop.Features.Theming;
+using bbnApp.deskTop.PlatformManagement.CustomTheme;
+using bbnApp.deskTop.OperationsCenter.ExceptionLess;
+using bbnApp.deskTop.OperationsCenter.InfluxDb;
+using bbnApp.deskTop.OperationsCenter.RabbitMQ;
 using bbnApp.deskTop.OrganizationStructure.Company;
 using bbnApp.deskTop.OrganizationStructure.DepartMent;
 using bbnApp.deskTop.OrganizationStructure.Employee;
@@ -25,9 +26,11 @@ using bbnApp.deskTop.OrganizationStructure.Role;
 using bbnApp.deskTop.PlatformManagement.AppSetting;
 using bbnApp.deskTop.PlatformManagement.AreaCode;
 using bbnApp.deskTop.PlatformManagement.DeviceCode;
+using bbnApp.deskTop.PlatformManagement.DeviceCommand;
 using bbnApp.deskTop.PlatformManagement.DictionaryCode;
 using bbnApp.deskTop.PlatformManagement.MaterialsCode;
 using bbnApp.deskTop.PlatformManagement.OperationCode;
+using bbnApp.deskTop.PlatformManagement.Theming;
 using bbnApp.deskTop.PlatformManagement.TopicCode;
 using bbnApp.deskTop.Services;
 using bbnApp.deskTop.UserCenter.UserDevice;
@@ -41,6 +44,7 @@ using Consul;
 using Exceptionless;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Serilog;
 using SukiUI.Dialogs;
 using SukiUI.Toasts;
@@ -73,6 +77,7 @@ public partial class App :Avalonia.Application
            .CreateLogger();
 
         #endregion
+
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
@@ -140,7 +145,6 @@ public partial class App :Avalonia.Application
             .AddView<LoginWindow, LoginWindowViewModel>(services)
             .AddView<ChangePassWordView, ChangePassWordViewModel>(services)
             .AddView<SettingView, SettingViewModel>(services)
-            .AddView<SplashView, SplashViewModel>(services)
             .AddView<ThemingView, ThemingViewModel>(services)
             .AddView<AESMixPage, AESMixPageViewModel>(services)
             .AddView<SM2Page, SM2PageViewModel>(services)
@@ -156,6 +160,7 @@ public partial class App :Avalonia.Application
             .AddView<CustomThemeDialogView, CustomThemeDialogViewModel>(services)
             .AddView<MaterialsCodeView, MaterialsCodeViewModel>(services)
             .AddView<DeviceCodeView, DeviceCodeViewModel>(services)
+            .AddView<DeviceCommandView, DeviceCommandViewModel>(services)
             .AddView<OperationCodeView, OperationCodeViewModel>(services)
             .AddView<TopicCodeView, TopicCodeViewModel>(services)
             .AddView<CompanyView, CompanyViewModel>(services)
@@ -166,54 +171,51 @@ public partial class App :Avalonia.Application
             .AddView<ReigisterKeyView, ReigisterKeyViewModel>(services)
             .AddView<UserInformationView, UserInformationViewModel>(services)
             .AddView<UserDeviceView, UserDeviceViewModel>(services)
+            .AddView<InfluxDbView, InfluxDbViewModel>(services)
+            .AddView<RabbitMQView, RabbitMQViewModel>(services)
+            .AddView<ExceptionLessView, ExceptionLessViewModel>(services)
             .AddView<InputPrompt, InputPromptViewModel>(services);
     }
 
     private static ServiceProvider ConfigureServices(IConfiguration configuration, ServiceCollection services)
     {
+        // 添加日志服务（核心修复）
+        services.AddLogging(logging =>
+        {
+            logging.AddDebug(); // 调试输出
+            logging.AddConsole(); // 控制台输出
+        });
         services.AddSingleton(Log.Logger); // 注册 ILogger
         // 注册 AutoMapper
-        services.AddAutoMapper(typeof(MappingProfile));
+        services.AddAutoMapper(cfg =>
+        {
+            cfg.AddProfile<MappingProfile>();
+        });
         #region exceptionless 配置
         var exceptionlessClient = new ExceptionlessClient();
         exceptionlessClient.Startup(configuration.GetSection("Exceptionless:ApiKey").Value.ToString());
         exceptionlessClient.Configuration.ServerUrl = configuration.GetSection("Exceptionless:ServerUrl").Value.ToString();
         #endregion
         #region grpc 注入
+
+        // 注册 Consul 集群配置
+        services.Configure<ConsulConfig>(configuration.GetSection("Consul"));
+        services.AddSingleton<IConsulClient>(_ => new ConsulClient(c => c.Address = new Uri(configuration.GetSection("Consul:Address").Value.ToString())));
+        services.AddSingleton<IGrpcClientFactory,GrpcClientFactory>();
+        // 默认注入 Basic
+        //services.AddSingleton<IConsulClient>(sp =>
+        //    sp.GetRequiredService<Func<string, IConsulClient>>().Invoke("Basic")
+        //);
         // 在客户端服务注册中添加
-        services.AddSingleton<IConsulClient>(sp =>
-            new ConsulClient(config =>
-            {
-                config.Address = new Uri(configuration["Consul:Address"] ?? "http://localhost:5003");
-            }));
-        //微服务，不需要固定的配置GRPC地址
-        //services.AddSingleton(provider =>
-        //{
-        //    var configuration = provider.GetRequiredService<IConfiguration>();
-        //    var grpcUrl = configuration.GetSection("Grpc:Url").Value;
-
-        //    if (string.IsNullOrEmpty(grpcUrl))
+        //services.AddSingleton<IConsulClient>(sp =>
+        //    new ConsulClient(config =>
         //    {
-        //        throw new InvalidOperationException("gRPC URL is not configured.");
-        //    }
-
-        //    var httpClientHandler = new HttpClientHandler
-        //    {
-        //        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-        //    };
-
-
-        //    return GrpcChannel.ForAddress(
-        //        grpcUrl,
-        //        new GrpcChannelOptions { HttpHandler = httpClientHandler }
-        //    );
-
-        //    //return new Author.AuthorClient(channel);
-        //});
+        //        config.Address = new Uri(configuration["Consul:Address"] ?? "http://localhost:5003");
+        //    })
+        //);
         //注册工厂
         //debug调试模式下延迟一会儿，不然服务还没注册就开始调用了
-        Task.Delay(20000).GetAwaiter().GetResult();
-        services.AddSingleton<IGrpcClientFactory, BbnGrpcClientFactory>();
+        //Task.Delay(20000).GetAwaiter().GetResult();
         #endregion
         #region redis注入
         // 配置 Redis 缓存c

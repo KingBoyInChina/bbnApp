@@ -54,5 +54,11 @@ namespace bbnApp.Application.IServices.IBusiness
         /// <param name="user"></param>
         /// <returns></returns>
         Task<(bool, string, List<UserGetWayDto>, List<UserBoxDto>)> UserDeviceState(UserDeviceStateRequestDto request, UserModel user);
+        /// <summary>
+        /// 获取所有网关设备清单
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        Task<(bool, string, List<UserDeviceListItemDto>)> UserGetWayDeviceInit(string UserId);
     }
 }

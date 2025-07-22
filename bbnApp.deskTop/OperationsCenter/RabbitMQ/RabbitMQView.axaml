@@ -1,0 +1,52 @@
+<UserControl x:Class="bbnApp.deskTop.OperationsCenter.RabbitMQ.RabbitMQView"
+         xmlns="https://github.com/avaloniaui"
+         xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         xmlns:suki="https://github.com/kikipoulet/SukiUI"
+          xmlns:webview="clr-namespace:WebViewControl;assembly=WebViewControl.Avalonia"
+         xmlns:converters="clr-namespace:bbnApp.deskTop.Converters"
+         xmlns:theme="clr-namespace:SukiUI.Theme;assembly=SukiUI"
+         xmlns:my="clr-namespace:bbnApp.deskTop.Controls"
+         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+         d:DesignHeight="1080"
+         d:DesignWidth="1920"
+         xmlns:company="clr-namespace:bbnApp.deskTop.OperationsCenter.RabbitMQ"
+         x:DataType="company:RabbitMQViewModel"
+         mc:Ignorable="d">
+  <Grid>
+    <NativeMenu.Menu>
+      <NativeMenu>
+        <NativeMenuItem Header="Edit">
+          <NativeMenuItem.Menu>
+            <NativeMenu>
+              <NativeMenuItem Header="Undo" Command="{Binding}" Gesture="CMD+Z" />
+              <NativeMenuItem Header="Redo" Command="{Binding}" Gesture="Shift+CMD+Z" />
+              <NativeMenuItemSeparator/>
+              <NativeMenuItem Header="Cut" Command="{Binding}" Gesture="CMD+X" />
+              <NativeMenuItem Header="Copy" Command="{Binding}" Gesture="CMD+C" />
+              <NativeMenuItem Header="Paste" Command="{Binding}" Gesture="CMD+V" />
+              <NativeMenuItem Header="Delete" Command="{Binding}" Gesture="CMD+Back" />
+              <NativeMenuItemSeparator/>
+              <NativeMenuItem Header="Select All" Command="{Binding}" Gesture="CMD+A" />
+            </NativeMenu>
+          </NativeMenuItem.Menu>
+        </NativeMenuItem>
+        <NativeMenuItem Header="Navigate">
+          <NativeMenuItem.Menu>
+            <NativeMenu>
+              <NativeMenuItem Header="Back" Command="{Binding}" />
+              <NativeMenuItem Header="Forward" Command="{Binding}" />
+            </NativeMenu>
+          </NativeMenuItem.Menu>
+        </NativeMenuItem>
+      </NativeMenu>
+    </NativeMenu.Menu>
+
+    <ScrollViewer>
+      <suki:BusyArea BusyText="载入中,请稍等..." IsBusy="{Binding IsBusy}">
+        <webview:WebView x:Name="influxdbWebview" Focusable="True" Address="{Binding Url}" IsVisible="{Binding !IsBusy}"> </webview:WebView>
+      </suki:BusyArea>
+    </ScrollViewer>
+  </Grid>
+</UserControl>

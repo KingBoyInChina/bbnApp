@@ -95,7 +95,7 @@ namespace bbnApp.deskTop.UserCenter.UserDevice
             this._mapper = _mapper;
             //初始化字典
             WlanType = new ObservableCollection<ComboboxItem>(CommAction.GetDicItems("1221"));
-            Devices =[.. devices.Where(x=>x.DeviceType== "1101001").ToList()];
+            Devices =[.. devices.Where(x=>x.DeviceType== "1101001"|| x.DeviceType == "1101007").ToList()];
             //初始化安装人
             var installer = UserContext.CompanyUsers.Select(x=>new ComboboxItem { 
                 Id=x.EmployeeId,

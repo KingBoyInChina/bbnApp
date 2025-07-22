@@ -119,6 +119,7 @@ namespace bbnApp.DTOs.CodeDto
         /// </summary>
         public string TopicType { get; set; } = string.Empty;
         public string TopicName { get; set; } = string.Empty;
+        public string DeviceIds { get; set; } = string.Empty;
     }
     /// <summary>
     /// 订阅代码清单响应对象

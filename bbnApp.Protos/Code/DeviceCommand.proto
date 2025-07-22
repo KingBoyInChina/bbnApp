@@ -1,0 +1,77 @@
+﻿
+syntax = "proto3";
+
+option csharp_namespace = "bbnApp.Protos";
+
+package DevicCommandGrpc;
+
+/********定义DeviceCode服务********/
+service DeviceCommandGrpc {
+    //设备明细加载
+    rpc DeviceCommandList (DeviceCommandListRequest) returns (DeviceCommandListResponse);
+	//设备命令信息提交
+    rpc DeviceCommandSave (DeviceCommandSaveRequest) returns (DeviceCommandSaveResponse);
+    //设备命令状态变更
+    rpc DeviceCommandState (DeviceCommandStateRequest) returns (DeviceCommandStateResponse);
+}
+
+// 设备命令
+message DeviceCommand {
+    int32 IdxNum = 1; // 序号
+    string Yhid = 2; // 用户组ID
+    string CommandId = 3; // 指令ID
+    string DeviceId = 4; // 设备ID
+    string CommandName = 5; // 命令名称
+    string CommandCode = 6; // 命令代码
+    string HardwareCP = 7; // 通信协议
+    string DeviceAddr = 8; // 设备地址
+    string FunctionCode = 9; // 功能码
+    string StartAddr = 10; // 起始地址,大小端
+    string RegCount = 11; // 寄存器数量
+    bool CRC = 12; // 校验码
+    string CommandInfo = 13; // 手动构造命令
+    string CommandDescription = 14; // 命令参数说明
+    int32 IsLock = 15; // 停用
+    string LockTime = 16; // 锁定时间
+    string LockReason = 17; // 锁定原因
+    string ReMarks = 18; // 备注信息
+    string ApplicationCP = 19; // 通信协议
+}
+
+// 根据设备ID获取设备命令列表请求参数
+message DeviceCommandListRequest {
+    string DeviceId = 1; // 设备ID
+}
+
+// 根据设备ID获取设备命令列表响应参数
+message DeviceCommandListResponse {
+    bool Code = 1; // 状态码
+    string Message = 2; // 消息内容
+    repeated DeviceCommand DeviceCommands = 3; // 设备命令列表
+}
+
+// 设备命令保存请求参数
+message DeviceCommandSaveRequest {
+    DeviceCommand DeviceCommand = 1; // 设备命令
+}
+
+// 设备命令保存响应参数
+message DeviceCommandSaveResponse {
+    bool Code = 1; // 状态码
+    string Message = 2; // 消息内容
+    DeviceCommand DeviceCommand = 3; // 保存的设备命令
+}
+
+// 设备命令状态变更请求参数
+message DeviceCommandStateRequest {
+    string CommandId = 1; // ID
+    string Type = 2; // 类型
+    string Reason = 3; // 原因
+}
+
+// 设备命令状态变更响应参数
+message DeviceCommandStateResponse {
+    bool Code = 1; // 状态码
+    string Message = 2; // 消息内容
+    DeviceCommand DeviceCommand = 3; // 变更后的设备命令
+}

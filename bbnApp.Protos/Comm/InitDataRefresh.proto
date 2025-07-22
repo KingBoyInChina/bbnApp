@@ -1,0 +1,22 @@
+﻿
+syntax = "proto3";
+
+option csharp_namespace = "bbnApp.Protos";
+
+package InitDataRefreshGrpc;
+
+/********定义平台数据刷新服务********/
+service InitDataRefreshGrpc {
+  //获取匹配地址清单
+  rpc InitDataRefresh (InitDataRefreshRequest) returns (InitDataRefreshResponse);
+}
+
+message InitDataRefreshRequest {
+  string Type = 1;
+}
+
+// 获取匹配地址清单响应
+message InitDataRefreshResponse {
+  bool Code = 1;
+  string Message = 2;
+}

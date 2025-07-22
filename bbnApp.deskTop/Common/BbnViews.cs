@@ -2,7 +2,7 @@
 using Avalonia.Markup.Xaml;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
-using bbnApp.deskTop.Features;
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;

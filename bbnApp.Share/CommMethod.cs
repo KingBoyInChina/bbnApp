@@ -13,6 +13,11 @@ using System.Text.RegularExpressions;
 
 namespace bbnApp.Share
 {
+    public static class OSHelper
+    {
+        public static bool IsWindows => RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+        public static bool IsLinux => RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
+    }
     /// <summary>
     /// 常用方法
     /// </summary>
@@ -537,5 +542,174 @@ namespace bbnApp.Share
             return Regex.IsMatch(input, pattern);
         }
         
+        /// <summary>
+        /// 应用重启,获取当前进程的可执行文件路径
+        /// </summary>
+        /// <param name="proccessName"></param>
+        public static void applicationRestart()
+        {
+            try
+            {
+                // 1. 获取当前进程的可执行文件路径
+                string executablePath = Environment.ProcessPath!;
+                string processName = Process.GetCurrentProcess().ProcessName;
+
+                // 2. 判断是否以 `dotnet` 方式运行（适用于 .NET 控制台应用）
+                bool isDotNetProcess = executablePath.EndsWith("dotnet") || executablePath.EndsWith("dotnet.exe");
+
+                // 3. 构造启动命令
+                string command = null;
+                string args = null;
+
+                if (isDotNetProcess)
+                {
+                    // 如果是 `dotnet` 启动的，则使用 `dotnet YourApp.dll` 方式
+                    command = "dotnet";
+                    args = $"{processName}.dll";
+                }
+                else
+                {
+                    // 否则直接启动可执行文件
+                    command = executablePath;
+                    args = "";
+                }
+
+                // 4. 根据操作系统选择不同的 Shell 执行方式
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    // Windows: 使用 cmd 延迟 1 秒启动，避免端口占用等问题
+                    Process.Start("cmd.exe", $"/c timeout 1 & start \"\" \"{command}\" {args}");
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                {
+                    // Linux: 使用 bash 延迟 1 秒启动
+                    Process.Start("bash", $"-c \"sleep 1 && {command} {args}\"");
+                }
+                else
+                {
+                    throw new PlatformNotSupportedException("Unsupported OS");
+                }
+
+                // 5. 退出当前进程
+                Environment.Exit(0);
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+        #region TAS 传感器通用解析
+        /// <summary>
+        /// 塔石传感器通用解析(自动识别温湿度或光照)
+        /// </summary>
+        /// <returns>
+        /// 对于温湿度：(状态，消息, 地址，温度，湿度)
+        /// 对于光照：(状态，消息, 地址，光照)
+        /// </returns>
+        public static (bool, string, byte, double, double) ParseTASSensor(byte[] modbusData, bool bcrc = false)
+        {
+            try
+            {
+                // 基本校验
+                if (modbusData == null || modbusData.Length < 5)
+                {
+                    return (false, "数据长度不足",byte.MinValue, double.MinValue, double.MinValue);
+                }
+
+                if (bcrc && !VerifyModbusCrc(modbusData))
+                {
+                    return (false, "CRC校验失败",  byte.MinValue, double.MinValue, double.MinValue);
+                }
+
+                // 1. 解析基础信息
+                byte address = modbusData[0];          // 地址码
+                byte functionCode = modbusData[1];     // 功能码
+                byte dataLength = modbusData[2];       // 数据字节数
+
+                // 2. 根据数据长度自动识别传感器类型
+                if (dataLength == 4) // 温湿度传感器(2个16位寄存器)
+                {
+                    if (modbusData.Length < 9) // 7数据字节 + 2CRC
+                    {
+                        return (false, "温湿度数据长度不足", byte.MinValue, double.MinValue, double.MinValue);
+                    }
+
+                    // 解析温湿度数据（大端序）
+                    ushort humidityRaw = (ushort)((modbusData[3] << 8) | modbusData[4]);
+                    ushort temperatureRaw = (ushort)((modbusData[5] << 8) | modbusData[6]);
+
+                    double humidity = humidityRaw / 10.0;
+                    double temperature = temperatureRaw / 10.0;
+
+                    return (true, "温湿度数据解析成功", address, temperature, humidity);
+                }
+                else if (dataLength == 2) // 单独数据采集
+                {
+                    if (modbusData.Length < 7) // 5数据字节 + 2CRC
+                    {
+                        return (false, "数据长度不足",  byte.MinValue, double.MinValue, double.MinValue);
+                    }
+
+                    // 解析数据（大端序）
+                    ushort lightValue = (ushort)((modbusData[3] << 8) | modbusData[4]);
+                    double actualLightValue = lightValue;
+
+                    // 返回时湿度位置填double.MinValue表示无效
+                    return (true, "数据解析成功", address, actualLightValue, double.MinValue);
+                }
+                else
+                {
+                    return (false, $"未知传感器类型(数据长度:{dataLength})",  byte.MinValue, double.MinValue, double.MinValue);
+                }
+            }
+            catch (Exception ex)
+            {
+                return (false, $"数据解析失败：{ex.Message}",  byte.MinValue, double.MinValue, double.MinValue);
+            }
+        }
+        #endregion
+        #region CRC计算
+        /// <summary>
+        /// 验证Modbus CRC
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public static bool VerifyModbusCrc(byte[] data)
+        {
+            if (data.Length < 2)
+                return false;
+
+            // 计算除最后两个字节(CRC)外的所有数据的CRC
+            ushort calculatedCrc = CalculateModbusCrc(data, 0, data.Length - 2);
+
+            // 获取帧中的CRC(小端序)
+            ushort receivedCrc = (ushort)((data[data.Length - 1] << 8) | data[data.Length - 2]);
+
+            return calculatedCrc == receivedCrc;
+        }
+        /// <summary>
+        /// Modbus CRC16计算
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public static ushort CalculateModbusCrc(byte[] data, int offset, int length)
+        {
+            ushort crc = 0xFFFF;
+
+            for (int i = offset; i < offset + length; i++)
+            {
+                crc ^= data[i];
+                for (int j = 0; j < 8; j++)
+                {
+                    bool lsb = (crc & 0x0001) != 0;
+                    crc >>= 1;
+                    if (lsb)
+                        crc ^= 0xA001;
+                }
+            }
+
+            return crc;
+        }
+        #endregion
     }
 }

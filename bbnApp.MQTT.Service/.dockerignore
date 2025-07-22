@@ -1,0 +1,7 @@
+﻿**/
+!bbnApp/
+**/bin/
+**/obj/
+.git
+*.user
+*.suo

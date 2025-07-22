@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,6 +7,49 @@ using System.Threading.Tasks;
 
 namespace bbnApp.DTOs.BusinessDto
 {
+    /// <summary>
+    /// 用户设备清单对象
+    /// </summary>
+    public class UserDeviceListItemDto { 
+        /// <summary>
+        /// 用户设备ID
+        /// </summary>
+        public string Id { get; set; }
+        /// <summary>
+        /// 用户ID
+        /// </summary>
+        public string UserId { get; set; }
+        /// <summary>
+        /// 设备编号
+        /// </summary>
+        public string Number { get; set; }
+        /// <summary>
+        /// 设备/网关名称
+        /// </summary>
+        public string Name { get; set; }
+        /// <summary>
+        /// 设备类型ID
+        /// </summary>
+        public string DeviceId { get; set; }
+        /// <summary>
+        /// 设备类型代码
+        /// </summary>
+        public string DeviceName { get; set; }
+        /// <summary>
+        /// 从站地址或IP
+        /// </summary>
+        public string SlaveId { get; set; }
+        /// <summary>
+        /// 从站名称
+        /// </summary>
+        public string SlaveName { get; set; }
+        /// <summary>
+        /// 值代码和顺序
+        /// </summary>
+        public string ValueCode { get; set; }
+    }
+    
+
     /// <summary>
     /// 树形对象
     /// </summary>
@@ -284,6 +328,14 @@ namespace bbnApp.DTOs.BusinessDto
         /// 设备编号
         /// </summary>
         public string DeviceNumber { get; set; } = string.Empty;
+        /// <summary>
+        /// 从站地址
+        /// </summary>
+        public string SlaveId { get; set; } = string.Empty;
+        /// <summary>
+        /// 从站名称
+        /// </summary>
+        public string SlaveName { get; set; } = string.Empty;
 
         /// <summary>
         /// 安装时间
@@ -682,5 +734,32 @@ namespace bbnApp.DTOs.BusinessDto
         /// 边缘盒子
         /// </summary>
         public List<UserBoxDto>? Box = new List<UserBoxDto>();
+    }
+    /// <summary>
+    /// 网关设备数据集读取
+    /// </summary>
+    public class UserDeviceDataRequestDto {
+        /// <summary>
+        /// 
+        /// </summary>
+        public string UserId { get;set; } = string.Empty;
+    }
+    /// <summary>
+    /// 网关设备数据集响应
+    /// </summary>
+    public class UserDeviceDataResponseDto
+    {
+        /// <summary>
+        ///请求状态
+        /// </summary>
+        public bool Code { get; set; } = false;
+        /// <summary>
+        /// 消息
+        /// </summary>
+        public string Message { get; set; } = string.Empty;
+        /// <summary>
+        /// 网关
+        /// </summary>
+        public List<UserDeviceListItemDto>? Devices { get; set; } = new List<UserDeviceListItemDto>();
     }
 }

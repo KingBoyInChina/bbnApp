@@ -1,0 +1,1 @@
+docker build -f bbnApp.MQTT.Service/Dockerfile -t bbnapp-mqtt-service:1.0.0 .

@@ -1,145 +1,99 @@
 ﻿using Consul;
-using Exceptionless;
 using Grpc.Core;
 using Grpc.Net.Client;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using System.Collections.Concurrent;
 
 namespace bbnApp.GrpcClients
 {
-    #region GRPC Client Factory Interface 静态连接
-    //public class BbnGrpcClientFactory : IGrpcClientFactory
-    //{
-    //    private readonly IConfiguration _configuration;
-
-    //    public BbnGrpcClientFactory(IConfiguration configuration)
-    //    {
-    //        _configuration = configuration;
-    //    }
-
-    //    public TClient CreateClient<TClient>() where TClient : ClientBase<TClient>
-    //    {
-    //        var channel = CreateGrpcChannel(_configuration);
-    //        return (TClient)Activator.CreateInstance(typeof(TClient), channel);
-    //    }
-
-    //    private GrpcChannel CreateGrpcChannel(IConfiguration configuration)
-    //    {
-    //        var grpcUrl = configuration.GetSection("Grpc:Url").Value;
-
-    //        if (string.IsNullOrEmpty(grpcUrl))
-    //        {
-    //            throw new InvalidOperationException("gRPC URL is not configured.");
-    //        }
-
-    //        var httpClientHandler = new HttpClientHandler
-    //        {
-    //            ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-    //        };
-
-    //        return GrpcChannel.ForAddress(
-    //            grpcUrl,
-    //            new GrpcChannelOptions { HttpHandler = httpClientHandler }
-    //        );
-    //    }
-    //}
-    #endregion
-
-    public class BbnGrpcClientFactory : IGrpcClientFactory, IDisposable
+    public class GrpcClientFactory : IGrpcClientFactory,IDisposable
     {
-        private readonly IConsulClient _consulClient;
-        private List<ServiceEntry> _serviceCache = new();
-        private DateTime _lastRefreshTime = DateTime.MinValue;
-        private readonly object _cacheLock = new();
-        private readonly ConcurrentDictionary<string, int> _serviceConnections = new();
-        private readonly object _loadBalancerLock = new(); private readonly ExceptionlessClient _exceptionlessClient;
+        private readonly IConsulClient _consul;
+        private readonly IReadOnlyDictionary<string, GrpcClusterConfig> _clusters;
+        private readonly ConcurrentDictionary<string, GrpcChannel> _channelCache = new();
+        private readonly ILogger<GrpcClientFactory> _logger;
 
-        public BbnGrpcClientFactory(IConsulClient consulClient,  ExceptionlessClient exceptionlessClient)
+        public GrpcClientFactory(IConsulClient consul, IOptions<ConsulConfig> config, ILogger<GrpcClientFactory> logger)
         {
-            _consulClient = consulClient;
-            _exceptionlessClient = exceptionlessClient;
+            _consul = consul;
+            _clusters = config.Value.GrpcClusters.ToDictionary(c => c.Name);
+            _logger = logger;
         }
 
-
-        public async Task<TClient> CreateClient<TClient>() where TClient : ClientBase<TClient>
+        public async Task<TClient> CreateClient<TClient>(
+        string clusterName = "Basic",
+        CancellationToken cancellationToken = default)
+        where TClient : ClientBase<TClient>
         {
-            await RefreshServiceCacheIfNeeded();
-            var service = GetLeastLoadedService();
-            var channel = GrpcChannel.ForAddress($"http://{service.Address}:{service.Port}");
-            return (TClient)Activator.CreateInstance(typeof(TClient), channel);
-        }
-
-        private async Task RefreshServiceCacheIfNeeded()
-        {
-            if ((DateTime.UtcNow - _lastRefreshTime).TotalSeconds <= 30)
+            if (!_clusters.TryGetValue(clusterName, out var clusterConfig))
             {
-                return;
+                _logger.LogError("Cluster {ClusterName} not configured", clusterName);
+                throw new ArgumentException($"Cluster {clusterName} not configured");
             }
 
-            lock (_cacheLock)
+            try
             {
-                if ((DateTime.UtcNow - _lastRefreshTime).TotalSeconds <= 30)
-                {
-                    return;
-                }
+                var serviceAddress = clusterConfig.FallbackAddress;//开发环境下，使用GetServiceAddressAsync 一致卡着，因此先跳过
+                //var serviceAddress = await GetServiceAddressAsync(clusterConfig, cancellationToken);
+                var channel = _channelCache.GetOrAdd(serviceAddress, addr => CreateChannel(addr));
 
-                try
-                {
-                    var queryResult = _consulClient.Health.Service("bbn-grpc-service", "", true).Result;
-                    lock (_cacheLock)
-                    {
-                        _serviceCache = queryResult.Response?.ToList() ?? new List<ServiceEntry>();
-                        _lastRefreshTime = DateTime.UtcNow;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    _exceptionlessClient.SubmitException(new Exception($"RefreshServiceCacheIfNeeded 异常:{ex.Message.ToString()}"));
-                }
+                _logger.LogDebug("Created gRPC client for {Type} via {Address}",
+                    typeof(TClient).Name, serviceAddress);
+
+                return (TClient)Activator.CreateInstance(typeof(TClient), channel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to create gRPC client {Type} for cluster {Cluster}",
+                    typeof(TClient).Name, clusterName);
+                throw;
             }
         }
 
-        private AgentService GetLeastLoadedService()
+        private GrpcChannel CreateChannel(string address)
         {
-            lock (_loadBalancerLock)
+            return GrpcChannel.ForAddress(address, new GrpcChannelOptions
             {
-                // 如果缓存为空，尝试同步刷新一次
-                
-                if (!_serviceCache.Any())
+                HttpHandler = new SocketsHttpHandler
                 {
-                    _exceptionlessClient.SubmitException(new Exception($"GetLeastLoadedService 异常:No available gRPC services"));
-                    throw new Exception("No available gRPC services");
+                    PooledConnectionIdleTimeout = Timeout.InfiniteTimeSpan,
+                    KeepAlivePingDelay = TimeSpan.FromSeconds(60),
+                    KeepAlivePingTimeout = TimeSpan.FromSeconds(30),
+                    EnableMultipleHttp2Connections = true
                 }
+            });
+        }
 
-                var healthyServices = _serviceCache
-                    .Where(entry => entry.Checks.All(check => check.Status == HealthStatus.Passing))
-                    .Select(entry => entry.Service)
+        private async Task<string> GetServiceAddressAsync(GrpcClusterConfig config,CancellationToken cts=default)
+        {
+            try
+            {
+                var services = await _consul.Health.Service(config.ServiceName, "", true, cts);
+
+                var healthyServices = services.Response?
+                    .Where(x => x.Checks.All(c => c.Status == HealthStatus.Passing))
+                    .Select(x => $"http://{x.Service.Address}:{x.Service.Port}")
                     .ToList();
 
-                if (!healthyServices.Any())
-                {
-                    _exceptionlessClient.SubmitException(new Exception($"GetLeastLoadedService 异常:No healthy gRPC services available"));
-                    throw new Exception("No healthy gRPC services available");
-                }
-
-                var selectedService = healthyServices
-                    .OrderBy(service => _serviceConnections.GetOrAdd(service.ID, 0))
-                    .First();
-
-                _serviceConnections.AddOrUpdate(selectedService.ID, 1, (_, count) => count + 1);
-                return selectedService;
+                return healthyServices?.Count > 0
+                    ? healthyServices[Random.Shared.Next(healthyServices.Count)]
+                    : config.FallbackAddress;
+            }
+            catch
+            {
+                return config.FallbackAddress;
             }
         }
-
-        public void ReleaseService(string serviceId)
-        {
-            _serviceConnections.AddOrUpdate(serviceId, 0, (_, count) => Math.Max(0, count - 1));
-        }
-
+        
         public void Dispose()
         {
-            _serviceConnections.Clear();
+            foreach (var channel in _channelCache.Values)
+            {
+                channel.Dispose();
+            }
+            _channelCache.Clear();
         }
     }
 }

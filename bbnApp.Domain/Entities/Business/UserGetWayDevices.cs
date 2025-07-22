@@ -53,6 +53,20 @@ namespace bbnApp.Domain.Entities.Business
         [Required]
         public string DeviceNumber { get; set; }
 
+        [Column(TypeName = "varchar(40)")]
+        [MaxLength(40)]
+        [Description("从站地址")]
+        [Comment("从站地址")]
+        [Required]
+        public string SlaveId { get; set; }
+
+        [Column(TypeName = "varchar(40)")]
+        [MaxLength(40)]
+        [Description("从站名称")]
+        [Comment("从站名称")]
+        [Required]
+        public string SlaveName { get; set; }
+
         [Column(TypeName = "datetime")]
         [Description("安装时间")]
         [Comment("安装时间")]

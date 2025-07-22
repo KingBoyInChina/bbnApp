@@ -56,7 +56,16 @@
       <StackPanel Classes="FormCell" Orientation="Vertical">
         <TextBlock VerticalAlignment="Center">安装时间：</TextBlock>
         <DatePicker  VerticalAlignment="Center" SelectedDate="{Binding InstallTime}" YearFormat="yyyy" MonthFormat="MM" DayFormat="dd"/>
-
+      </StackPanel>
+      
+      <StackPanel Classes="FormCell" Orientation="Vertical">
+        <TextBlock VerticalAlignment="Center">从站地址(16进制)：</TextBlock>
+        <TextBox Watermark="从站地址" MaxHeight="2" Text="{Binding Device.SlaveId}" ></TextBox>
+      </StackPanel>
+      
+      <StackPanel Classes="FormCell" Orientation="Vertical">
+        <TextBlock VerticalAlignment="Center">从站名称：</TextBlock>
+        <TextBox Watermark="从站名称" MaxLength="100" Text="{Binding Device.SlaveName}" ></TextBox>
       </StackPanel>
 
       <StackPanel Classes="FormCell" Orientation="Vertical">

@@ -1,8 +1,6 @@
 ﻿using bbnApp.Core;
-using bbnApp.GrpcClients;
 using bbnApp.MQTT.Service;
 using bbnApp.Service.GlobalService;
-using Consul;
 using Exceptionless;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,7 +24,10 @@ async Task Main()
             services.AddSingleton<IConfiguration>(context.Configuration);
 
             // 注册 AutoMapper
-            services.AddAutoMapper(typeof(MappingProfile));
+            services.AddAutoMapper(cfg =>
+            {
+                cfg.AddProfile<MappingProfile>();
+            });
             #region exceptionless 配置
 
             services.AddSingleton<ExceptionlessClient>(sp =>

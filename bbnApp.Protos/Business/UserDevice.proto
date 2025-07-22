@@ -21,6 +21,20 @@ service UserDeviceGrpc {
   //状态变更
   rpc UserDeviceState (UserDeviceStateRequest) returns (UserDeviceStateResponse);
 }
+
+
+// 树形对象BoxId as Id,UserId,BoxNumber as DeviceNumber,DeviceId
+message UserDeviceListItem {
+    string Id = 1; 
+    string UserId = 2;
+    string Number = 3;
+    string DeviceId = 4; 
+    string SlaveId = 5; 
+    string SlaveName = 6; 
+    string Name=7;
+    string DeviceName = 8; 
+    string ValueCode = 9; 
+}
 // 树形对象
 message UserDeviceTreeItem {
     string Id = 1; // ID
@@ -73,6 +87,8 @@ message UserGetWayDevice {
     string LockReason = 14; // 停用原因
     string ReMarks = 15; // 备注信息
     string DeviceName = 16; // 设备名称
+    string SlaveId =17; // 从站ID
+    string SlaveName = 18; // 从站名称
 }
 
 // 边缘盒子
@@ -238,4 +254,14 @@ message UserDeviceStateResponse {
     string Message = 2; // 消息
     repeated UserGetWay GetWay = 3; // 网关
     repeated UserBox Box = 4; // 边缘盒子
+}
+//网关设备清单请求
+message UserDeviceDataRequest {
+    string UserId = 1; // 消息
+}
+///网关设备清单响应
+message UserDeviceDataResponse {
+    bool Code = 1; // 请求状态
+    string Message = 2; // 消息
+    repeated UserDeviceListItem GetWay = 3; //设备清单
 }

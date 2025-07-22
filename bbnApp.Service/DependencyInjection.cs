@@ -8,6 +8,7 @@ using bbnApp.Application.Services.INIT;
 using bbnApp.Application.Services.JWT;
 using bbnApp.Common;
 using bbnApp.Core;
+using bbnApp.gRPC.GlobalService;
 using bbnApp.Infrastructure.Dapr;
 using bbnApp.Infrastructure.Data;
 using bbnApp.Service.GlobalService;
@@ -213,29 +214,7 @@ public static class DependencyInjection
 
         return services;
     }
-    /// <summary>
-    /// GRPC服务-不用微服务，静态绑定
-    /// </summary>
-    /// <param name="services"></param>
-    /// <returns></returns>
-    //public static IServiceCollection AddGrpcServices(this IServiceCollection services)
-    //{
-    //    // 配置 gRPC 服务
-    //    services.AddGrpc(options =>
-    //    {
-    //        options.Interceptors.Add<GlobalInterceptor>(); // 添加全局拦截器
-    //    });
 
-    //    // 注册 gRPC 服务
-    //    //services.AddScoped<Author.AuthorBase, AuthorService>();
-    //    //services.AddScoped<AreaGrpc.AreaGrpcBase, AreaGrpcService>();
-    //    //services.AddScoped<AppSettingGrpc.AppSettingGrpcBase, AppSettingGrpcService>();
-    //    //services.AddScoped<DataDictionaryGrpc.DataDictionaryGrpcBase, DataDictionaryGrpcService>();
-    //    //注册gRPC工厂
-    //    services.AddSingleton<IGrpcClientFactory, BbnGrpcClientFactory>();
-
-    //    return services;
-    //}
     /// <summary>
     /// 应用层服务
     /// </summary>
@@ -246,7 +225,10 @@ public static class DependencyInjection
         // 注册 IHttpContextAccessor
         services.AddHttpContextAccessor();
         // 注册 AutoMapper
-        services.AddAutoMapper(typeof(MappingProfile));
+        services.AddAutoMapper(cfg =>
+        {
+            cfg.AddProfile<MappingProfile>();
+        });
         // 注册 DapperRepository
         services.AddScoped<IDapperRepository, DapperRepository>();
         //注册高德地图服务
@@ -273,6 +255,8 @@ public static class DependencyInjection
         services.AddScoped<IMaterialsCodeService, MaterialsCodeService>();
         //设备代码
         services.AddScoped<IDeviceCodeService, DeviceCodeService>();
+        //设备指令
+        services.AddScoped<IDeviceCommandService, DeviceCommandService>();
         //订阅服务
         services.AddScoped<ITopicCodesService, TopicCodesService>();
         //文件上传服务
@@ -285,7 +269,8 @@ public static class DependencyInjection
         services.AddScoped<IUserService, UserService>();
         //用户设备
         services.AddScoped<IUserDevices, UserDevices>();
-
+        //平台数据刷新服务
+        services.AddScoped<IInitializationRefresh, InitializationRefresh>();
         return services;
     }
 }

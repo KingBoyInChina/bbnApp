@@ -3,7 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Media.Imaging;
 using bbnApp.Common.Models;
 using bbnApp.deskTop.Common;
-using bbnApp.deskTop.Features;
+
 using bbnApp.deskTop.Services;
 using bbnApp.DTOs.BusinessDto;
 using bbnApp.DTOs.CodeDto;

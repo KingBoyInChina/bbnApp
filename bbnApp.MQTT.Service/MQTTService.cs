@@ -1,13 +1,6 @@
-﻿using AutoMapper;
-using bbnApp.Core;
-using bbnApp.Domain.Entities.Business;
+﻿using bbnApp.Core;
 using bbnApp.DTOs.CodeDto;
-using bbnApp.GrpcClients;
-using bbnApp.Protos;
 using Exceptionless;
-using Grpc.Core;
-using Grpc.Net.ClientFactory;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
@@ -17,13 +10,10 @@ using MQTTnet.Diagnostics.Logger;
 using MQTTnet.Protocol;
 using MQTTnet.Server;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Serilog.Core;
 using System.Collections.Concurrent;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace bbnApp.MQTT.Service;
 
@@ -61,7 +51,11 @@ public class MqttServerHostedService : IHostedService
     /// 
     /// </summary>
     private readonly IRedisService redisService;
-    
+    /// <summary>
+    /// 是否是调试模式，用于控制日志输出等行为
+    /// </summary>
+    private bool _isDebug = false;
+
     public MqttServerHostedService(MqttServer mqttServer, ILogger<MqttServerHostedService> logger, IConfiguration configuration , IRedisService redisService, ExceptionlessClient exceptionlessClient)
     {
         _mqttServer = mqttServer;
@@ -73,6 +67,7 @@ public class MqttServerHostedService : IHostedService
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
+        _isDebug=_configuration.GetValue<bool>("MQTT:Debug");
         // 设置事件处理器
         _mqttServer.ClientConnectedAsync += OnClientConnected;
         _mqttServer.ClientDisconnectedAsync += OnClientDisconnected;
@@ -88,12 +83,20 @@ public class MqttServerHostedService : IHostedService
     public async Task StopAsync(CancellationToken cancellationToken)
     {
         await _mqttServer.StopAsync();
-        _logger.LogInformation("MQTT server stopped");
+        if (_isDebug)
+        {
+            Console.WriteLine($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff")}MQTT server stopped");
+        }
+        _logger.LogInformation($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff")}MQTT server stopped");
     }
 
     private Task OnServerStarted(EventArgs args)
     {
-        _logger.LogInformation("MQTT server is ready");
+        if (_isDebug)
+        {
+            Console.WriteLine($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff")}MQTT server is ready");
+        }
+        _logger.LogInformation($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff")}MQTT server is ready");
         return Task.CompletedTask;
     }
 
@@ -104,6 +107,10 @@ public class MqttServerHostedService : IHostedService
             args.ClientId,
             args,
             (_, __) => args); // 始终更新为最新上下文
+        if (_isDebug)
+        {
+            Console.WriteLine($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff")}Client connected: {args.ClientId}");
+        }
         _logger.LogInformation($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff")}Client connected: {args.ClientId}");
         return Task.CompletedTask;
     }
@@ -112,6 +119,10 @@ public class MqttServerHostedService : IHostedService
     {
         // 从连接客户端集合中移除
         _connectionClients.TryRemove(args.ClientId, out _);
+        if (_isDebug)
+        {
+            Console.WriteLine($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff")}Client disconnected: {args.ClientId}");
+        }
         _logger.LogInformation($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff")}Client disconnected: {args.ClientId}");
         return Task.CompletedTask;
     }
@@ -122,86 +133,103 @@ public class MqttServerHostedService : IHostedService
     /// <returns></returns>
     private Task OnMessageReceived(InterceptingPublishEventArgs args)
     {
-        var payload = args.ApplicationMessage?.Payload == null
-            ? null
-            : Encoding.UTF8.GetString(args.ApplicationMessage.Payload);
-        string topic = args.ApplicationMessage?.Topic ?? string.Empty;
-        #region 平台对服务端的一些特殊操作,这里后面应该需要加上是否是平台运维人员的身份验证
-        if (topic.Contains("/MqttService/Restart"))
+        try
         {
-            #region 服务重启
-            try
+
+            var payload = args.ApplicationMessage?.Payload == null
+                ? null
+                : Encoding.UTF8.GetString(args.ApplicationMessage.Payload);
+            string topic = args.ApplicationMessage?.Topic ?? string.Empty;
+            #region 平台对服务端的一些特殊操作,这里后面应该需要加上是否是平台运维人员的身份验证
+            if (topic.Contains("/MqttService/Restart"))
             {
-                // 获取当前程序路径
-                string exePath = Environment.ProcessPath ?? string.Empty;//  Process.GetCurrentProcess().MainModule.FileName;
-                if (!string.IsNullOrEmpty(exePath))
+                #region 服务重启
+                try
                 {
-                    // 启动新实例
-                    Process.Start(exePath);
-                    // 退出当前程序
-                    Environment.Exit(0);
+                    Share.CommMethod.applicationRestart();
                 }
-            }
-            catch (Exception ex)
-            {
-
-            }
-            #endregion
-        }
-        else if (topic.Contains("/MqttService/Disconnected"))
-        {
-            #region 断开连接
-            if (payload == "all")
-            {
-                _connectionClients.Clear();
-            }
-            else if (!string.IsNullOrEmpty(payload))
-            {
-                _connectionClients.TryRemove(payload, out _);
-            }
-
-            var message = new MqttApplicationMessageBuilder().WithTopic($"/private/{args.ClientId}/Notice").WithPayload($"服务端连接用户【{payload}】断开完成").Build();
-
-            _ = _mqttServer.InjectApplicationMessage(
-                new InjectedMqttApplicationMessage(message)
+                catch (Exception ex)
                 {
-                    SenderClientId = "root"
-                });
-            #endregion
-        }
-        else if (topic.Contains("/MqttService/RegisterClients"))
-        {
-            #region 重载注册用户
-            _ = RegisterClientsInit();
-            var message = new MqttApplicationMessageBuilder().WithTopic($"/private/{args.ClientId}/Notice").WithPayload("服务端注册用户重载完成").Build();
 
-            _ = _mqttServer.InjectApplicationMessage(
-                new InjectedMqttApplicationMessage(message)
-                {
-                    SenderClientId = "root"
-                });
-            #endregion
-        }
-        else if (topic.Contains("/MqttService/GetClients"))
-        {
-            #region 得到实时连接信息(一般由平台触发,数据也只需返回触发对象获取)
-            string clients = string.Empty;
-            foreach(var item in _connectionClients)
-            {
-                clients += item.Key + ";";
+                }
+                #endregion
             }
-            clients = clients.TrimEnd(';');
-            var message = new MqttApplicationMessageBuilder().WithTopic($"/Private/Operator/{args.ClientId}/GetClients").WithPayload(clients).Build();
-
-            _ = _mqttServer.InjectApplicationMessage(
-                new InjectedMqttApplicationMessage(message)
+            else if (topic.Contains("/MqttService/Disconnected"))
+            {
+                #region 断开连接
+                if (payload == "all")
                 {
-                    SenderClientId = "root"
-                });
+                    _connectionClients.Clear();
+                }
+                else if (!string.IsNullOrEmpty(payload))
+                {
+                    _connectionClients.TryRemove(payload, out _);
+                }
+
+                var message = new MqttApplicationMessageBuilder().WithTopic($"/private/{args.ClientId}/Notice").WithPayload($"服务端连接用户【{payload}】断开完成").Build();
+
+                _ = _mqttServer.InjectApplicationMessage(
+                    new InjectedMqttApplicationMessage(message)
+                    {
+                        SenderClientId = "root"
+                    });
+                #endregion
+            }
+            else if (topic.Contains("/MqttService/RegisterClients"))
+            {
+                #region 重载注册用户
+                _ = RegisterClientsInit();
+                var message = new MqttApplicationMessageBuilder().WithTopic($"/Private/Operator/{args.ClientId}/Notice").WithPayload("服务端注册用户重载完成").Build();
+
+                _ = _mqttServer.InjectApplicationMessage(
+                    new InjectedMqttApplicationMessage(message)
+                    {
+                        SenderClientId = "root"
+                    });
+                #endregion
+            }
+            else if (topic.Contains("/MqttService/GetClients"))
+            {
+                #region 得到实时连接信息(一般由平台触发,数据也只需返回触发对象获取)
+                string clients = string.Empty;
+                foreach (var item in _connectionClients)
+                {
+                    clients += item.Key + ";";
+                }
+                clients = clients.TrimEnd(';');
+                var message = new MqttApplicationMessageBuilder().WithTopic($"/Private/Operator/{args.ClientId}/GetClients").WithPayload(clients).Build();
+
+                _ = _mqttServer.InjectApplicationMessage(
+                    new InjectedMqttApplicationMessage(message)
+                    {
+                        SenderClientId = "root"
+                    });
+                #endregion
+            }
+            else if (topic.Contains("/MqttService/GetDevicesData"))
+            {
+                #region 获取设备数据信息
+                var devices = GetDevicesData().GetAwaiter().GetResult();
+                var message = new MqttApplicationMessageBuilder().WithTopic($"/Private/Reciver/{args.ClientId}/DeviceData").WithPayload(Encoding.UTF8.GetBytes(devices)).Build();
+
+                _ = _mqttServer.InjectApplicationMessage(
+                    new InjectedMqttApplicationMessage(message)
+                    {
+                        SenderClientId = "root"
+                    });
+                #endregion
+            }
             #endregion
+            if (_isDebug)
+            {
+                Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss:fff")}Message received on topic {topic}: {payload}");
+            }
+            _logger.LogInformation("Message received on topic {Topic}: {Payload}", topic, payload);
         }
-        #endregion
-        _logger.LogInformation("Message received on topic {Topic}: {Payload}", args.ApplicationMessage?.Topic, payload);
+        catch(Exception ex)
+        {
+            Console.WriteLine("{Time} OnMessageReceived异常： {msg}",DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") ,ex.Message.ToString());
+        }
 
         return Task.CompletedTask;
     }
@@ -228,15 +256,37 @@ public class MqttServerHostedService : IHostedService
         try
         {
             var registerAuthors =await redisService.GetAsync("RegisterKeys");
+            List<AuthorReginsterKeyClientDto> list = new List<AuthorReginsterKeyClientDto>() ;
             if (!string.IsNullOrEmpty(registerAuthors))
             {
-                List<AuthorReginsterKeyClientDto> list = JsonConvert.DeserializeObject<List<AuthorReginsterKeyClientDto>>(registerAuthors);
-                _validClients = list.ToImmutableList();
+                list = JsonConvert.DeserializeObject<List<AuthorReginsterKeyClientDto>>(registerAuthors);
             }
+            #region 添加平台固定身份
+            var rooterinfo= _configuration.GetSection("Reciver").Get<List<AuthorReginsterKeyClientDto>>();
+            list?.AddRange(rooterinfo??new List<AuthorReginsterKeyClientDto>());
+            _validClients = list?.ToImmutableList()??new List<AuthorReginsterKeyClientDto>().ToImmutableList();
+            #endregion
+        }
+        catch (Exception ex)
+        {
+            exceptionlessClient.SubmitException(ex);
+        }
+    }
+    /// <summary>
+    /// 获取设备清单
+    /// </summary>
+    /// <returns></returns>
+    private async Task<string> GetDevicesData()
+    {
+        try
+        {
+            var devicesData = await redisService.GetAsync("DevicesData");
+            return devicesData;
         }
         catch(Exception ex)
         {
             exceptionlessClient.SubmitException(ex);
+            return "";
         }
     }
 }

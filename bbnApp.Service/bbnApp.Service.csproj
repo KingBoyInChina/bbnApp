@@ -9,17 +9,24 @@
   </PropertyGroup>
 
   <ItemGroup>
-	<ProjectReference Include="..\bbnApp.GrpcClients\bbnApp.GrpcClients.csproj" />
-	<ProjectReference Include="..\bbnApp.Infrastructure\bbnApp.Infrastructure.csproj" />
-	<ProjectReference Include="..\bbnApp.Protos\bbnApp.Protos.csproj" />
-	<ProjectReference Include="..\bbnApp.Common\bbnApp.Common.csproj" />
-	  <ProjectReference Include="..\bbnApp.Application\bbnApp.Application.csproj" />
-    <ProjectReference Include="..\bbnApp.Share\bbnApp.Share.csproj" />
-    <ProjectReference Include="..\bbnApp.Mapper\bbnApp.Mapper.csproj" />
+    <Compile Remove="GlobalService\**" />
+    <Content Remove="GlobalService\**" />
+    <EmbeddedResource Remove="GlobalService\**" />
+    <None Remove="GlobalService\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="14.0.0" />
+	  <ProjectReference Include="..\bbnApp.GrpcClients\bbnApp.GrpcClients.csproj" />
+	  <ProjectReference Include="..\bbnApp.Infrastructure\bbnApp.Infrastructure.csproj" />
+	  <ProjectReference Include="..\bbnApp.Protos\bbnApp.Protos.csproj" />
+	  <ProjectReference Include="..\bbnApp.Common\bbnApp.Common.csproj" />
+	  <ProjectReference Include="..\bbnApp.Application\bbnApp.Application.csproj" />
+    <ProjectReference Include="..\bbnApp.Share\bbnApp.Share.csproj" />
+    <ProjectReference Include="..\bbnApp.Mapper\bbnApp.Mapper.csproj" />
+    <ProjectReference Include="..\bbnApp.gRPC.GlobalService\bbnApp.gRPC.GlobalService.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Consul" Version="1.7.14.7" />
     <PackageReference Include="Exceptionless" Version="6.1.0" />
     <PackageReference Include="Exceptionless.AspNetCore" Version="6.1.0" />
@@ -32,12 +39,12 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.14" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.5" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.5">
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.7">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.7" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0-preview.3.efcore.9.0.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />

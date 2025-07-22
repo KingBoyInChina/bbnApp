@@ -1,3 +1,4 @@
+using bbnApp.Application.IServices.IBusiness;
 using bbnApp.Application.IServices.ICODE;
 using bbnApp.Application.IServices.IINIT;
 using bbnApp.Infrastructure.Data;
@@ -78,6 +79,9 @@ using (var scope = app.Services.CreateScope())
         //初始化注册密钥
         var AuthorRegisterKeyService = scope.ServiceProvider.GetRequiredService<IAuthorRegisterKeyService>();
         await AuthorRegisterKeyService.AuthorRegisterInit();
+        var UserDevice = scope.ServiceProvider.GetRequiredService<IUserDevices>();
+        await UserDevice.UserGetWayDeviceInit(string.Empty);
+        
     }
     else
     {
@@ -85,24 +89,6 @@ using (var scope = app.Services.CreateScope())
         throw new RpcException(new Status(StatusCode.PermissionDenied, "数据库连接失败,导致初始化数据失败"));
     }
 }
-
-// 自动执行数据库迁移（生产环境下需要屏蔽）
-//using (var scope = app.Services.CreateScope())
-//{
-//    try
-//    {
-//        var authordbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-//        authordbContext.Database.Migrate();
-
-//        var codedbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbCodeContext>();
-//        codedbContext.Database.Migrate();
-//    }
-//    catch (Exception ex)
-//    {
-//        Log.Warning("自动执行数据库迁移一层: {0}", ex.Message.ToString());
-//        throw new RpcException(new Status(StatusCode.PermissionDenied, $"【User库】自动执行数据库迁移一层: {ex.Message.ToString()}"));
-//    }
-//}
 
 // 配置 gRPC 服务
 app.MapGrpcService<HealthCheckService>();
@@ -114,6 +100,7 @@ app.MapGrpcService<DataDictionaryGrpcService>();
 app.MapGrpcService<OperationObjectGrpcService>();
 app.MapGrpcService<MaterialGrpcCodeService>();
 app.MapGrpcService<DeviceCodeGrpcService>();
+app.MapGrpcService<DeviceCommandGrpcService>();
 app.MapGrpcService<TopicCodesGrpcService>();
 app.MapGrpcService<FileUploadGrpcService>();
 app.MapGrpcService<GuideGrpcService>();
@@ -122,8 +109,7 @@ app.MapGrpcService<EmployeeGrpcServcie>();
 app.MapGrpcService<RoleGrpcService>();
 app.MapGrpcService<OperatorGrpcService>();
 app.MapGrpcService<AuthorRegisterKeyGrpcService>();
-app.MapGrpcService<UserGrpcService>();
-app.MapGrpcService<UserDeviceGrpcService>();
+app.MapGrpcService<InitDataRefreshGrpcService>();
 //app.MapGet("/health", () => Results.Ok("Healthy")); // 最简单的方式
 app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
 

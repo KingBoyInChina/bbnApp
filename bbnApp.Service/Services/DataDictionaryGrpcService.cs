@@ -117,7 +117,7 @@ namespace bbnApp.Service.Services
                 if (context.UserState.TryGetValue("User", out var userObj) && userObj is UserModel user)
                 {
                     DataDictionaryInfoRequestDto data = _mapper.Map<DataDictionaryInfoRequestDto>(request);
-                    var (code, msg,obj, list) = _dataDictionaryService.DicRead(data.DicCode);
+                    var (code, msg,obj, list) =await _dataDictionaryService.DicRead(data.DicCode);
                     response = new DataDictionaryInfoResponse
                     {
                         Code = code,

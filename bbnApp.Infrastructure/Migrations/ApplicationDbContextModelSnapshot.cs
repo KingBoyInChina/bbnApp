@@ -17,7 +17,7 @@ namespace bbnApp.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.5")
+                .HasAnnotation("ProductVersion", "9.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
@@ -644,6 +644,18 @@ namespace bbnApp.Infrastructure.Migrations
                     b.Property<string>("ReMarks")
                         .HasColumnType("varchar(40)")
                         .HasComment("备注信息");
+
+                    b.Property<string>("SlaveId")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("从站地址");
+
+                    b.Property<string>("SlaveName")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("从站名称");
 
                     b.Property<string>("UserId")
                         .IsRequired()

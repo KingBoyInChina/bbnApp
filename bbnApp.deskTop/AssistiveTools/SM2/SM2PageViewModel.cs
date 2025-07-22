@@ -1,5 +1,5 @@
 ﻿using Avalonia.Controls.Notifications;
-using bbnApp.deskTop.Features;
+using bbnApp.deskTop.Common;
 using bbnApp.deskTop.Services;
 using bbnApp.Share;
 using CommunityToolkit.Mvvm.ComponentModel;

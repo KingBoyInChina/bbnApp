@@ -27,7 +27,7 @@ namespace bbnApp.Application.IServices.ICODE
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        (bool, string, DataDictionaryCodeDto?, List<DataDictionaryItemDto>?) DicRead(string id);
+        Task<(bool, string, DataDictionaryCodeDto?, List<DataDictionaryItemDto>?)> DicRead(string id);
         /// <summary>
         /// 字典分类状态
         /// </summary>

@@ -3,7 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Styling;
 using bbnApp.Common.Models;
 using bbnApp.deskTop.Common;
-using bbnApp.deskTop.Features;
+
 using bbnApp.deskTop.Models.Device;
 using bbnApp.deskTop.Models.User;
 using bbnApp.deskTop.OrganizationStructure.ReigisterKey;
@@ -196,8 +196,8 @@ namespace bbnApp.deskTop.UserCenter.UserDevice
         /// <returns></returns>
         private async Task ClientInit(IGrpcClientFactory grpcClientFactory)
         {
-            _client = await grpcClientFactory.CreateClient<UserDeviceGrpc.UserDeviceGrpcClient>();
-            _deviceClient = await grpcClientFactory.CreateClient<DeviceCodeGrpc.DeviceCodeGrpcClient>();
+            _client = await grpcClientFactory.CreateClient<UserDeviceGrpc.UserDeviceGrpcClient>("User");
+            _deviceClient = await grpcClientFactory.CreateClient<DeviceCodeGrpc.DeviceCodeGrpcClient>("Basic");
         }
         /// <summary>
         /// 字典初始化

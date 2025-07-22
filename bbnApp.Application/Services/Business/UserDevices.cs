@@ -6,6 +6,7 @@ using bbnApp.Domain.Entities.Business;
 using bbnApp.Domain.Entities.Code;
 using bbnApp.DTOs.BusinessDto;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System.Text;
 
 namespace bbnApp.Application.Services.Business
@@ -19,6 +20,7 @@ namespace bbnApp.Application.Services.Business
         /// 
         /// </summary>
         private readonly IApplicationDbContext dbContext;
+        private readonly IApplicationDbCodeContext dbCodeContext;
         /// <summary>
         /// 
         /// </summary>
@@ -33,17 +35,21 @@ namespace bbnApp.Application.Services.Business
         /// 设备清单
         /// </summary>
         private static List<DeviceCode> deviceCodes = new List<DeviceCode>();
+
+        private readonly IRedisService redisService;
         /// <summary>
         /// 
         /// </summary>
         /// <param name="dbContext"></param>
         /// <param name="redisService"></param>
-        public UserDevices(IApplicationDbContext dbContext, IOperatorService operatorService, IDataDictionaryService dataDictionaryService, IDeviceCodeService deviceCodeService)
+        public UserDevices(IApplicationDbContext dbContext, IOperatorService operatorService, IDataDictionaryService dataDictionaryService, IDeviceCodeService deviceCodeService, IRedisService redisService, IApplicationDbCodeContext dbCodeContext)
         {
             this.dbContext = dbContext;
             this.operatorService = operatorService;
             this.dataDictionaryService = dataDictionaryService;
             this.deviceCodeService = deviceCodeService;
+            this.redisService = redisService;
+            this.dbCodeContext = dbCodeContext;
         }
         #region 用户树
         /// <summary>
@@ -173,7 +179,8 @@ namespace bbnApp.Application.Services.Business
                         model.Yhid = user.Yhid;
                         model.UserId = getWay.UserId;
                         model.GetWayId = Guid.NewGuid().ToString("N");
-                        string starValue = DateTime.Now.ToString("yyMMdd");
+
+                        string starValue = "10"+DateTime.Now.ToString("yyMMdd");//10代表网关
                         var topmodel = EFObj.Where(x => x.GetWayNumber.StartsWith(starValue)).OrderByDescending(x => Convert.ToInt64(x.GetWayNumber)).Take(1).FirstOrDefault();
                         if (topmodel != null)
                         {
@@ -183,7 +190,7 @@ namespace bbnApp.Application.Services.Business
                         }
                         else
                         {
-                            model.GetWayNumber = DateTime.Now.ToString("yyMMdd")+"001";
+                            model.GetWayNumber = "10" + DateTime.Now.ToString("yyMMdd")+"001";
                         }
 
                         model.IsLock = 0;
@@ -279,7 +286,7 @@ namespace bbnApp.Application.Services.Business
                         model.UserId = getway.UserId;
                         model.GetWayId = getway.GetWayId;
                         model.GetWayDeviceId = Guid.NewGuid().ToString("N");
-                        var topmodel = DeviceEFObj.Where(x => x.DeviceNumber.StartsWith(getway.GetWayNumber)).OrderByDescending(x => Convert.ToInt64(x.DeviceNumber)).Take(1).FirstOrDefault();
+                        var topmodel = DeviceEFObj.Where(x => x.DeviceNumber.StartsWith("11"+getway.GetWayNumber.Substring(2))).OrderByDescending(x => Convert.ToInt64(x.DeviceNumber)).Take(1).FirstOrDefault();
                         if (topmodel != null)
                         {
                             Int64 num = Convert.ToInt64(topmodel.DeviceNumber);
@@ -288,7 +295,7 @@ namespace bbnApp.Application.Services.Business
                         }
                         else
                         {
-                            model.DeviceNumber = getway.GetWayNumber + "001";
+                            model.DeviceNumber = "11"+getway.GetWayNumber + "001";
                         }
 
                         model.IsLock = 0;
@@ -297,6 +304,8 @@ namespace bbnApp.Application.Services.Business
                     }
                     #region 写数据
                     model.DeviceId = device.DeviceId;
+                    model.SlaveId = device.SlaveId;
+                    model.SlaveName = device.SlaveName;
                     model.InstallTime = device.InstallTime;
                     model.Installer = device.Installer;
                     model.InstallerId = device.InstallerId;
@@ -361,7 +370,7 @@ namespace bbnApp.Application.Services.Business
                         model.Yhid = user.Yhid;
                         model.UserId = box.UserId;
                         model.BoxId = Guid.NewGuid().ToString("N");
-                        string starValue = DateTime.Now.ToString("yyMMdd");
+                        string starValue ="11"+ DateTime.Now.ToString("yyMMdd");//11 代表边缘盒子
                         var topmodel = EFObj.Where(x => x.BoxNumber.StartsWith(starValue)).OrderByDescending(x => Convert.ToInt64(x.BoxNumber)).Take(1).FirstOrDefault();
                         if (topmodel != null)
                         {
@@ -371,7 +380,7 @@ namespace bbnApp.Application.Services.Business
                         }
                         else
                         {
-                            model.BoxNumber = DateTime.Now.ToString("yyMMdd") + "001";
+                            model.BoxNumber = "11" + DateTime.Now.ToString("yyMMdd") + "001";
                         }
 
                         model.InstallTime = box.InstallTime;
@@ -690,6 +699,108 @@ namespace bbnApp.Application.Services.Business
             }
         }
         #endregion
+        #region 获取网关设备清单
+        /// <summary>
+        /// 获取所有网关设备清单
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public async Task<(bool,string,List<UserDeviceListItemDto>)> UserGetWayDeviceInit(string UserId)
+        {
+            try
+            {
+
+                var deviceEf = dbContext.Set<UserGetWayDevices>();
+                var getwayEf = dbContext.Set<UserGetWays>();
+                var boxEf = dbContext.Set<UserBoxs>();
+                var canmeraEf = dbContext.Set<UserCameras>();
+                var deviceCodeEf = dbCodeContext.Set<DeviceCode>();
+
+                var deviececodes = await deviceCodeEf.Where(x => x.Isdelete == 0).OrderBy(x => x.DeviceId).ToListAsync();
+
+                var getways = await getwayEf.Where(x => x.IsDelete == 0).OrderBy(x => x.UserId).OrderBy(x => x.GetWayNumber).ToListAsync();
+                var devices = await deviceEf.Where(x => x.IsDelete == 0).OrderBy(x => x.UserId).OrderBy(x => x.DeviceNumber).ToListAsync();
+                var boxs = await boxEf.Where(x => x.IsDelete == 0).OrderBy(x => x.UserId).OrderBy(x => x.BoxNumber).ToListAsync();
+                var canmeras = await canmeraEf.Where(x => x.IsDelete == 0).OrderBy(x => x.UserId).OrderBy(x => x.CameraNumber).ToListAsync();
+                
+                if (!string.IsNullOrEmpty(UserId))
+                {
+                    getways = getways.Where(x=>x.UserId==UserId).ToList();
+                    devices = devices.Where(x => x.UserId == UserId).ToList();
+                    boxs = boxs.Where(x => x.UserId == UserId).ToList();
+                    canmeras = canmeras.Where(x => x.UserId == UserId).ToList();
+                }
+
+
+                var getways_reuslt = getways.Select(x => new UserDeviceListItemDto
+                {
+                    UserId = x.UserId,
+                    DeviceId = x.DeviceId,
+                    DeviceName= deviececodes.FirstOrDefault(i=>i.DeviceId==x.DeviceId)?.DeviceName??string.Empty,
+                    Number = x.GetWayNumber,
+                    SlaveId = "0",
+                    SlaveName = "/",
+                    Id = x.GetWayId,
+                    Name = x.GetWayName,
+                    ValueCode = x.ReMarks
+                }).ToList();
+
+
+                var devices_reuslt = devices.Select(x=>new UserDeviceListItemDto { 
+                    UserId = x.UserId,
+                    DeviceId = x.DeviceId,
+                    DeviceName = deviececodes.FirstOrDefault(i => i.DeviceId == x.DeviceId)?.DeviceName ?? string.Empty,
+                    Number = x.DeviceNumber,
+                    SlaveId = x.SlaveId.ToString(),
+                    SlaveName = x.SlaveName,
+                    Id=x.GetWayDeviceId,
+                    Name = x.SlaveName,
+                    ValueCode = x.ReMarks
+                }).ToList();
+
+                var boxs_reuslt = boxs.Select(x => new UserDeviceListItemDto
+                {
+                    UserId = x.UserId,
+                    DeviceId = x.DeviceId,
+                    DeviceName = deviececodes.FirstOrDefault(i => i.DeviceId == x.DeviceId)?.DeviceName ?? string.Empty,
+                    Number = x.BoxNumber,
+                    SlaveId = "0",
+                    SlaveName = "/",
+                    Id = x.BoxId,
+                    Name = x.BoxName,
+                    ValueCode = x.ReMarks
+                }).ToList();
+
+
+                var canmeras_reuslt = canmeras.Select(x => new UserDeviceListItemDto
+                {
+                    UserId = x.UserId,
+                    DeviceId = x.DeviceId,
+                    DeviceName = deviececodes.FirstOrDefault(i => i.DeviceId == x.DeviceId)?.DeviceName ?? string.Empty,
+                    Number = x.CameraNumber,
+                    SlaveId = x.CameraIp,
+                    SlaveName = x.CameraName,
+                    Id = x.CameraId,
+                    Name = x.CameraName,
+                    ValueCode=x.ReMarks
+                }).ToList();
+
+                List<UserDeviceListItemDto> results = new List<UserDeviceListItemDto>();
+                results.AddRange(getways_reuslt);
+                results.AddRange(devices_reuslt);
+                results.AddRange(boxs_reuslt);
+                results.AddRange(canmeras_reuslt);
+
+                await redisService.SetAsync("DevicesData",JsonConvert.SerializeObject(results));
+
+                return (true,"设备清单写入成功", results);
+            }
+            catch(Exception ex)
+            {
+                return (false,$"网关设备清单读取异常：{ex.Message.ToString()}",new List<UserDeviceListItemDto>());
+            }
+        }
+        #endregion
         #region ModelToDto
         /// <summary>
         /// 网关
@@ -760,6 +871,8 @@ namespace bbnApp.Application.Services.Business
                 DeviceId = model.DeviceId,
                 DeviceName = deviceCodes?.FirstOrDefault(x => x.DeviceId == model.DeviceId)?.DeviceName ?? "",
                 DeviceNumber = model.DeviceNumber,
+                SlaveId=model.SlaveId,
+                SlaveName=model.SlaveName,
                 GetWayDeviceId = model.GetWayDeviceId,
                 InstallTime = model.InstallTime,
                 Installer = model.Installer,

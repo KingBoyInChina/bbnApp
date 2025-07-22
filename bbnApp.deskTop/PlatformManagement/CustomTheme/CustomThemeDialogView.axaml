@@ -1,0 +1,33 @@
+
+<UserControl x:Class="bbnApp.deskTop.PlatformManagement.CustomTheme.CustomThemeDialogView"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:suki="https://github.com/kikipoulet/SukiUI"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:customTheme="clr-namespace:bbnApp.deskTop.PlatformManagement.CustomTheme"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             x:DataType="customTheme:CustomThemeDialogViewModel"
+             mc:Ignorable="d">
+	<suki:GroupBox>
+    <suki:GroupBox.Header>
+      <UniformGrid Columns="2">
+        <TextBlock Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left">自定义主题色</TextBlock>
+        <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right">
+          <Button Command="{Binding CloseCommand}">
+            <avalonia:MaterialIcon Kind="ExitToApp" ToolTip.Tip="点击关闭" Cursor="Hand"></avalonia:MaterialIcon>
+          </Button>
+        </StackPanel>
+      </UniformGrid>
+    </suki:GroupBox.Header>
+		<StackPanel Spacing="20">
+			<TextBox Text="{Binding DisplayName}" />
+			<ColorPicker Color="{Binding PrimaryColor}" Width="300"/>
+			<ColorPicker Color="{Binding AccentColor}" Width="300" />
+			<Button Command="{Binding TryCreateThemeCommand}" Content="Create" />
+		</StackPanel>
+	</suki:GroupBox>
+</UserControl>
+

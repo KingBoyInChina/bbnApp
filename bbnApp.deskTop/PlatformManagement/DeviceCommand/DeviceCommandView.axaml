@@ -1,0 +1,374 @@
+<UserControl x:Class="bbnApp.deskTop.PlatformManagement.DeviceCommand.DeviceCommandView"
+         xmlns="https://github.com/avaloniaui"
+         xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         xmlns:suki="https://github.com/kikipoulet/SukiUI"
+         xmlns:converters="clr-namespace:bbnApp.deskTop.Converters"
+         xmlns:theme="clr-namespace:SukiUI.Theme;assembly=SukiUI"
+         xmlns:my="clr-namespace:bbnApp.deskTop.Controls"
+         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+         d:DesignHeight="1080"
+         d:DesignWidth="1920"
+         xmlns:device="clr-namespace:bbnApp.deskTop.PlatformManagement.DeviceCommand"
+         x:DataType="device:DeviceCommandViewModel"
+         mc:Ignorable="d">
+  <SplitView IsPaneOpen="{Binding CommandPanelOpen}"
+               Background="Transparent"
+               DisplayMode="Overlay"
+               x:Name="DeviceCommandSplit"
+               PanePlacement="Right"
+               OpenPaneLength="300">
+        <SplitView.Pane>
+          <Grid Background="{DynamicResource SukiCardBackground}">
+            <suki:GlassCard Classes="HeaderCard" Margin="1"  Grid.Row="4" IsOpaque="True"
+                   Background="{DynamicResource SukiCardBackground}"
+                   BorderThickness="1">
+              <suki:GroupBox>
+                <suki:GroupBox.Header>
+                  <UniformGrid Columns="2">
+
+                    <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Grid.Column="0">
+                      <avalonia:MaterialIcon Kind="ListBox" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+                      <TextBlock Foreground="{DynamicResource SukiText}">指令执行测试</TextBlock>
+                    </StackPanel>
+                    <Button HorizontalAlignment="Right" Classes="Basic" Command="{Binding DeviceCommandCloseCommand}">
+                      <StackPanel Orientation="Horizontal">
+                        <avalonia:MaterialIcon Kind="CloseBox" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+                      </StackPanel>
+                    </Button>
+                  </UniformGrid>
+                </suki:GroupBox.Header>
+
+                <StackPanel HorizontalAlignment="Stretch">
+
+                  <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" Margin="5,5" IsVisible="{Binding TempDeviceCommandObj.IsTcp}">
+                    <TextBlock Margin="5,5">IP：</TextBlock>
+                    <TextBox Width="260" Text="{Binding TempDeviceCommandObj.Ip}"/>
+                  </StackPanel>
+                  
+                  <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" Margin="5,5" IsVisible="{Binding TempDeviceCommandObj.IsTcp}">
+                    <TextBlock Margin="5,5">Port：</TextBlock>
+                    <TextBox Width="260" Text="{Binding TempDeviceCommandObj.Port}"/>
+                  </StackPanel>
+
+                  <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" Margin="5,5" IsVisible="{Binding !TempDeviceCommandObj.IsTcp}">
+                    <TextBlock Margin="5,5">串口号：</TextBlock>
+                    <TextBox Width="260" Text="{Binding TempDeviceCommandObj.Com}"/>
+                  </StackPanel>
+
+                  <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" Margin="5,5" >
+                    <TextBlock Margin="5,5">从站地址：</TextBlock>
+                    <TextBox Width="260" Text="{Binding TempDeviceCommandObj.SlaveId}"/>
+                  </StackPanel>
+
+                  <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" Margin="5,5" >
+                    <TextBlock Margin="5,5">起始地址：</TextBlock>
+                    <TextBox Width="260" Text="{Binding TempDeviceCommandObj.StartAddress}"/>
+                  </StackPanel>
+
+                  <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" Margin="5,5" >
+                    <TextBlock Margin="5,5">寄存器数量：</TextBlock>
+                    <TextBox Width="260" Text="{Binding TempDeviceCommandObj.NumRegisters}"/>
+                  </StackPanel>
+
+                  
+                  <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" Margin="5,5" >
+                    <TextBlock Margin="5,5">生成命令：</TextBlock>
+                    <TextBox Width="260" AcceptsReturn="True" TextWrapping="Wrap" Text="{Binding Modbuscommand}"/>
+                  </StackPanel>
+
+                  <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" Margin="5,5" >
+                    <TextBlock Margin="5,5">执行结果：</TextBlock>
+                    <TextBox Width="260" AcceptsReturn="True" TextWrapping="Wrap" Text="{Binding TempDeviceCommandObj.Result}"/>
+                  </StackPanel>
+                  
+                  <StackPanel Margin="5,5">
+                    <Button Classes="Flat" Command="{Binding CommandExecTestCommand}">
+                      <StackPanel Orientation="Horizontal">
+                        <avalonia:MaterialIcon Kind="Post" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+                        <TextBlock Foreground="{DynamicResource SukiText}">执行</TextBlock>
+                      </StackPanel>
+                    </Button>
+                  </StackPanel>
+
+                </StackPanel>
+              </suki:GroupBox>
+            </suki:GlassCard>
+          </Grid>
+        </SplitView.Pane>
+
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="400"></ColumnDefinition>
+            <ColumnDefinition Width="300"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+          </Grid.ColumnDefinitions>
+
+          <suki:GlassCard Classes="HeaderCard" Margin="10" Grid.Column="0">
+            <suki:GroupBox>
+              <suki:GroupBox.Header>
+
+                <UniformGrid Columns="2">
+
+                  <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Grid.Column="0">
+                    <avalonia:MaterialIcon Kind="ListBox" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+                    <TextBlock Foreground="{DynamicResource SukiText}">设备分类</TextBlock>
+                  </StackPanel>
+
+                  <my:Space HorizontalAlignment="Right" Orientation="Horizontal" VerticalAlignment="Center">
+
+                    <Button Classes="Basic" Command="{Binding DeviceTreeReloadCommand}">
+                      <StackPanel Orientation="Horizontal">
+                        <avalonia:MaterialIcon Kind="Refresh" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+                        <TextBlock Foreground="{DynamicResource SukiText}">重载</TextBlock>
+                      </StackPanel>
+                    </Button>
+
+                  </my:Space>
+
+                </UniformGrid>
+
+              </suki:GroupBox.Header>
+              <ScrollViewer>
+                <TreeView ItemsSource="{Binding DeviceTreeSource}" SelectionChanged="TreeView_SelectionChanged">
+                  <TreeView.ItemTemplate>
+                    <TreeDataTemplate ItemsSource="{Binding SubItems}">
+                      <StackPanel Orientation="Horizontal">
+                        <avalonia:MaterialIcon Kind="{Binding IsLeaf,Converter={x:Static converters:BoolToIconConverters.FileLeaf}}"></avalonia:MaterialIcon>
+                        <TextBlock Text="{Binding Name}" Foreground="{DynamicResource SukiText}">
+                          <avalonia:MaterialIcon Kind="Lock" IsVisible="{Binding IsLock}"></avalonia:MaterialIcon>
+                        </TextBlock>
+
+                      </StackPanel>
+                    </TreeDataTemplate>
+                  </TreeView.ItemTemplate>
+                </TreeView>
+              </ScrollViewer>
+            </suki:GroupBox>
+          </suki:GlassCard>
+
+          <suki:GlassCard Classes="HeaderCard" Margin="10" Grid.Column="1">
+            <suki:GroupBox>
+              <suki:GroupBox.Header>
+
+                <UniformGrid Columns="2">
+
+                  <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Grid.Column="0">
+                    <avalonia:MaterialIcon Kind="Comma" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+                    <TextBlock Foreground="{DynamicResource SukiText}">命令清单</TextBlock>
+                  </StackPanel>
+
+                  <my:Space HorizontalAlignment="Right" Orientation="Horizontal" VerticalAlignment="Center">
+
+                    <Button Classes="Basic" Command="{Binding CommandReloadCommand}">
+                      <StackPanel Orientation="Horizontal">
+                        <avalonia:MaterialIcon Kind="Refresh" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+                        <TextBlock Foreground="{DynamicResource SukiText}">重载</TextBlock>
+                      </StackPanel>
+                    </Button>
+
+                  </my:Space>
+
+                </UniformGrid>
+
+              </suki:GroupBox.Header>
+              <ScrollViewer>
+                <ListBox ItemsSource="{Binding DeviceCommandSource}" SelectedItem="{Binding DeviceCommandSelected}">
+                  <ListBox.ItemTemplate>
+                    <DataTemplate>
+                      <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding CommandName}" Foreground="{DynamicResource SukiText}">
+                          <avalonia:MaterialIcon Kind="Lock" IsVisible="{Binding IsLock,Converter={x:Static converters:IntToBoolConverters.Instance}}"></avalonia:MaterialIcon>
+                          <TextBlock.ContextMenu>
+                            <ContextMenu>
+                              <MenuItem Header="删除" Tag="IsDelete" Click="MenuItem_Click">
+                                <MenuItem.Icon>
+                                  <avalonia:MaterialIcon Kind="Delete"></avalonia:MaterialIcon>
+                                </MenuItem.Icon>
+                              </MenuItem>
+                              <MenuItem Header="{Binding IsLock,Converter={x:Static converters:IntToTextConverters.LockLg }}" Tag="IsLock" Click="MenuItem_Click">
+                                <MenuItem.Icon>
+                                  <avalonia:MaterialIcon Kind="{Binding IsLock,Converter={x:Static converters:BoolToIconConverters.FileLock }}}"></avalonia:MaterialIcon>
+                                </MenuItem.Icon>
+                              </MenuItem>
+                            </ContextMenu>
+                          </TextBlock.ContextMenu>
+                        </TextBlock>
+                  
+                      </StackPanel>
+                    </DataTemplate>
+                  </ListBox.ItemTemplate>
+                </ListBox>
+              </ScrollViewer>
+            </suki:GroupBox>
+          </suki:GlassCard>
+    
+          <suki:GlassCard Classes="HeaderCard" Margin="10" Grid.Column="2">
+            <suki:GroupBox>
+              <suki:GroupBox.Header>
+                <UniformGrid Columns="2">
+
+                  <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Grid.Column="0">
+                    <avalonia:MaterialIcon Kind="File" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+
+                    <TextBlock Foreground="{DynamicResource SukiText}" Text="{Binding DeviceCodeSelected.DeviceName}"></TextBlock>
+                    <TextBlock Text="("></TextBlock>
+                    <TextBlock Text="{Binding DeviceCodeSelected.Code}"></TextBlock>
+                    <TextBlock Text=")"></TextBlock>
+                    <TextBlock Foreground="{DynamicResource SukiText}">设备命令</TextBlock>
+
+                    <avalonia:MaterialIcon Kind="{Binding DeviceCodeSelected.IsLock,Converter={x:Static converters:IntToIconConverters.FileLock}}" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+
+                  </StackPanel>
+
+                  <my:Space HorizontalAlignment="Right" Orientation="Horizontal" VerticalAlignment="Center" Grid.Column="1">
+
+                    <Button Classes="Basic" Command="{Binding DeviceCommandAddCommand}">
+                      <StackPanel Orientation="Horizontal">
+                        <avalonia:MaterialIcon Kind="Plus" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+                        <TextBlock Foreground="{DynamicResource SukiText}">新建</TextBlock>
+                      </StackPanel>
+                    </Button>
+
+                    <Button Classes="Basic" Command="{Binding DeviceCommandSaveCommand}">
+                      <StackPanel Orientation="Horizontal">
+                        <avalonia:MaterialIcon Kind="Post" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+                        <TextBlock Foreground="{DynamicResource SukiText}">保存</TextBlock>
+                      </StackPanel>
+                    </Button>
+
+                  </my:Space>
+
+                </UniformGrid>
+
+
+              </suki:GroupBox.Header>
+              <Grid>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="3*"></ColumnDefinition>
+                  <ColumnDefinition>*</ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <Grid Grid.Column="0">
+                  <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                  </Grid.RowDefinitions>
+
+                  <UniformGrid Columns="2" Grid.Row="0">
+
+                    <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Column="0">
+                      <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">命令名称：</TextBlock>
+                      <TextBox Width="230" Text="{Binding DeviceCommandSelected.CommandName}"/>
+                      <TextBlock VerticalAlignment="Center" Classes="NOTNULL">*</TextBlock>
+                    </StackPanel>
+
+                    <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Column="1">
+                      <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">命令代码：</TextBlock>
+                      <TextBox Width="230" Text="{Binding DeviceCommandSelected.CommandCode}"/>
+                      <TextBlock VerticalAlignment="Center" Classes="NOTNULL">*</TextBlock>
+                    </StackPanel>
+              
+                    <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Column="0">
+                      <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">硬件通信协议：</TextBlock>
+                      <ComboBox Width="230" HorizontalAlignment="Stretch" ItemsSource="{Binding HardwareCPList}" SelectedItem="{Binding HardwareCPSelected}">
+                        <ComboBox.ItemTemplate>
+                          <DataTemplate>
+                            <TextBlock Text="{Binding Name}"/>
+                          </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                      </ComboBox>
+                      <TextBlock VerticalAlignment="Center" Classes="NOTNULL">*</TextBlock>
+                    </StackPanel>
+
+                    <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Column="1">
+                      <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">应用通信协议：</TextBlock>
+                      <ComboBox Width="230" HorizontalAlignment="Stretch" ItemsSource="{Binding ApplicationCPList}" SelectedItem="{Binding ApplicationCPSelected}">
+                        <ComboBox.ItemTemplate>
+                          <DataTemplate>
+                            <TextBlock Text="{Binding Name}"/>
+                          </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                      </ComboBox>
+                      <TextBlock VerticalAlignment="Center" Classes="NOTNULL">*</TextBlock>
+                    </StackPanel>
+
+                    <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Column="0">
+                      <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">设备默认地址：</TextBlock>
+                      <TextBox Width="230" Text="{Binding DeviceCommandSelected.DeviceAddr}"/>
+                      <TextBlock VerticalAlignment="Center" Classes="NOTNULL">*</TextBlock>
+                    </StackPanel>
+
+                    <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Column="1">
+                      <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">功    能    码：</TextBlock>
+                      <TextBox Width="230" Text="{Binding DeviceCommandSelected.FunctionCode}"/>
+                    </StackPanel>
+
+                    <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Column="0">
+                      <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">起    始    位：</TextBlock>
+                      <TextBox Width="230" Text="{Binding DeviceCommandSelected.StartAddr}"/>
+                      <TextBlock VerticalAlignment="Center" Classes="NOTNULL">*</TextBlock>
+                    </StackPanel>
+
+                    <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Column="1">
+                      <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">寄存器总数：</TextBlock>
+                      <TextBox Width="230" Text="{Binding DeviceCommandSelected.RegCount}"/>
+                      <TextBlock VerticalAlignment="Center" Classes="NOTNULL">*</TextBlock>
+                    </StackPanel>
+
+                    <StackPanel Classes="FormCell" Orientation="Horizontal" Grid.Column="0">
+                      <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">CRC校验：</TextBlock>
+                      <ToggleSwitch IsChecked="{Binding DeviceCommandSelected.CRC}"/>
+                    </StackPanel>
+                  </UniformGrid>
+
+                  <StackPanel Grid.Row="1" Classes="FormCell" Orientation="Horizontal">
+                    <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">命令示例：</TextBlock>
+                    <TextBox Width="580" Text="{Binding DeviceCommandSelected.CommandInfo}"/>
+                    <Button Classes="Basic" ToolTip.Tip="点击测试指令执行" Command="{Binding CommandExecCommand}">
+                      <avalonia:MaterialIcon Kind="Excavator"></avalonia:MaterialIcon>
+                    </Button>
+
+                  </StackPanel>
+
+                  <StackPanel Grid.Row="2" Classes="FormCell" Orientation="Horizontal">
+                    <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource SukiText}">命令说明：</TextBlock>
+                    <TextBox Width="600" AcceptsReturn="True" TextWrapping="Wrap" Text="{Binding DeviceCommandSelected.CommandDescription}"/>
+                  </StackPanel>
+
+
+                </Grid>
+                <StackPanel Grid.Column="1">
+                  <suki:GlassCard Classes="HeaderCard" Margin="10">
+                    <suki:GroupBox>
+                      <suki:GroupBox.Header>
+                        <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Grid.Column="0">
+                          <avalonia:MaterialIcon Kind="Image" Foreground="{DynamicResource SukiText}"></avalonia:MaterialIcon>
+                          <TextBlock Foreground="{DynamicResource SukiText}">设备图片</TextBlock>
+                        </StackPanel>
+                      </suki:GroupBox.Header>
+                      <suki:BusyArea Name="BusyImage"
+                                   BusyText="图片加载中..."
+                                   IsBusy="{Binding IsBusy}">
+                        <StackPanel Orientation="Vertical">
+                          <Image Source="{Binding DeviceCodeImage}" Width="270" Height="360" Stretch="Uniform"></Image>
+                        </StackPanel>
+                      </suki:BusyArea>
+                    </suki:GroupBox>
+                  </suki:GlassCard>
+                </StackPanel>
+
+              </Grid>
+
+            </suki:GroupBox>
+          </suki:GlassCard>
+
+
+        </Grid>
+
+
+        </SplitView>
+  
+</UserControl>

@@ -10,6 +10,7 @@
   <ItemGroup>
     <PackageReference Include="MySqlConnector" Version="2.4.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="NModbus" Version="3.0.81" />
   </ItemGroup>
 
   <ItemGroup>

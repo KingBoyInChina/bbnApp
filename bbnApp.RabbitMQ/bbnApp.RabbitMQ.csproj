@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="RabbitMQ.Client" Version="7.1.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\bbnApp.InfluxDb.Client\bbnApp.InfluxDb.Client.csproj" />
+    <ProjectReference Include="..\bbnApp.Common\bbnApp.Common.csproj" />
+  </ItemGroup>
+</Project>

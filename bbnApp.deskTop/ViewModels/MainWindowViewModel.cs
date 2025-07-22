@@ -9,9 +9,8 @@ using bbnApp.Application.DTOs.LoginDto;
 using bbnApp.Common.Models;
 using bbnApp.Core;
 using bbnApp.deskTop.Common;
-using bbnApp.deskTop.Features;
-using bbnApp.deskTop.Features.CustomTheme;
-using bbnApp.deskTop.Features.Theming;
+using bbnApp.deskTop.PlatformManagement.CustomTheme;
+using bbnApp.deskTop.PlatformManagement.Theming;
 using bbnApp.deskTop.Services;
 using bbnApp.deskTop.Utilities;
 using bbnApp.DTOs.CodeDto;
@@ -21,6 +20,7 @@ using bbnApp.Protos;
 using bbnApp.Share;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Consul;
 using Exceptionless;
 using Grpc.Core;
 using Microsoft.Extensions.Configuration;
@@ -279,11 +279,12 @@ namespace bbnApp.deskTop.ViewModels
         /// </summary>
         private async Task ClientInit()
         {
+            _client =await _grpcClientFactory.CreateClient<Author.AuthorClient>();
             _companyclient = await _grpcClientFactory.CreateClient<CompanyGrpcService.CompanyGrpcServiceClient>();
             _client = await _grpcClientFactory.CreateClient<Author.AuthorClient>();
             _codeClient = await _grpcClientFactory.CreateClient<AreaGrpc.AreaGrpcClient>();
             _appSettignClient = await _grpcClientFactory.CreateClient<AppSettingGrpc.AppSettingGrpcClient>();
-            _dictionaryClient =await _grpcClientFactory.CreateClient<DataDictionaryGrpc.DataDictionaryGrpcClient>();
+            _dictionaryClient = await _grpcClientFactory.CreateClient<DataDictionaryGrpc.DataDictionaryGrpcClient>();
             _authorKeyClient = await _grpcClientFactory.CreateClient<ReigisterKeyGrpcService.ReigisterKeyGrpcServiceClient>();
             _operatorClient = await _grpcClientFactory.CreateClient<OperatorGrpc.OperatorGrpcClient>();
         }

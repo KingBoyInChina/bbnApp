@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Exceptionless" Version="6.1.0" />
+    <PackageReference Include="InfluxDB.Client" Version="4.18.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.7" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\bbnApp.Common\bbnApp.Common.csproj" />
+    <ProjectReference Include="..\bbnApp.Share\bbnApp.Share.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Consul" Version="1.7.14.7" />
+    <PackageReference Include="Exceptionless" Version="6.1.0" />
+    <PackageReference Include="Grpc.Core" Version="2.46.6" />
+    <PackageReference Include="Grpc.AspNetCore" Version="2.71.0" />
+    <PackageReference Include="Grpc.HealthCheck" Version="2.71.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="9.0.7" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.7" />
+    <PackageReference Include="Serilog" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\bbnApp.Application\bbnApp.Application.csproj" />
+  </ItemGroup>
+
+</Project>

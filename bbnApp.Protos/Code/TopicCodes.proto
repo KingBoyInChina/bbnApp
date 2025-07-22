@@ -52,6 +52,7 @@ message TopicCodesItem {
 message TopicCodesSearchRequest {
     string TopicType = 1; // 过滤条件
     string TopicName = 2; // 过滤条件
+    string DeviceIds = 3; // 设备ID
 }
 
 // 订阅代码清单响应对象

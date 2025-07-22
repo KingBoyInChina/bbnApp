@@ -343,10 +343,14 @@ namespace bbnApp.deskTop.Common
         /// <returns></returns>
         public static Bitmap ByteArrayToBitmap(byte[] imageBytes)
         {
-            using (var memoryStream = new MemoryStream(imageBytes))
+            if (imageBytes.Length > 0)
             {
-                return new Bitmap(memoryStream);
+                using (var memoryStream = new MemoryStream(imageBytes))
+                {
+                    return new Bitmap(memoryStream);
+                }
             }
+            return null;
         }
     }
 }

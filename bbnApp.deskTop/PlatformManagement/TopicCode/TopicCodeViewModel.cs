@@ -3,7 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Media.Imaging;
 using bbnApp.Common.Models;
 using bbnApp.deskTop.Common;
-using bbnApp.deskTop.Features;
+
 using bbnApp.deskTop.PlatformManagement.TopicCode;
 using bbnApp.deskTop.Services;
 using bbnApp.DTOs.BusinessDto;
@@ -111,7 +111,7 @@ namespace bbnApp.deskTop.PlatformManagement.TopicCode
         /// <param name="ToastManager"></param>
         /// <param name="DialogManager"></param>
         /// <param name="nav"></param>
-        public TopicCodeViewModel(ISukiDialogManager DialogManager, PageNavigationService nav, IGrpcClientFactory grpcClientFactory, IMapper mapper, IDialog dialog) : base("PlatformManagement", "订阅代码", MaterialIconKind.NoticeBoard, "", 6)
+        public TopicCodeViewModel(ISukiDialogManager DialogManager, PageNavigationService nav, IGrpcClientFactory grpcClientFactory, IMapper mapper, IDialog dialog) : base("PlatformManagement", "订阅代码", MaterialIconKind.NoticeBoard, "", 9)
         {
             this.dialogManager = DialogManager;
             this.nav = nav;

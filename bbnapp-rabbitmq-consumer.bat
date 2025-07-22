@@ -1,0 +1,1 @@
+docker build -f bbnApp.RabbitMQ.Consumer/Dockerfile -t bbnapp-rabbitmq-consumer:1.0.0 .

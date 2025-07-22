@@ -510,6 +510,114 @@ namespace bbnApp.Infrastructure.Migrations.ApplicationDbCode
                     b.ToTable("DeviceCode");
                 });
 
+            modelBuilder.Entity("bbnApp.Domain.Entities.Code.DeviceCommand", b =>
+                {
+                    b.Property<string>("Yhid")
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnOrder(0)
+                        .HasComment("用户组ID");
+
+                    b.Property<string>("CommandId")
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnOrder(1)
+                        .HasComment("指令ID");
+
+                    b.Property<string>("ApplicationCP")
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("应用通信协议");
+
+                    b.Property<bool>("CRC")
+                        .HasColumnType("tinyint(1)")
+                        .HasComment("校验码");
+
+                    b.Property<string>("CommandCode")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("varchar(80)")
+                        .HasComment("命令代码");
+
+                    b.Property<string>("CommandDescription")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasComment("命令参数说明");
+
+                    b.Property<string>("CommandInfo")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasComment("手动构造命令");
+
+                    b.Property<string>("CommandName")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("varchar(80)")
+                        .HasComment("命令名称");
+
+                    b.Property<string>("DeviceAddr")
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)")
+                        .HasComment("设备地址");
+
+                    b.Property<string>("DeviceId")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("varchar(80)")
+                        .HasComment("设备ID");
+
+                    b.Property<string>("FunctionCode")
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)")
+                        .HasComment("功能码");
+
+                    b.Property<string>("HardwareCP")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasComment("硬件通信协议");
+
+                    b.Property<sbyte>("IsLock")
+                        .HasMaxLength(1)
+                        .HasColumnType("tinyint")
+                        .HasComment("停用");
+
+                    b.Property<sbyte>("Isdelete")
+                        .HasMaxLength(1)
+                        .HasColumnType("tinyint")
+                        .HasComment("删除标志");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime")
+                        .HasComment("末次数据变更时间");
+
+                    b.Property<string>("LockReason")
+                        .HasColumnType("varchar(40)")
+                        .HasComment("停用原因");
+
+                    b.Property<DateTime?>("LockTime")
+                        .HasColumnType("datetime")
+                        .HasComment("停用时间");
+
+                    b.Property<string>("ReMarks")
+                        .HasColumnType("varchar(40)")
+                        .HasComment("备注信息");
+
+                    b.Property<string>("RegCount")
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasComment("寄存器数量");
+
+                    b.Property<string>("StartAddr")
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasComment("起始地址,大小端");
+
+                    b.HasKey("Yhid", "CommandId");
+
+                    b.ToTable("DeviceCommand");
+                });
+
             modelBuilder.Entity("bbnApp.Domain.Entities.Code.DeviceStruct", b =>
                 {
                     b.Property<string>("Yhid")

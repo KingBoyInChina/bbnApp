@@ -170,12 +170,12 @@ namespace bbnApp.Application.Services.CODE
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public (bool, string, DataDictionaryCodeDto?, List<DataDictionaryItemDto>?) DicRead(string id)
+        public async Task<(bool, string, DataDictionaryCodeDto?, List<DataDictionaryItemDto>?)> DicRead(string id)
         {
             try
             {
                 var model = dbContext.Set<DataDictionaryCode>().FirstOrDefault(x => x.DicCode == id);
-                var list = dbContext.Set<DataDictionaryList>().Where(x=>x.DicCode == id&&x.Isdelete==0).OrderBy(x => x.ItemIndex).ToList();
+                var list =await dbContext.Set<DataDictionaryList>().Where(x=>x.DicCode == id&&x.Isdelete==0).OrderBy(x => x.ItemIndex).ToListAsync();
                 return (true,"数据读取成功", DataToObj(model), ItemsToObjs(list));
             }
             catch(Exception ex)

@@ -1,0 +1,1 @@
+docker build -f bbnApp.MQTT.DataReciveClient/Dockerfile -t bbnapp-mqtt-datarecive:1.0.0 .

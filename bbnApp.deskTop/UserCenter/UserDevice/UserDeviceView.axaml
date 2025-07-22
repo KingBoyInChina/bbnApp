@@ -294,6 +294,22 @@
                                             </DataGridTextColumn.Header>
                                           </DataGridTextColumn>
 
+                                          <DataGridTextColumn Binding="{Binding  SlaveId}"  Width="80">
+                                            <DataGridTextColumn.Header>
+                                              <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                <TextBlock>从站地址</TextBlock>
+                                              </StackPanel>
+                                            </DataGridTextColumn.Header>
+                                          </DataGridTextColumn>
+
+                                          <DataGridTextColumn Binding="{Binding  SlaveName}"  Width="120">
+                                            <DataGridTextColumn.Header>
+                                              <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                <TextBlock>从站名称</TextBlock>
+                                              </StackPanel>
+                                            </DataGridTextColumn.Header>
+                                          </DataGridTextColumn>
+
                                           <DataGridTextColumn Binding="{Binding  InstallTime,Converter={x:Static converters:DateFormatConverters.SmallDate}}"  Width="120">
                                             <DataGridTextColumn.Header>
                                               <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">

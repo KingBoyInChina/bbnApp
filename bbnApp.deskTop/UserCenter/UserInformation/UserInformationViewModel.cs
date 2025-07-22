@@ -4,7 +4,6 @@ using Avalonia.Controls.Notifications;
 using Avalonia.Styling;
 using bbnApp.Common.Models;
 using bbnApp.deskTop.Common;
-using bbnApp.deskTop.Features;
 using bbnApp.deskTop.Models.User;
 using bbnApp.deskTop.Services;
 using bbnApp.DTOs.BusinessDto;
@@ -184,7 +183,7 @@ namespace bbnApp.deskTop.UserCenter.UserInformation
         /// <returns></returns>
         private async Task ClientInit(IGrpcClientFactory grpcClientFactory)
         {
-            _client = await grpcClientFactory.CreateClient<UserInformationGrpc.UserInformationGrpcClient>();
+            _client = await grpcClientFactory.CreateClient<UserInformationGrpc.UserInformationGrpcClient>("User");
         }
         /// <summary>
         /// 字典初始化

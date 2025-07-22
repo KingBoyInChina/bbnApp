@@ -170,10 +170,10 @@ namespace bbnApp.Service.Services
                 if (context.UserState.TryGetValue("User", out var userObj) && userObj is UserModel user)
                 {
                     AreaPostDataDto postdata = _mapper.Map<AreaPostDataDto>(request.AreaData);
-                    (bool, string, AreaPostDataDto) data = await _areaService.AreaSave(postdata, user);
+                    (bool, string, AreaPostDataDto?) data = await _areaService.AreaSave(postdata, user);
                     if (data.Item1)
                     {
-                        AreaPostData backdata = _mapper.Map<AreaPostData>(data.Item3);
+                        AreaPostData backdata = data.Item3==null?new AreaPostData(): _mapper.Map<AreaPostData>(data.Item3);
                         response = new AreaPostResponse
                         {
                             Code = true,

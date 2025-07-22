@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Avalonia.Controls;
 using bbnApp.deskTop.Common;
-using bbnApp.deskTop.Features;
+
 using bbnApp.deskTop.PlatformManagement.AppSetting;
 using bbnApp.deskTop.Services;
 using bbnApp.DTOs.CodeDto;

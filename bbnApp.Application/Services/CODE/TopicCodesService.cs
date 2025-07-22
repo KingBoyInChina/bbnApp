@@ -262,6 +262,10 @@ namespace bbnApp.Application.Services.CODE
                 {
                     list = list.Where(x => x.TopicType.Contains(request.TopicType)).ToList();
                 }
+                if (!string.IsNullOrEmpty(request.DeviceIds))
+                {
+                    list = list.Where(x => x.DeviceIds?.Contains(request.DeviceIds)??true).ToList();
+                }
                 return (true, "数据读取成功", TopicCodessToDtos(list));
             }
             catch (Exception ex)

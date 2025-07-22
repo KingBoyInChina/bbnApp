@@ -88,7 +88,7 @@ namespace bbnApp.Service.Services
                         Message = msg,
                         Total = total
                     };
-                    List<EmployeeItemDto> list = result.ToList();
+                    List<EmployeeItemDto> list = result?.ToList()??new List<EmployeeItemDto>();
                     response.Items.AddRange(_mapper.Map<List<EmployeeItem>>(list));
                 }
                 else

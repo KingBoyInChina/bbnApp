@@ -1,6 +1,5 @@
 using System;
 using System.Device.Gpio;
-using System.Device.Pwm;
 using System.Diagnostics;
 using System.IO.Ports;
 using System.Threading;
@@ -20,10 +19,17 @@ namespace bbnApp.loT.ESP32C3
         /// </summary>
         private static GpioController gpio;
         /// <summary>
-        /// 呼吸灯
-        /// 定义 PWM 引脚和频率
+        /// TXD
         /// </summary>
-        private static PwmChannel pwmRed, pwmGreen, pwmBlue;
+        private const int TXDPin = 17;
+        /// <summary>
+        /// 方向控制引脚
+        /// </summary>
+        private const int RXDirPin = 16;
+        /// <summary>
+        /// 方向控制引脚
+        /// </summary>
+        private const int Rs485DirPin = 8;
         /// <summary>
         /// 扇热风扇
         /// </summary>
@@ -42,15 +48,6 @@ namespace bbnApp.loT.ESP32C3
         {
             gpio = new GpioController();
 
-            // 配置 GPIO 引脚功能
-            Configuration.SetPinFunction(25, DeviceFunction.PWM1); // R (GPIO25)
-            Configuration.SetPinFunction(26, DeviceFunction.PWM2); // G (GPIO26)
-            Configuration.SetPinFunction(27, DeviceFunction.PWM3); // B (GPIO27)
-            // 初始化 PWM 通道（频率 1000Hz）
-            pwmRed = PwmChannel.CreateFromPin(25, 1000, 0);
-            pwmGreen = PwmChannel.CreateFromPin(26, 1000, 0);
-            pwmBlue = PwmChannel.CreateFromPin(27, 1000, 0);
-
             gpio.OpenPin(logPin, PinMode.Output);
             gpio.OpenPin(djPin, PinMode.Output);
             //高电平日志输出
@@ -58,16 +55,32 @@ namespace bbnApp.loT.ESP32C3
             //扇热风扇
             gpio.Write(djPin, PinValue.Low);
             State();
-
+            // 初始化方向控制引脚
+            var dirPin = gpio.OpenPin(Rs485DirPin, PinMode.Output);
             try
             {
-                // 配置 UART2 的引脚（GPIO17=TX, GPI16=RX）
-                Configuration.SetPinFunction(17, DeviceFunction.COM2_TX);
-                Configuration.SetPinFunction(16, DeviceFunction.COM2_RX);
+                // 配置 UART2 的引脚
+                Configuration.SetPinFunction(TXDPin, DeviceFunction.COM2_TX);
+                Configuration.SetPinFunction(RXDirPin, DeviceFunction.COM2_RX);
+
+                // RTU模式（接MAX485模块）
+                var modbusRtu = new ModbusHelper(
+                    ModbusHelper.ModbusType.Rtu,
+                    rtuPort: "COM2",
+                    dirPin: Rs485DirPin);
+
+
+                var data = modbusRtu.ReadHoldingRegisters(
+                slaveAddress: 0x01,
+                startAddress: 0x0000,
+                count: 2);
+
+                float temperature = data[0] / 10.0f;
+                float humidity = data[1] / 10.0f;
                 // 使用 COM2（对应 UART2）
-                uart = new SerialPort("COM2", 9600, Parity.None, 8, StopBits.One);
-                uart.DataReceived += Uart_DataReceived;
-                uart.Open();
+                //uart = new SerialPort("COM2", 9600, Parity.None, 8, StopBits.One);
+                //uart.DataReceived += Uart_DataReceived;
+                //uart.Open();
 
                 State();
             }
@@ -111,6 +124,11 @@ namespace bbnApp.loT.ESP32C3
                     {
                         gpio.Write(djPin, PinValue.Low);
                     }
+                    else if (code == "000002")
+                    {
+                        //读取传感器数据
+                        
+                    }
                 }
                 State();
             }
@@ -121,52 +139,22 @@ namespace bbnApp.loT.ESP32C3
             }
         }
         /// <summary>
-        /// 
+        /// 这里用3色Led表示状态
         /// </summary>
         /// <param name="type"></param>
         private static void State(byte type = 0)
         {
             if (type == 2)
             {
-                SetColor(Color.Red);
+                
             }
             else if (type == 1)
             {
-                SetColor(Color.Orange);
+               
             }
             else
             {
-                SetColor(Color.Green);
-            }
-        }
-        /// <summary>
-        /// 颜色枚举
-        /// </summary>
-        private enum Color { Red, Orange, Green }
-        /// <summary>
-        /// 设置颜色
-        /// </summary>
-        /// <param name="color"></param>
-        private static void SetColor(Color color)
-        {
-            // 关闭所有通道
-            pwmRed.DutyCycle = 0;
-            pwmGreen.DutyCycle = 0;
-            pwmBlue.DutyCycle = 0;
-
-            // 根据状态点亮对应颜色
-            switch (color)
-            {
-                case Color.Green:
-                    pwmGreen.DutyCycle = 1.0; // 纯绿
-                    break;
-                case Color.Orange:
-                    pwmRed.DutyCycle = 1.0;   // 红 + 少量绿 = 橙
-                    pwmGreen.DutyCycle = 0.2;
-                    break;
-                case Color.Red:
-                    pwmRed.DutyCycle = 1.0;   // 纯红
-                    break;
+                
             }
         }
     }

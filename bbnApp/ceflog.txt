@@ -1,0 +1,495 @@
+[0710/174645.098:WARNING:resource_bundle.cc(464)] locale_file_path.empty() for locale 
+[0710/174645.104:ERROR:alloy_main_delegate.cc(716)] Could not load locale pak for en-US
+[0710/174648.109:VERBOSE1:pref_proxy_config_tracker_impl.cc(191)] 000028A800140800: set chrome proxy config service to 000028A80010C900
+[0710/174648.695:VERBOSE1:webrtc_internals.cc(123)] Could not get the download directory.
+[0710/174648.750:VERBOSE1:media_stream_manager.cc(1410)] MSM::InitializeMaybeAsync([this=000028A8000A2200])
+[0710/174648.777:VERBOSE1:media_stream_manager.cc(1410)] MDM::MediaDevicesManager()
+[0710/174648.777:VERBOSE1:media_stream_manager.cc(1410)] MSM::MediaStreamManager([this=000028A8000A2200]))
+[0710/174650.316:WARNING:resource_bundle.cc(464)] locale_file_path.empty() for locale 
+[0710/174650.318:ERROR:alloy_main_delegate.cc(716)] Could not load locale pak for en-US
+[0710/174651.266:VERBOSE1:device_event_log_impl.cc(194)] [17:46:50.103] Display: EVENT: screen_win.cc:828 Displays updated, count: 1
+[0710/174651.279:VERBOSE1:device_event_log_impl.cc(194)] [17:46:51.280] Display: EVENT: screen_win.cc:830 Display[2528732444] bounds=[0,0 1920x1080], workarea=[0,0 1920x1032], scale=1, rotation=0, panel_rotation=0 external detected
+[0710/174651.484:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/174651.518:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/174651.575:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/174651.583:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/174651.583:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/174651.583:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/174651.583:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/174651.583:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/174651.583:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/174651.583:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/174651.583:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/174651.583:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/174651.583:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/174651.583:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/174651.583:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/174651.583:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/174651.583:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/174651.583:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/174651.583:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/174651.583:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/174651.583:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/174651.583:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/174651.583:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/174651.583:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/174651.584:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/174651.584:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/174651.584:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/174651.584:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/174651.584:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/174651.584:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/174651.584:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/174651.584:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/174651.584:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/174651.584:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/174651.584:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/174651.584:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/174651.584:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/174651.584:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/174651.584:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/174651.584:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/174651.585:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/174652.770:VERBOSE1:component_installer.cc(428)] StartRegistration for Widevine Content Decryption Module
+[0710/174653.670:VERBOSE1:component_installer.cc(499)] FinishRegistration for Widevine Content Decryption Module
+[0710/174653.679:VERBOSE1:component_updater_service.cc(151)] CrxUpdateService starting up. First update attempt will take place in 60 s seconds. Next update attempt will take place in 18000 s seconds. 
+[0710/174654.637:WARNING:resource_bundle.cc(464)] locale_file_path.empty() for locale 
+[0710/174654.637:ERROR:alloy_main_delegate.cc(716)] Could not load locale pak for en-US
+[0710/174754.297:VERBOSE1:network_delegate.cc(35)] NetworkDelegate::NotifyBeforeURLRequest: https://update.googleapis.com/service/update2/json?cup2key=13:tcfHkKh74H450z6otqlkUGGVFJEc0HxDLgnbLpuTLGU&cup2hreq=aeff093de1f31632d613165813dcb6b555d58ee803f6045f79ba18ff6b96592c
+[0710/174756.140:VERBOSE1:request_sender.cc(181)] Request completed from url: https://update.googleapis.com/service/update2/json?cup2key=13:tcfHkKh74H450z6otqlkUGGVFJEc0HxDLgnbLpuTLGU&cup2hreq=aeff093de1f31632d613165813dcb6b555d58ee803f6045f79ba18ff6b96592c
+[0710/174756.584:VERBOSE1:component_updater_service.cc(451)] Update completed with error 0
+[0710/174849.292:WARNING:resource_bundle.cc(464)] locale_file_path.empty() for locale 
+[0710/174849.292:ERROR:alloy_main_delegate.cc(716)] Could not load locale pak for en-US
+[0710/181208.432:WARNING:resource_bundle.cc(464)] locale_file_path.empty() for locale 
+[0710/181208.469:ERROR:alloy_main_delegate.cc(716)] Could not load locale pak for en-US
+[0710/181212.160:VERBOSE1:pref_proxy_config_tracker_impl.cc(191)] 000068E400140800: set chrome proxy config service to 000068E40010C900
+[0710/181213.069:VERBOSE1:webrtc_internals.cc(123)] Could not get the download directory.
+[0710/181213.130:VERBOSE1:media_stream_manager.cc(1410)] MSM::InitializeMaybeAsync([this=000068E4000A2200])
+[0710/181213.135:VERBOSE1:media_stream_manager.cc(1410)] MDM::MediaDevicesManager()
+[0710/181213.135:VERBOSE1:media_stream_manager.cc(1410)] MSM::MediaStreamManager([this=000068E4000A2200]))
+[0710/181214.383:WARNING:resource_bundle.cc(464)] locale_file_path.empty() for locale 
+[0710/181214.383:ERROR:alloy_main_delegate.cc(716)] Could not load locale pak for en-US
+[0710/181215.222:VERBOSE1:device_event_log_impl.cc(194)] [18:12:13.378] Display: EVENT: screen_win.cc:828 Displays updated, count: 1
+[0710/181215.262:VERBOSE1:device_event_log_impl.cc(194)] [18:12:15.262] Display: EVENT: screen_win.cc:830 Display[2528732444] bounds=[0,0 1920x1080], workarea=[0,0 1920x1032], scale=1, rotation=0, panel_rotation=0 external detected
+[0710/182733.232:WARNING:resource_bundle.cc(464)] locale_file_path.empty() for locale 
+[0710/182733.243:ERROR:alloy_main_delegate.cc(716)] Could not load locale pak for en-US
+[0710/182734.244:VERBOSE1:pref_proxy_config_tracker_impl.cc(191)] 000046900005D000: set chrome proxy config service to 0000469000114900
+[0710/182734.433:VERBOSE1:webrtc_internals.cc(123)] Could not get the download directory.
+[0710/182734.440:VERBOSE1:media_stream_manager.cc(1410)] MSM::InitializeMaybeAsync([this=00004690000B6200])
+[0710/182734.440:VERBOSE1:media_stream_manager.cc(1410)] MDM::MediaDevicesManager()
+[0710/182734.440:VERBOSE1:media_stream_manager.cc(1410)] MSM::MediaStreamManager([this=00004690000B6200]))
+[0710/182734.960:WARNING:resource_bundle.cc(464)] locale_file_path.empty() for locale 
+[0710/182734.960:ERROR:alloy_main_delegate.cc(716)] Could not load locale pak for en-US
+[0710/182735.142:VERBOSE1:device_event_log_impl.cc(194)] [18:27:34.492] Display: EVENT: screen_win.cc:828 Displays updated, count: 1
+[0710/182735.142:VERBOSE1:device_event_log_impl.cc(194)] [18:27:35.142] Display: EVENT: screen_win.cc:830 Display[2528732444] bounds=[0,0 1920x1080], workarea=[0,0 1920x1032], scale=1, rotation=0, panel_rotation=0 external detected
+[0710/182735.418:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/182735.533:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/182735.574:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/182735.574:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/182735.574:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/182735.574:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/182735.574:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/182735.574:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/182735.574:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/182735.574:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/182735.580:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/182735.580:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/182735.580:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/182735.580:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/182735.580:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/182735.580:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/182735.580:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/182735.580:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/182735.580:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/182735.580:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/182735.580:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/182735.580:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/182735.580:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/182735.580:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/182735.580:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/182735.580:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/182735.580:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/182735.580:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/182735.580:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/182735.580:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/182735.580:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/182735.580:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/182735.580:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/182735.580:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/182735.580:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/182735.580:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/182735.580:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/182735.580:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/182735.580:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/182735.580:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/182735.582:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/182736.082:VERBOSE1:component_installer.cc(428)] StartRegistration for Widevine Content Decryption Module
+[0710/182736.129:VERBOSE1:component_installer.cc(499)] FinishRegistration for Widevine Content Decryption Module
+[0710/182736.129:VERBOSE1:component_updater_service.cc(151)] CrxUpdateService starting up. First update attempt will take place in 60 s seconds. Next update attempt will take place in 18000 s seconds. 
+[0710/182736.655:WARNING:resource_bundle.cc(464)] locale_file_path.empty() for locale 
+[0710/182736.655:ERROR:alloy_main_delegate.cc(716)] Could not load locale pak for en-US
+[0710/182836.746:VERBOSE1:network_delegate.cc(35)] NetworkDelegate::NotifyBeforeURLRequest: https://update.googleapis.com/service/update2/json?cup2key=13:laPVEMk8JZPlkFrCC3KBynvCzkbhpWD-TMExD8TCvwE&cup2hreq=a1ffeb15d5172060079f3c19aa027a456242fd5ac3ece032ea6471dd4476d65f
+[0710/182838.289:VERBOSE1:request_sender.cc(181)] Request completed from url: https://update.googleapis.com/service/update2/json?cup2key=13:laPVEMk8JZPlkFrCC3KBynvCzkbhpWD-TMExD8TCvwE&cup2hreq=a1ffeb15d5172060079f3c19aa027a456242fd5ac3ece032ea6471dd4476d65f
+[0710/182838.425:VERBOSE1:component_updater_service.cc(451)] Update completed with error 0
+[0710/182935.041:WARNING:resource_bundle.cc(464)] locale_file_path.empty() for locale 
+[0710/182935.041:ERROR:alloy_main_delegate.cc(716)] Could not load locale pak for en-US
+[0710/184256.331:WARNING:resource_bundle.cc(464)] locale_file_path.empty() for locale 
+[0710/184256.362:ERROR:alloy_main_delegate.cc(716)] Could not load locale pak for en-US
+[0710/184302.127:VERBOSE1:pref_proxy_config_tracker_impl.cc(191)] 000016E000140800: set chrome proxy config service to 000016E00010C900
+[0710/184303.926:VERBOSE1:webrtc_internals.cc(123)] Could not get the download directory.
+[0710/184304.858:VERBOSE1:media_stream_manager.cc(1410)] MSM::InitializeMaybeAsync([this=000016E0000A2200])
+[0710/184304.959:VERBOSE1:media_stream_manager.cc(1410)] MDM::MediaDevicesManager()
+[0710/184304.959:VERBOSE1:media_stream_manager.cc(1410)] MSM::MediaStreamManager([this=000016E0000A2200]))
+[0710/184304.966:WARNING:resource_bundle.cc(464)] locale_file_path.empty() for locale 
+[0710/184304.966:ERROR:alloy_main_delegate.cc(716)] Could not load locale pak for en-US
+[0710/184306.467:VERBOSE1:device_event_log_impl.cc(194)] [18:43:05.654] Display: EVENT: screen_win.cc:828 Displays updated, count: 1
+[0710/184306.531:VERBOSE1:device_event_log_impl.cc(194)] [18:43:06.531] Display: EVENT: screen_win.cc:830 Display[2528732444] bounds=[0,0 1920x1080], workarea=[0,0 1920x1032], scale=1, rotation=0, panel_rotation=0 external detected
+[0710/184307.347:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/184307.687:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/184307.910:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/184307.943:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/184307.943:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/184307.943:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/184307.943:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/184307.943:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/184307.943:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/184307.943:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/184307.943:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/184307.943:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/184307.943:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/184307.943:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/184307.943:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/184307.943:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/184307.943:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/184307.943:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/184307.943:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/184307.943:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/184307.943:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/184307.943:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/184307.943:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/184307.943:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/184307.943:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/184307.943:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/184307.943:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/184307.943:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/184307.943:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/184307.943:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/184307.943:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/184307.943:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/184307.943:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/184307.943:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/184307.943:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/184307.943:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/184307.943:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/184307.943:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/184307.943:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/184307.943:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/184307.946:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/184309.496:VERBOSE1:component_installer.cc(428)] StartRegistration for Widevine Content Decryption Module
+[0710/184310.471:VERBOSE1:component_installer.cc(499)] FinishRegistration for Widevine Content Decryption Module
+[0710/184310.498:VERBOSE1:component_updater_service.cc(151)] CrxUpdateService starting up. First update attempt will take place in 60 s seconds. Next update attempt will take place in 18000 s seconds. 
+[0710/184312.385:WARNING:resource_bundle.cc(464)] locale_file_path.empty() for locale 
+[0710/184312.385:ERROR:alloy_main_delegate.cc(716)] Could not load locale pak for en-US
+[0710/184411.216:VERBOSE1:network_delegate.cc(35)] NetworkDelegate::NotifyBeforeURLRequest: https://update.googleapis.com/service/update2/json?cup2key=13:WzYs9WmLWObNVlMLULDuOgD-pQ7FmBSXx_-e868V95g&cup2hreq=6fe49b846f775f4526f3934fdb17aeaf1a122779ab54787ee97374aef9d114de
+[0710/184413.543:VERBOSE1:request_sender.cc(181)] Request completed from url: https://update.googleapis.com/service/update2/json?cup2key=13:WzYs9WmLWObNVlMLULDuOgD-pQ7FmBSXx_-e868V95g&cup2hreq=6fe49b846f775f4526f3934fdb17aeaf1a122779ab54787ee97374aef9d114de
+[0710/184418.253:VERBOSE1:background_downloader_win.cc(475)] Starting BITS download for: http://redirector.gvt1.com/edgedl/release2/chrome_component/acccxbt6wwsvpxzpob4hojndwkqq_4.10.2830.0/oimompecagnajdejgnnjijobebaeigek_4.10.2830.0_win64_dldxogwi36sxwpr57ta4lg57z4.crx3
+[0710/184422.329:VERBOSE1:background_downloader_win.cc(475)] Starting BITS download for: http://edgedl.me.gvt1.com/edgedl/release2/chrome_component/acccxbt6wwsvpxzpob4hojndwkqq_4.10.2830.0/oimompecagnajdejgnnjijobebaeigek_4.10.2830.0_win64_dldxogwi36sxwpr57ta4lg57z4.crx3
+[0710/185719.804:WARNING:resource_bundle.cc(464)] locale_file_path.empty() for locale 
+[0710/185719.810:ERROR:alloy_main_delegate.cc(716)] Could not load locale pak for en-US
+[0710/185719.915:VERBOSE1:pref_proxy_config_tracker_impl.cc(191)] 0000259C0005D400: set chrome proxy config service to 0000259C00114900
+[0710/185719.941:VERBOSE1:webrtc_internals.cc(123)] Could not get the download directory.
+[0710/185719.941:VERBOSE1:media_stream_manager.cc(1410)] MSM::InitializeMaybeAsync([this=0000259C000D6200])
+[0710/185719.941:VERBOSE1:media_stream_manager.cc(1410)] MDM::MediaDevicesManager()
+[0710/185719.941:VERBOSE1:media_stream_manager.cc(1410)] MSM::MediaStreamManager([this=0000259C000D6200]))
+[0710/185720.326:VERBOSE1:device_event_log_impl.cc(194)] [18:57:19.959] Display: EVENT: screen_win.cc:828 Displays updated, count: 1
+[0710/185720.327:VERBOSE1:device_event_log_impl.cc(194)] [18:57:20.327] Display: EVENT: screen_win.cc:830 Display[2528732444] bounds=[0,0 1920x1080], workarea=[0,0 1920x1032], scale=1, rotation=0, panel_rotation=0 external detected
+[0710/185720.331:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/185720.333:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/185720.334:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/185720.334:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/185720.334:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/185720.334:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/185720.334:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/185720.334:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/185720.335:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/185720.335:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/185720.335:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/185720.335:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/185720.335:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/185720.335:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/185720.335:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/185720.335:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/185720.335:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/185720.335:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/185720.335:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/185720.335:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/185720.335:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/185720.335:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/185720.335:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/185720.335:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/185720.335:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/185720.335:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/185720.335:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/185720.335:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/185720.335:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/185720.336:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/185720.336:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/185720.336:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/185720.336:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/185720.336:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/185720.336:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/185720.336:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/185720.336:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/185720.336:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/185720.336:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/185720.336:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/185720.340:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/185720.358:VERBOSE1:component_installer.cc(428)] StartRegistration for Widevine Content Decryption Module
+[0710/185720.358:VERBOSE1:component_installer.cc(499)] FinishRegistration for Widevine Content Decryption Module
+[0710/185720.359:VERBOSE1:component_updater_service.cc(151)] CrxUpdateService starting up. First update attempt will take place in 60 s seconds. Next update attempt will take place in 18000 s seconds. 
+[0710/185721.263:WARNING:resource_bundle.cc(464)] locale_file_path.empty() for locale 
+[0710/185721.263:ERROR:alloy_main_delegate.cc(716)] Could not load locale pak for en-US
+[0710/185722.780:WARNING:resource_bundle.cc(464)] locale_file_path.empty() for locale 
+[0710/185722.780:ERROR:alloy_main_delegate.cc(716)] Could not load locale pak for en-US
+[0710/185820.902:VERBOSE1:network_delegate.cc(35)] NetworkDelegate::NotifyBeforeURLRequest: https://update.googleapis.com/service/update2/json?cup2key=13:BzAY92L9eUkwtg1VKe3Hwvv2HOHe5_WQM7woerpCV9k&cup2hreq=9725f86067a5873aa8d302c5e5c41c392435fbfd4473d90c503225585aecf4f6
+[0710/185822.272:VERBOSE1:request_sender.cc(181)] Request completed from url: https://update.googleapis.com/service/update2/json?cup2key=13:BzAY92L9eUkwtg1VKe3Hwvv2HOHe5_WQM7woerpCV9k&cup2hreq=9725f86067a5873aa8d302c5e5c41c392435fbfd4473d90c503225585aecf4f6
+[0710/185822.390:VERBOSE1:component_updater_service.cc(451)] Update completed with error 0
+[0710/185920.290:WARNING:resource_bundle.cc(464)] locale_file_path.empty() for locale 
+[0710/185920.290:ERROR:alloy_main_delegate.cc(716)] Could not load locale pak for en-US
+[0710/191446.348:WARNING:resource_bundle.cc(464)] locale_file_path.empty() for locale 
+[0710/191446.360:ERROR:alloy_main_delegate.cc(716)] Could not load locale pak for en-US
+[0710/191449.308:VERBOSE1:pref_proxy_config_tracker_impl.cc(191)] 0000587800140800: set chrome proxy config service to 000058780010C900
+[0710/191449.742:VERBOSE1:webrtc_internals.cc(123)] Could not get the download directory.
+[0710/191449.761:VERBOSE1:media_stream_manager.cc(1410)] MSM::InitializeMaybeAsync([this=00005878000A2200])
+[0710/191449.775:VERBOSE1:media_stream_manager.cc(1410)] MDM::MediaDevicesManager()
+[0710/191449.775:VERBOSE1:media_stream_manager.cc(1410)] MSM::MediaStreamManager([this=00005878000A2200]))
+[0710/191450.946:WARNING:resource_bundle.cc(464)] locale_file_path.empty() for locale 
+[0710/191450.946:ERROR:alloy_main_delegate.cc(716)] Could not load locale pak for en-US
+[0710/191452.187:VERBOSE1:device_event_log_impl.cc(194)] [19:14:51.310] Display: EVENT: screen_win.cc:828 Displays updated, count: 1
+[0710/191452.211:VERBOSE1:device_event_log_impl.cc(194)] [19:14:52.212] Display: EVENT: screen_win.cc:830 Display[2528732444] bounds=[0,0 1920x1080], workarea=[0,0 1920x1032], scale=1, rotation=0, panel_rotation=0 external detected
+[0710/191452.694:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/191452.733:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/191452.790:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/191452.799:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/191452.799:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/191452.799:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/191452.799:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/191452.799:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/191452.799:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/191452.799:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/191452.799:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/191452.799:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/191452.799:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/191452.799:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/191452.799:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/191452.799:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/191452.799:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/191452.799:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/191452.799:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/191452.799:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/191452.799:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/191452.799:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/191452.799:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/191452.799:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/191452.799:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/191452.799:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/191452.799:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/191452.799:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/191452.799:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/191452.799:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/191452.799:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/191452.799:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/191452.799:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/191452.799:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/191452.799:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/191452.799:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/191452.799:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/191452.799:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/191452.799:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/191452.799:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/191452.801:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/191453.584:VERBOSE1:component_installer.cc(428)] StartRegistration for Widevine Content Decryption Module
+[0710/191454.085:VERBOSE1:component_installer.cc(499)] FinishRegistration for Widevine Content Decryption Module
+[0710/191454.098:VERBOSE1:component_updater_service.cc(151)] CrxUpdateService starting up. First update attempt will take place in 60 s seconds. Next update attempt will take place in 18000 s seconds. 
+[0710/191455.345:WARNING:resource_bundle.cc(464)] locale_file_path.empty() for locale 
+[0710/191455.345:ERROR:alloy_main_delegate.cc(716)] Could not load locale pak for en-US
+[0710/210440.589:WARNING:resource_bundle.cc(464)] locale_file_path.empty() for locale 
+[0710/210440.595:ERROR:alloy_main_delegate.cc(716)] Could not load locale pak for en-US
+[0710/210440.694:VERBOSE1:pref_proxy_config_tracker_impl.cc(191)] 00006B2C00069400: set chrome proxy config service to 00006B2C00114900
+[0710/210440.703:VERBOSE1:webrtc_internals.cc(123)] Could not get the download directory.
+[0710/210440.703:VERBOSE1:media_stream_manager.cc(1410)] MSM::InitializeMaybeAsync([this=00006B2C000D6200])
+[0710/210440.703:VERBOSE1:media_stream_manager.cc(1410)] MDM::MediaDevicesManager()
+[0710/210440.703:VERBOSE1:media_stream_manager.cc(1410)] MSM::MediaStreamManager([this=00006B2C000D6200]))
+[0710/210440.711:VERBOSE1:device_event_log_impl.cc(194)] [21:04:40.710] Display: EVENT: screen_win.cc:828 Displays updated, count: 1
+[0710/210440.711:VERBOSE1:device_event_log_impl.cc(194)] [21:04:40.711] Display: EVENT: screen_win.cc:830 Display[2528732444] bounds=[0,0 1920x1080], workarea=[0,0 1920x1032], scale=1, rotation=0, panel_rotation=0 external detected
+[0710/210440.711:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/210440.712:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/210440.712:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/210440.712:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/210440.712:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/210440.712:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/210440.712:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/210440.712:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/210440.712:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/210440.712:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/210440.712:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/210440.712:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/210440.712:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/210440.712:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/210440.712:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/210440.712:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/210440.712:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/210440.712:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/210440.712:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/210440.712:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/210440.712:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/210440.712:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/210440.712:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/210440.712:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/210440.712:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/210440.712:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/210440.712:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/210440.712:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/210440.712:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/210440.712:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/210440.712:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/210440.712:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/210440.712:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/210440.712:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/210440.712:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/210440.712:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/210440.712:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/210440.712:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/210440.712:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/210440.712:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/210440.713:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/210440.721:VERBOSE1:component_installer.cc(428)] StartRegistration for Widevine Content Decryption Module
+[0710/210440.722:VERBOSE1:component_installer.cc(499)] FinishRegistration for Widevine Content Decryption Module
+[0710/210440.723:VERBOSE1:component_updater_service.cc(151)] CrxUpdateService starting up. First update attempt will take place in 60 s seconds. Next update attempt will take place in 18000 s seconds. 
+[0710/210441.032:WARNING:resource_bundle.cc(464)] locale_file_path.empty() for locale 
+[0710/210441.032:ERROR:alloy_main_delegate.cc(716)] Could not load locale pak for en-US
+[0710/210441.314:WARNING:resource_bundle.cc(464)] locale_file_path.empty() for locale 
+[0710/210441.314:ERROR:alloy_main_delegate.cc(716)] Could not load locale pak for en-US
+[0710/220024.303:WARNING:resource_bundle.cc(464)] locale_file_path.empty() for locale 
+[0710/220024.314:ERROR:alloy_main_delegate.cc(716)] Could not load locale pak for en-US
+[0710/220025.273:VERBOSE1:pref_proxy_config_tracker_impl.cc(191)] 0000175000140800: set chrome proxy config service to 0000175000100900
+[0710/220025.723:VERBOSE1:webrtc_internals.cc(123)] Could not get the download directory.
+[0710/220025.784:VERBOSE1:media_stream_manager.cc(1410)] MSM::InitializeMaybeAsync([this=00001750000B2200])
+[0710/220025.813:VERBOSE1:media_stream_manager.cc(1410)] MDM::MediaDevicesManager()
+[0710/220025.813:VERBOSE1:media_stream_manager.cc(1410)] MSM::MediaStreamManager([this=00001750000B2200]))
+[0710/220027.028:WARNING:resource_bundle.cc(464)] locale_file_path.empty() for locale 
+[0710/220027.028:ERROR:alloy_main_delegate.cc(716)] Could not load locale pak for en-US
+[0710/220031.287:WARNING:resource_bundle.cc(464)] locale_file_path.empty() for locale 
+[0710/220031.287:ERROR:alloy_main_delegate.cc(716)] Could not load locale pak for en-US
+[0710/220031.310:VERBOSE1:pref_proxy_config_tracker_impl.cc(191)] 000030CC00041400: set chrome proxy config service to 000030CC00114900
+[0710/220031.317:VERBOSE1:webrtc_internals.cc(123)] Could not get the download directory.
+[0710/220031.317:VERBOSE1:media_stream_manager.cc(1410)] MSM::InitializeMaybeAsync([this=000030CC000D6200])
+[0710/220031.317:VERBOSE1:media_stream_manager.cc(1410)] MDM::MediaDevicesManager()
+[0710/220031.317:VERBOSE1:media_stream_manager.cc(1410)] MSM::MediaStreamManager([this=000030CC000D6200]))
+[0710/220031.322:VERBOSE1:device_event_log_impl.cc(194)] [22:00:31.321] Display: EVENT: screen_win.cc:828 Displays updated, count: 1
+[0710/220031.360:VERBOSE1:device_event_log_impl.cc(194)] [22:00:31.359] Display: EVENT: screen_win.cc:830 Display[2528732444] bounds=[0,0 1920x1080], workarea=[0,0 1920x1032], scale=1, rotation=0, panel_rotation=0 external detected
+[0710/220032.018:WARNING:resource_bundle.cc(464)] locale_file_path.empty() for locale 
+[0710/220032.018:ERROR:alloy_main_delegate.cc(716)] Could not load locale pak for en-US
+[0710/220032.258:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/220032.339:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/220032.388:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/220032.405:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/220032.405:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/220032.405:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/220032.405:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/220032.405:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/220032.405:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/220032.405:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/220032.405:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/220032.405:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/220032.405:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/220032.405:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/220032.405:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/220032.405:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/220032.405:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/220032.405:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/220032.405:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/220032.406:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/220032.406:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/220032.406:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/220032.406:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/220032.406:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/220032.406:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/220032.406:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/220032.406:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/220032.406:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/220032.406:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/220032.406:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/220032.406:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/220032.406:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/220032.406:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/220032.406:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/220032.406:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/220032.406:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/220032.406:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/220032.406:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/220032.406:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/220032.406:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/220032.407:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/220032.898:VERBOSE1:component_installer.cc(428)] StartRegistration for Widevine Content Decryption Module
+[0710/220033.159:VERBOSE1:component_installer.cc(499)] FinishRegistration for Widevine Content Decryption Module
+[0710/220033.189:VERBOSE1:component_updater_service.cc(151)] CrxUpdateService starting up. First update attempt will take place in 60 s seconds. Next update attempt will take place in 18000 s seconds. 
+[0710/220033.693:WARNING:resource_bundle.cc(464)] locale_file_path.empty() for locale 
+[0710/220033.693:ERROR:alloy_main_delegate.cc(716)] Could not load locale pak for en-US
+[0710/222831.229:WARNING:resource_bundle.cc(464)] locale_file_path.empty() for locale 
+[0710/222831.243:ERROR:alloy_main_delegate.cc(716)] Could not load locale pak for en-US
+[0710/222832.398:VERBOSE1:pref_proxy_config_tracker_impl.cc(191)] 000028D800140800: set chrome proxy config service to 000028D800100900
+[0710/222832.831:VERBOSE1:webrtc_internals.cc(123)] Could not get the download directory.
+[0710/222832.834:VERBOSE1:media_stream_manager.cc(1410)] MSM::InitializeMaybeAsync([this=000028D8000A2200])
+[0710/222832.847:VERBOSE1:media_stream_manager.cc(1410)] MDM::MediaDevicesManager()
+[0710/222832.847:VERBOSE1:media_stream_manager.cc(1410)] MSM::MediaStreamManager([this=000028D8000A2200]))
+[0710/222834.280:WARNING:resource_bundle.cc(464)] locale_file_path.empty() for locale 
+[0710/222834.280:ERROR:alloy_main_delegate.cc(716)] Could not load locale pak for en-US
+[0710/222834.659:VERBOSE1:device_event_log_impl.cc(194)] [22:28:33.032] Display: EVENT: screen_win.cc:828 Displays updated, count: 1
+[0710/222834.694:VERBOSE1:device_event_log_impl.cc(194)] [22:28:34.693] Display: EVENT: screen_win.cc:830 Display[2528732444] bounds=[0,0 1920x1080], workarea=[0,0 1920x1032], scale=1, rotation=0, panel_rotation=0 external detected
+[0710/222835.116:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/222835.190:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/222835.263:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/222835.272:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/222835.272:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/222835.272:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/222835.272:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/222835.272:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/222835.272:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/222835.272:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/222835.272:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/222835.272:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/222835.272:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/222835.272:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/222835.272:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/222835.272:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/222835.272:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/222835.272:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/222835.272:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/222835.287:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/222835.287:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/222835.287:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/222835.287:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/222835.287:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/222835.287:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/222835.287:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/222835.287:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/222835.287:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/222835.287:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/222835.287:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/222835.287:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/222835.287:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/222835.287:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/222835.287:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/222835.287:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/222835.287:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/222835.287:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/222835.287:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/222835.287:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/222835.287:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/222835.298:WARNING:resource_bundle.cc(1199)] locale resources are not loaded
+[0710/222836.234:VERBOSE1:component_installer.cc(428)] StartRegistration for Widevine Content Decryption Module
+[0710/222836.558:VERBOSE1:component_installer.cc(499)] FinishRegistration for Widevine Content Decryption Module
+[0710/222836.639:VERBOSE1:component_updater_service.cc(151)] CrxUpdateService starting up. First update attempt will take place in 60 s seconds. Next update attempt will take place in 18000 s seconds. 
+[0710/222837.758:WARNING:resource_bundle.cc(464)] locale_file_path.empty() for locale 
+[0710/222837.758:ERROR:alloy_main_delegate.cc(716)] Could not load locale pak for en-US

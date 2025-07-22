@@ -7,13 +7,12 @@ using System.Threading.Tasks;
 
 namespace bbnApp.GrpcClients
 {
-    //grpc 静态连接
-    //public interface IGrpcClientFactory
-    //{
-    //    TClient CreateClient<TClient>() where TClient : ClientBase<TClient>;
-    //}
+    /// <summary>
+    /// 单例
+    /// </summary>
     public interface IGrpcClientFactory
     {
-        Task<TClient> CreateClient<TClient>() where TClient : ClientBase<TClient>;
+       Task<TClient> CreateClient<TClient>(string clusterName = "Basic", CancellationToken cancellationToken = default)
+       where TClient : ClientBase<TClient>;
     }
 }

@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="appSetting.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="appSetting.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="15.0.1" />
+    <PackageReference Include="Exceptionless" Version="6.1.0" />
+    <PackageReference Include="Serilog" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\bbnApp.RabbitMQ\bbnApp.RabbitMQ.csproj" />
+    <ProjectReference Include="..\bbnApp.Share\bbnApp.Share.csproj" />
+    <ProjectReference Include="..\bbnApp.GrpcClients\bbnApp.GrpcClients.csproj" />
+    <ProjectReference Include="..\bbnApp.Mapper\bbnApp.Mapper.csproj" />
+  </ItemGroup>
+</Project>
