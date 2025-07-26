@@ -7,3 +7,12 @@
 终端：esp32 S3+lora+其他一些硬件设备或传感器
 数采：RS485+Modbu RTU+RS485串口服务器/自主开发硬件采集设备
 自主开发硬件：基于esp32 C3 实现的 远程电机控制模块、 远程电磁阀控制、远程继电器控制
+
+桌面应用入口：
+![首页](https://github.com/user-attachments/assets/820f6c34-c5c5-410e-b0eb-8b897c8e1191)
+展示页1：
+![示例页面1](https://github.com/user-attachments/assets/c2411610-5973-423f-89ba-e5cf0c768f4c)
+Cef集成：
+![cefglue应用](https://github.com/user-attachments/assets/9a9ca1c6-6cc3-4468-9d6f-eaf98f89d36f)
+展示页2：
+![其他页展示](https://github.com/user-attachments/assets/6384e1f3-af84-451a-977f-0a9deb4b8b44)
